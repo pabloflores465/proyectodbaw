@@ -1,2 +1,2 @@
 # proyectodbaw
-Proyecto de reacto con php y mysql como backed y base de datos
+react proyect with php and mysql as backed and db
