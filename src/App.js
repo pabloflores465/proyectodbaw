@@ -30,9 +30,10 @@ export const UserNameContext = createContext();
 function App() {
   //You need to wrap the routes in a context to access the variables
   const [userName, setUserName] = useState("Guest");
+  const [userType, setUserType] = useState("Guest");
   return (
     <React.StrictMode>
-      <UserNameContext.Provider value={{ userName, setUserName }}>
+      <UserNameContext.Provider value={{ userName, setUserName, userType, setUserType }}>
         <RouterProvider router={router} />
       </UserNameContext.Provider>
     </React.StrictMode>
