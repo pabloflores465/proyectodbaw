@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  Container,
   Nav,
   Navbar,
-  NavLink,
   Button,
   Form,
   Offcanvas,
   NavDropdown,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
-import { TiThMenu } from "react-icons/ti";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { UserNameContext } from "../App";
 
-export default function Navigation() {
+export default function Navigation({ params }) {
+
+  const { userName }=useContext(UserNameContext)
+
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  // Función para detectar el cambio de tamaño de la pantalla
+  //Function to detect screen size
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -26,17 +27,20 @@ export default function Navigation() {
 
     window.addEventListener("resize", handleResize);
 
-    // Cleanup listener al desmontar el componente
+    // Cleanup listener by rezising the component
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
-
   return (
     <>
-      <Navbar bg="primary" expand="lg" className="m-0 ps-2 pe-2 pt-0 pb-0 shadow">
+      <Navbar
+        bg="primary"
+        expand="lg"
+        className="m-0 ps-2 pe-2 pt-0 pb-0 shadow"
+      >
         <Navbar.Brand href="#home" className="text-white">
           <img
             alt="Logo"
@@ -55,16 +59,16 @@ export default function Navigation() {
               className="bg-primary text-white custom"
               aria-controls="offcanvasNavbar"
               onClick={handleToggle}
-              style={{color:"white", borderColor:"white"}}
+              style={{ color: "white", borderColor: "white" }}
             >
-              <GiHamburgerMenu/>
+              <GiHamburgerMenu />
             </Navbar.Toggle>
             <Offcanvas
               show={showOffcanvas}
               onHide={handleToggle}
               placement="end"
             >
-              <Offcanvas.Header className="bg-primary text-white"  closeButton>
+              <Offcanvas.Header className="bg-primary text-white" closeButton>
                 <Offcanvas.Title>D&P</Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
@@ -95,26 +99,31 @@ export default function Navigation() {
             <Button className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center">
               <FaSearch className="me-1" /> Search
             </Button>
-
-            {/* Este Toggle es redundante, así que lo removemos */}
             <FaShoppingCart size={"2rem"} className="ms-auto me-2 text-white" />
-            <Link
-              class="btn bg-secondary text-white rounded-pill ms-1 me-1 d-flex justify-content-center align-items-center"
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Sign Up
-            </Link>
-            <Link
-              as={Link}
-              to="/home"
-              class="btn bg-secondary text-white rounded-pill ms-1 me-1 d-flex justify-content-center align-items-center"
-              style={{ whiteSpace: "nowrap" }}
-            >
-              Log In
-            </Link>
+            {userName === "Guest" ? (
+              <>
+                <Link
+                  class="btn bg-secondary text-white rounded-pill ms-1 me-1 d-flex justify-content-center align-items-center"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  as={Link}
+                  to="/login"
+                  class="btn bg-secondary text-white rounded-pill ms-1 me-1 d-flex justify-content-center align-items-center"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Log In
+                </Link>
+              </>
+            ) : (
+              <p>"adios"</p>
+            )}
           </>
         )}
       </Navbar>
+      <Outlet/>
     </>
   );
 }
