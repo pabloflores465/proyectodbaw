@@ -1,8 +1,14 @@
 import React from 'react'
+import Navigation from '../components/Navigation'
+import BestSellers from '../components/BestSellers'
+
 
 function Home() {
   return (
-    <div>Home</div>
+    <>
+        <Navigation></Navigation>
+        
+    </>
   )
 }
 
