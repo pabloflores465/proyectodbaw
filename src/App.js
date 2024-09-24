@@ -10,13 +10,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
   {
-    path:'/',
-    element: <Login/>,
+    path: '/',
+    element: <Home/>,
     errorElement:  <ErrorPage/>
   },
   {
-    path: '/home',
-    element: <Home/>
+    path:'/login',
+    element: <Login/>
+    
   }
 ]);
 
