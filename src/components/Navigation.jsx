@@ -209,7 +209,7 @@ export default function Navigation() {
       <Login show={showLogin} setShow={setShowLogin} />
       <Signup show={showSignup} setShow={setShowSignup} />
 
-      <Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
+      {windowWidth > 800 ? (<Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
         <Row>
           <Col><strong>About D&P Petshop</strong></Col>
           <Col><strong>Social Media</strong></Col>
@@ -233,10 +233,60 @@ export default function Navigation() {
           <Col>Vision</Col>
           <Col><FaTiktok/> Tik Tok</Col>
           <Col><MdEmail/> example@gmail.com</Col>
-          <Col>License: GPLV3</Col>
-          
+          <Col>License: GPLV3</Col> 
+        </Row>
+      </Card>):(<Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
+        <Row>
+          <Col><strong>About D&P Petshop</strong></Col>
+        </Row>
+        <Row>
+          <Col>¿Who are We?</Col>
+        </Row>
+        <Row>
+          <Col>Mision</Col>
+        </Row>
+        <Row>
+          <Col>Vision</Col>
+        </Row>
+        <Row>
+          <Col><strong>Social Media</strong></Col>
+        </Row>
+        <Row>
+          <Col><FaFacebook/> Facebook</Col>
+        </Row>
+        <Row>
+          <Col><FaInstagram/> Instagram</Col>
+        </Row>
+        <Row>
+          <Col><FaTiktok/> Tik Tok</Col>
+        </Row>
+        <Row>
+          <Col><strong>Contact Us</strong></Col>
+        </Row>
+        <Row>
+          <Col><FaWhatsapp/> Whattsapp</Col>
+        </Row>
+        <Row>
+          <Col><FaPhone/> +502 1234-4321</Col>
+        </Row>
+        <Row>
+          <Col><MdEmail/> example@gmail.com</Col>
+        </Row>
+        <Row>
+          <Col><strong>About</strong></Col>
+        </Row>
+        <Row>
+          <Col>Privacy Policy</Col>
+        </Row>
+        <Row>
+          <Col>Devs: Pablo Flores & Nohel Estrada</Col>
+        </Row>
+        <Row>
+          <Col>License: GPLV3</Col> 
         </Row>
       </Card>
+        
+      ) }
     </>
   );
 }
