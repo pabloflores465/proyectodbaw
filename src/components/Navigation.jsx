@@ -203,15 +203,13 @@ export default function Navigation() {
         )}
       </Navbar>
       <Outlet />
-      <div className="bg-primary w-100 text-white text-center">
-        <p>About Us</p>
-      </div>
+
       <Login show={showLogin} setShow={setShowLogin} />
       <Signup show={showSignup} setShow={setShowSignup} />
 
-      <footer>
-        about us
-      </footer>
+      <Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
+        <p>About Us</p>
+      </Card>
     </>
   );
 }
