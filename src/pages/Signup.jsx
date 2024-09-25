@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
 function Signup({ show, setShow }) {
-  const handleClose = () => setShow(false);
   const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event) => {
@@ -16,6 +15,11 @@ function Signup({ show, setShow }) {
   };
 
   const [activeBilling, setActiveBilling] = useState(false);
+
+  const handleClose = () => {
+    setShow(false);
+    setActiveBilling(false);
+  };
 
   return (
     <Modal
@@ -31,7 +35,12 @@ function Signup({ show, setShow }) {
         <Modal.Title>Sign Up</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit} className="ps-1 pe-1 overflow-auto">
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={handleSubmit}
+          className="ps-1 pe-1 overflow-auto"
+        >
           <Form.Group className="mb-3" controlId="validateName">
             <Form.Label className="text-success">First Name</Form.Label>
             <Form.Control required placeholder="John" type="text" />
@@ -72,31 +81,33 @@ function Signup({ show, setShow }) {
             <Form.Control required placeholder="12344321" type="number" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="mb-3" >
+          <Form.Group className="mb-3">
             <Form.Label className="text-success">Phone 2 </Form.Label>
             <Form.Control placeholder="12344321" type="number" />
           </Form.Group>
           <Form.Group>
-            <Form.Label className="text-success">
-              Billing Profile
-            </Form.Label>
+            <Form.Label className="text-success">Billing Profile</Form.Label>
             <Form.Check
               type="switch"
               id="custom-switch"
               className=" mb-3"
-              onChange={()=>setActiveBilling(!activeBilling)}
+              onChange={() => setActiveBilling(!activeBilling)}
             />
           </Form.Group>
           {activeBilling === true ? (
             <Form.Group className="mb-3">
-                <Form.Label className="text-success">Card Number </Form.Label>
-                <Form.Control className="mb-3" placeholder="12344321" type="number" />
-                <Form.Label className="text-success">CCV </Form.Label>
-                <Form.Control placeholder="123" type="number" />
-                <Form.Label className="text-success">Expire Date </Form.Label>
-                <Form.Control required placeholder="01/01/2024" type="date" />
+              <Form.Label className="text-success">Card Number </Form.Label>
+              <Form.Control
+                className="mb-3"
+                placeholder="12344321"
+                type="number"
+              />
+              <Form.Label className="text-success">CCV </Form.Label>
+              <Form.Control placeholder="123" type="number" />
+              <Form.Label className="text-success">Expire Date </Form.Label>
+              <Form.Control required placeholder="01/01/2024" type="date" />
             </Form.Group>
-          ):null}
+          ) : null}
           <Button
             variant="secondary text-white rounded-pill w-100"
             onSubmit={handleClose}
