@@ -1,21 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Nav,
   Navbar,
   Button,
   Form,
   Offcanvas,
-  NavDropdown,
-  Card,
-  Container,
   Dropdown,
-  DropdownButton,
+  OverlayTrigger,
+  Card,
 } from "react-bootstrap";
-import { Link, Outlet } from "react-router-dom";
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import { Outlet } from "react-router-dom";
+import { FaSearch, FaShoppingCart, FaWindowClose } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { UserNameContext } from "../App";
-import { DiRackspace } from "react-icons/di";
+import { RiLogoutBoxFill } from "react-icons/ri";
+import { IoMdPersonAdd } from "react-icons/io";
+import { MdPets } from "react-icons/md";
+import { FaArrowsDownToPeople } from "react-icons/fa6";
+import Login from "../pages/Login";
+import Signup from "../pages/Signup";
+import { IoCloseSharp } from "react-icons/io5";
 
 export default function Navigation() {
   const { userName } = useContext(UserNameContext);
@@ -23,7 +27,7 @@ export default function Navigation() {
   const { userType } = useContext(UserNameContext);
   const { setUserType } = useContext(UserNameContext);
   setUserName("Pablo Flores");
-  setUserType("Admin");
+  setUserType("Guest");
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -42,6 +46,12 @@ export default function Navigation() {
   }, []);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
+
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+
+  const [showProducts, setShowProducts] = useState(false);
+  const target = useRef(null);
 
   return (
     <>
@@ -108,23 +118,51 @@ export default function Navigation() {
             <Button className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center">
               <FaSearch className="me-1" /> Search
             </Button>
-            <FaShoppingCart size={"2rem"} className="ms-auto me-3 text-white" />
+
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Card
+                  bg="secondary"
+                  className="text-white ps-0 pe-0"
+                  style={{maxWidth:"350px"}}
+                >
+                  <Card.Header>Products</Card.Header>
+                  <Card.Body>
+                    <div className="d-flex justify-content-center align-items-center p-0 m-0">
+                      <p className="pe-2" style={{maxWidth:"80%"}}>
+                        ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
+                      </p>
+                      
+                        <Button variant = "link" className="text-white"><IoCloseSharp size={"1.5rem"}/></Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              }
+              trigger="click"
+            >
+              <Button
+                ref={target}
+                onClick={() => setShowProducts(!showProducts)}
+                className="ms-auto me-1 text-white"
+              >
+                <FaShoppingCart size={"2rem"} />
+              </Button>
+            </OverlayTrigger>
             {userType === "Guest" ? (
               <>
-                <Link
-                  class="btn bg-secondary text-white rounded-pill ms-1 me-1 d-flex justify-content-center align-items-center"
-                  style={{ whiteSpace: "nowrap" }}
+                <Button
+                  onClick={() => setShowSignup(true)}
+                  className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
                 >
                   Sign Up
-                </Link>
-                <Link
-                  as={Link}
-                  to="/login"
-                  class="btn bg-secondary text-white rounded-pill ms-1 me-1 d-flex justify-content-center align-items-center"
-                  style={{ whiteSpace: "nowrap" }}
+                </Button>
+                <Button
+                  onClick={() => setShowLogin(true)}
+                  className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
                 >
                   Log In
-                </Link>
+                </Button>
               </>
             ) : (
               <>
@@ -132,14 +170,22 @@ export default function Navigation() {
                   <Dropdown.Toggle className="text-white">
                     {userName}
                   </Dropdown.Toggle>
-                  <Dropdown.Menu
-                    style={{ minWidth: "auto" }}
-                  >
+                  <Dropdown.Menu style={{ minWidth: "auto" }}>
+                    {userType === "Admin" ? (
+                      <Dropdown.Item className="text-success">
+                        <FaArrowsDownToPeople /> Users
+                      </Dropdown.Item>
+                    ) : null}
+                    {userType === "Employee" || userType === "Admin" ? (
+                      <Dropdown.Item className="text-success">
+                        <MdPets /> Products
+                      </Dropdown.Item>
+                    ) : null}
                     <Dropdown.Item href="#action/3.1" className="text-success">
-                      Profile
+                      <IoMdPersonAdd /> Profile
                     </Dropdown.Item>
                     <Dropdown.Item href="#action/3.1" className="text-success">
-                      Log Out
+                      <RiLogoutBoxFill /> Log Out
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -160,6 +206,12 @@ export default function Navigation() {
       <div className="bg-primary w-100 text-white text-center">
         <p>About Us</p>
       </div>
+      <Login show={showLogin} setShow={setShowLogin} />
+      <Signup show={showSignup} setShow={setShowSignup} />
+
+      <footer>
+        about us
+      </footer>
     </>
   );
 }
