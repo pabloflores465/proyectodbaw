@@ -1,27 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
-import { Link, createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from './pages/Login';
-import React from 'react';
-import ErrorPage from './pages/ErrorPage';
-import Home from './pages/Home';
+import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./pages/Login";
+import React, { createContext, useState } from "react";
+import ErrorPage from "./pages/ErrorPage";
+import Home from "./pages/Home";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Navigation from "./components/Navigation";
 
 const router = createBrowserRouter([
   {
-    path:'/',
-    element: <Login/>,
-    errorElement:  <ErrorPage/>
+    path: "/",
+    element: <Navigation />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path:"/home",
+        element: <Home />
+      },
+    ],
   },
-  {
-    path: '/home',
-    element: <Home/>
-  }
 ]);
 
+export const UserNameContext = createContext();
+
 function App() {
+  //You need to wrap the routes in a context to access the variables
+  const [userName, setUserName] = useState("Guest");
+  const [userType, setUserType] = useState("Guest");
   return (
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <UserNameContext.Provider value={{ userName, setUserName, userType, setUserType }}>
+        <RouterProvider router={router} />
+      </UserNameContext.Provider>
     </React.StrictMode>
   );
 }
