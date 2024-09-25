@@ -29,7 +29,7 @@ export default function Navigation() {
   const { userType } = useContext(UserNameContext);
   const { setUserType } = useContext(UserNameContext);
   setUserName("Pablo Flores");
-  setUserType("Guest");
+  //setUserType("Admin");
   const [showOffcanvas, setShowOffcanvas] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -186,8 +186,10 @@ export default function Navigation() {
                     <Dropdown.Item href="#action/3.1" className="text-success">
                       <IoMdPersonAdd /> Profile
                     </Dropdown.Item>
-                    <Dropdown.Item href="#action/3.1" className="text-success">
-                      <RiLogoutBoxFill /> Log Out
+                    <Dropdown.Item  className="text-success">
+                      <Button onClick={()=>setUserType('Guest')} variant="link">
+                        <RiLogoutBoxFill /> Log Out
+                      </Button>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -220,7 +222,7 @@ export default function Navigation() {
         <Row>
           <Col>¿Who are We?</Col>
           <Col><FaFacebook/> Facebook</Col>
-          <Col><FaWhatsapp/> Whattsapp</Col>
+          <Col><FaWhatsapp/> Whatsapp</Col>
           <Col>Privacy Policy</Col>
         </Row>
         <Row>
@@ -264,7 +266,7 @@ export default function Navigation() {
           <Col><strong>Contact Us</strong></Col>
         </Row>
         <Row>
-          <Col><FaWhatsapp/> Whattsapp</Col>
+          <Col><FaWhatsapp/> Whatsapp</Col>
         </Row>
         <Row>
           <Col><FaPhone/> +502 1234-4321</Col>
