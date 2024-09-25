@@ -8,14 +8,16 @@ import {
   Dropdown,
   OverlayTrigger,
   Card,
+  Row, 
+  Col,
 } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
-import { FaSearch, FaShoppingCart, FaWindowClose } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaPhone, FaSearch, FaShoppingCart, FaTiktok, FaWhatsapp, FaWindowClose } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { UserNameContext } from "../App";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { IoMdPersonAdd } from "react-icons/io";
-import { MdPets } from "react-icons/md";
+import { MdEmail, MdPets } from "react-icons/md";
 import { FaArrowsDownToPeople } from "react-icons/fa6";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
@@ -208,7 +210,32 @@ export default function Navigation() {
       <Signup show={showSignup} setShow={setShowSignup} />
 
       <Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
-        <p>About Us</p>
+        <Row>
+          <Col><strong>About D&P Petshop</strong></Col>
+          <Col><strong>Social Media</strong></Col>
+          <Col><strong>Contact Us</strong></Col>
+          <Col><strong>About</strong></Col>
+
+        </Row>
+        <Row>
+          <Col>¿Who are We?</Col>
+          <Col><FaFacebook/> Facebook</Col>
+          <Col><FaWhatsapp/> Whattsapp</Col>
+          <Col>Privacy Policy</Col>
+        </Row>
+        <Row>
+          <Col>Mision</Col>
+          <Col><FaInstagram/> Instagram</Col>
+          <Col><FaPhone/> +502 1234-4321</Col>
+          <Col>Devs: Pablo Flores & Nohel Estrada</Col>
+        </Row>
+        <Row>
+          <Col>Vision</Col>
+          <Col><FaTiktok/> Tik Tok</Col>
+          <Col><MdEmail/> example@gmail.com</Col>
+          <Col>License: GPLV3</Col>
+          
+        </Row>
       </Card>
     </>
   );
