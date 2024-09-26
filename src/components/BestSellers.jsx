@@ -1,25 +1,39 @@
-import Carousel from 'react-bootstrap/Carousel';
+import { Image } from "react-bootstrap";
+import Carousel from "react-bootstrap/Carousel";
 //import ExampleCarouselImage from 'components/ExampleCarouselImage';
 
 function BestSellers() {
   return (
-    <Carousel>
+    <Carousel className="mb-4">
       <Carousel.Item>
-       
+        <img
+          src="hola.png"
+          className="d-block w-100"
+          style={{ objectFit: "cover", height: "300px" }}
+        />
+
         <Carousel.Caption>
           <h3>First slide label</h3>
           <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
-        
+        <img
+          src="hola.png"
+          className="d-block w-100"
+          style={{ objectFit: "cover", height: "300px" }}
+        />
         <Carousel.Caption>
           <h3>Second slide label</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
-        
+        <img
+          src="hola.png"
+          className="d-block w-100"
+          style={{ objectFit: "cover", height: "300px" }}
+        />
         <Carousel.Caption>
           <h3>Third slide label</h3>
           <p>

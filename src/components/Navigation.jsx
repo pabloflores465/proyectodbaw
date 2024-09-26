@@ -74,7 +74,7 @@ export default function Navigation() {
         expand="lg"
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow"
       >
-        <Navbar.Brand href="/home" className="text-white">
+        <Navbar.Brand href="/" className="text-white">
           <img
             alt="Logo"
             src="/logo512.png"
@@ -143,13 +143,17 @@ export default function Navigation() {
                 >
                   <Card.Header>Products</Card.Header>
                   <Card.Body className="p-0">
-                    <div className="d-flex justify-content-center bg-success align-items-center">
-                      <Image src="/logo512.png" rounded height={80} width={80} />
-                      <p className="pe-2" style={{ maxWidth: "65%" }}>
-                        ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
-                      </p>
+                    <div className="d-flex justify-content-center rounded-bottom bg-white align-items-center">
+                      <Image src="/hola.png" rounded height={80} width={80} />
+                        <p
+                          className="pe-2 ms-3 text-black"
+                          style={{ maxWidth: "55%" }}
+                        >
+                          <strong>title</strong><br/>
+                          ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
+                        </p>
 
-                      <Button variant="link" className="text-white">
+                      <Button variant="link">
                         <IoCloseSharp size={"1.5rem"} />
                       </Button>
                     </div>
@@ -200,7 +204,7 @@ export default function Navigation() {
                     ) : null}
                     <Dropdown.Item>
                       <Button
-                        onClick={() =>setShowProfile(true)}
+                        onClick={() => setShowProfile(true)}
                         variant="link"
                         className="m-0 p-0 text-success"
                       >
@@ -238,9 +242,7 @@ export default function Navigation() {
       <Profile show={showProfile} setShow={setShowProfile} />
 
       {windowWidth > 800 ? (
-        <Card
-          className="bg-primary w-100 text-white text-center rounded-0 shadow"
-        >
+        <Card className="bg-primary w-100 text-white text-center rounded-0 shadow">
           <Row>
             <Col>
               <strong>About D&P Petshop</strong>
@@ -287,9 +289,7 @@ export default function Navigation() {
           </Row>
         </Card>
       ) : (
-        <Card
-          className="bg-primary w-100 text-white text-center rounded-0 shadow"
-        >
+        <Card className="bg-primary w-100 text-white text-center rounded-0 shadow">
           <Row>
             <Col>
               <strong>About D&P Petshop</strong>
