@@ -1,19 +1,87 @@
-import React, { useContext } from 'react'
-import Navigation from '../components/Navigation'
-import { useParams } from 'react-router'
-import BestSellers from '../components/BestSellers'
-import { UserNameContext } from '../App'
+import { Col, Container, Row } from "react-bootstrap";
+import Product from "../components/Product";
 
 function Home() {
-    const params = useParams();
-    const { userName } = useContext(UserNameContext)
-    console.log(userName)
+  const products = [
+    {
+      title: "Product 1",
+      description: "A cool product with awesome features.",
+      price: 120,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 2",
+      description: "This product is top quality and affordable.",
+      price: 80,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 3",
+      description: "An innovative product for everyday use.",
+      price: 150,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 4",
+      description: "Durable and long-lasting, a must-have.",
+      price: 200,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 5",
+      description: "Stylish design with great functionality.",
+      price: 60,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 6",
+      description: "An eco-friendly product that reduces waste.",
+      price: 95,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 7",
+      description: "A gadget that simplifies your life.",
+      price: 130,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 8",
+      description: "Compact and efficient, perfect for small spaces.",
+      price: 75,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 9",
+      description: "A premium product for the discerning buyer.",
+      price: 220,
+      image: "https://via.placeholder.com/200x160",
+    },
+    {
+      title: "Product 10",
+      description: "An affordable yet highly functional product.",
+      price: 50,
+      image: "https://via.placeholder.com/200x160",
+    },
+  ];
+
   return (
     <>
-        hola
-        
+      <Container>
+        <Row>
+          {products.map((product, index) => (
+            <Col xs={12} sm={6} md={4} lg={3} key={index} className="mb-4">
+              <Product
+                productTitle={product.title}
+                productDescription={product.description}
+                productPrice={product.price}
+              />
+            </Col>
+          ))}
+        </Row>
+      </Container>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;
