@@ -8,11 +8,20 @@ import {
   Dropdown,
   OverlayTrigger,
   Card,
-  Row, 
+  Row,
   Col,
 } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaPhone, FaSearch, FaShoppingCart, FaTiktok, FaWhatsapp, FaWindowClose } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaPhone,
+  FaSearch,
+  FaShoppingCart,
+  FaTiktok,
+  FaWhatsapp,
+  FaWindowClose,
+} from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { UserNameContext } from "../App";
 import { RiLogoutBoxFill } from "react-icons/ri";
@@ -22,6 +31,7 @@ import { FaArrowsDownToPeople } from "react-icons/fa6";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import { IoCloseSharp } from "react-icons/io5";
+import Profile from "../pages/Profile";
 
 export default function Navigation() {
   const { userName } = useContext(UserNameContext);
@@ -51,8 +61,10 @@ export default function Navigation() {
 
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const [showProducts, setShowProducts] = useState(false);
+
   const target = useRef(null);
 
   return (
@@ -127,16 +139,18 @@ export default function Navigation() {
                 <Card
                   bg="secondary"
                   className="text-white ps-0 pe-0"
-                  style={{maxWidth:"350px"}}
+                  style={{ maxWidth: "350px" }}
                 >
                   <Card.Header>Products</Card.Header>
                   <Card.Body>
                     <div className="d-flex justify-content-center align-items-center p-0 m-0">
-                      <p className="pe-2" style={{maxWidth:"80%"}}>
+                      <p className="pe-2" style={{ maxWidth: "80%" }}>
                         ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
                       </p>
-                      
-                        <Button variant = "link" className="text-white"><IoCloseSharp size={"1.5rem"}/></Button>
+
+                      <Button variant="link" className="text-white">
+                        <IoCloseSharp size={"1.5rem"} />
+                      </Button>
                     </div>
                   </Card.Body>
                 </Card>
@@ -183,11 +197,21 @@ export default function Navigation() {
                         <MdPets /> Products
                       </Dropdown.Item>
                     ) : null}
-                    <Dropdown.Item href="#action/3.1" className="text-success">
-                      <IoMdPersonAdd /> Profile
+                    <Dropdown.Item>
+                      <Button
+                        onClick={() =>setShowProfile(true)}
+                        variant="link"
+                        className="m-0 p-0 text-success"
+                      >
+                        <IoMdPersonAdd /> Profile
+                      </Button>
                     </Dropdown.Item>
-                    <Dropdown.Item  className="text-success">
-                      <Button onClick={()=>setUserType('Guest')} variant="link">
+                    <Dropdown.Item>
+                      <Button
+                        onClick={() => setUserType("Guest")}
+                        variant="link"
+                        className="m-0 p-0 text-success"
+                      >
                         <RiLogoutBoxFill /> Log Out
                       </Button>
                     </Dropdown.Item>
@@ -210,85 +234,133 @@ export default function Navigation() {
 
       <Login show={showLogin} setShow={setShowLogin} />
       <Signup show={showSignup} setShow={setShowSignup} />
+      <Profile show={showProfile} setShow={setShowProfile} />
 
-      {windowWidth > 800 ? (<Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
-        <Row>
-          <Col><strong>About D&P Petshop</strong></Col>
-          <Col><strong>Social Media</strong></Col>
-          <Col><strong>Contact Us</strong></Col>
-          <Col><strong>About</strong></Col>
-
-        </Row>
-        <Row>
-          <Col>¿Who are We?</Col>
-          <Col><FaFacebook/> Facebook</Col>
-          <Col><FaWhatsapp/> Whatsapp</Col>
-          <Col>Privacy Policy</Col>
-        </Row>
-        <Row>
-          <Col>Mision</Col>
-          <Col><FaInstagram/> Instagram</Col>
-          <Col><FaPhone/> +502 1234-4321</Col>
-          <Col>Devs: Pablo Flores & Nohel Estrada</Col>
-        </Row>
-        <Row>
-          <Col>Vision</Col>
-          <Col><FaTiktok/> Tik Tok</Col>
-          <Col><MdEmail/> example@gmail.com</Col>
-          <Col>License: GPLV3</Col> 
-        </Row>
-      </Card>):(<Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
-        <Row>
-          <Col><strong>About D&P Petshop</strong></Col>
-        </Row>
-        <Row>
-          <Col>¿Who are We?</Col>
-        </Row>
-        <Row>
-          <Col>Mision</Col>
-        </Row>
-        <Row>
-          <Col>Vision</Col>
-        </Row>
-        <Row>
-          <Col><strong>Social Media</strong></Col>
-        </Row>
-        <Row>
-          <Col><FaFacebook/> Facebook</Col>
-        </Row>
-        <Row>
-          <Col><FaInstagram/> Instagram</Col>
-        </Row>
-        <Row>
-          <Col><FaTiktok/> Tik Tok</Col>
-        </Row>
-        <Row>
-          <Col><strong>Contact Us</strong></Col>
-        </Row>
-        <Row>
-          <Col><FaWhatsapp/> Whatsapp</Col>
-        </Row>
-        <Row>
-          <Col><FaPhone/> +502 1234-4321</Col>
-        </Row>
-        <Row>
-          <Col><MdEmail/> example@gmail.com</Col>
-        </Row>
-        <Row>
-          <Col><strong>About</strong></Col>
-        </Row>
-        <Row>
-          <Col>Privacy Policy</Col>
-        </Row>
-        <Row>
-          <Col>Devs: Pablo Flores & Nohel Estrada</Col>
-        </Row>
-        <Row>
-          <Col>License: GPLV3</Col> 
-        </Row>
-      </Card>
-        
-      ) }
+      {windowWidth > 800 ? (
+        <Card
+          className="bg-primary w-100 text-white text-center rounded-0 shadow"
+          style={{ position: "fixed", bottom: "0" }}
+        >
+          <Row>
+            <Col>
+              <strong>About D&P Petshop</strong>
+            </Col>
+            <Col>
+              <strong>Social Media</strong>
+            </Col>
+            <Col>
+              <strong>Contact Us</strong>
+            </Col>
+            <Col>
+              <strong>About</strong>
+            </Col>
+          </Row>
+          <Row>
+            <Col>¿Who are We?</Col>
+            <Col>
+              <FaFacebook /> Facebook
+            </Col>
+            <Col>
+              <FaWhatsapp /> Whatsapp
+            </Col>
+            <Col>Privacy Policy</Col>
+          </Row>
+          <Row>
+            <Col>Mision</Col>
+            <Col>
+              <FaInstagram /> Instagram
+            </Col>
+            <Col>
+              <FaPhone /> +502 1234-4321
+            </Col>
+            <Col>Devs: Pablo Flores & Nohel Estrada</Col>
+          </Row>
+          <Row>
+            <Col>Vision</Col>
+            <Col>
+              <FaTiktok /> Tik Tok
+            </Col>
+            <Col>
+              <MdEmail /> example@gmail.com
+            </Col>
+            <Col>License: GPLV3</Col>
+          </Row>
+        </Card>
+      ) : (
+        <Card
+          className="bg-primary w-100 text-white text-center rounded-0 shadow"
+          style={{ position: "fixed", bottom: "0" }}
+        >
+          <Row>
+            <Col>
+              <strong>About D&P Petshop</strong>
+            </Col>
+          </Row>
+          <Row>
+            <Col>¿Who are We?</Col>
+          </Row>
+          <Row>
+            <Col>Mision</Col>
+          </Row>
+          <Row>
+            <Col>Vision</Col>
+          </Row>
+          <Row>
+            <Col>
+              <strong>Social Media</strong>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FaFacebook /> Facebook
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FaInstagram /> Instagram
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FaTiktok /> Tik Tok
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <strong>Contact Us</strong>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FaWhatsapp /> Whatsapp
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FaPhone /> +502 1234-4321
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <MdEmail /> example@gmail.com
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <strong>About</strong>
+            </Col>
+          </Row>
+          <Row>
+            <Col>Privacy Policy</Col>
+          </Row>
+          <Row>
+            <Col>Devs: Pablo Flores & Nohel Estrada</Col>
+          </Row>
+          <Row>
+            <Col>License: GPLV3</Col>
+          </Row>
+        </Card>
+      )}
     </>
   );
 }
