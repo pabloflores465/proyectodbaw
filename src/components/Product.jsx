@@ -9,10 +9,10 @@ export default function Product({
   productPrice,
 }) {
   return (
-    <Card className="bg-warning shadow text-white w-100 h-100">
+    <Card className="shadow w-100 h-100">
       <Card.Img
         variant="top"
-        src="holder.js/100px180"
+        src="hola.png"
         height={160}
         width={200}
       />
@@ -28,7 +28,7 @@ export default function Product({
         <div className="d-flex flex-row justify-content-center">
           <Button
             variant="secondary"
-            className="bg-secondary text-white rounded-pill me-1 d-flex align-items-center justify-content-cente"
+            className="text-white rounded-pill me-1 d-flex align-items-center justify-content-cente"
           >
             <strong>
               {" "}

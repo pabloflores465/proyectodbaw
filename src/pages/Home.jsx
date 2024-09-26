@@ -1,5 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import Product from "../components/Product";
+import BestSellers from "../components/BestSellers";
 
 function Home() {
   const products = [
@@ -66,7 +67,8 @@ function Home() {
   ];
 
   return (
-    <>
+    <div style={{backgroundColor:'#fcf3f4'}}>
+      <BestSellers/>
       <Container>
         <Row>
           {products.map((product, index) => (
@@ -80,7 +82,7 @@ function Home() {
           ))}
         </Row>
       </Container>
-    </>
+    </div>
   );
 }
 
