@@ -10,6 +10,7 @@ import {
   Card,
   Row,
   Col,
+  Image,
 } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import {
@@ -142,9 +143,10 @@ export default function Navigation() {
                   style={{ maxWidth: "350px" }}
                 >
                   <Card.Header>Products</Card.Header>
-                  <Card.Body>
-                    <div className="d-flex justify-content-center align-items-center p-0 m-0">
-                      <p className="pe-2" style={{ maxWidth: "80%" }}>
+                  <Card.Body className="p-0">
+                    <div className="d-flex justify-content-center bg-success align-items-center">
+                      <Image src="/logo512.png" rounded height={80} width={80} />
+                      <p className="pe-2" style={{ maxWidth: "65%" }}>
                         ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
                       </p>
 
