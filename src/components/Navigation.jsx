@@ -21,7 +21,6 @@ import {
   FaShoppingCart,
   FaTiktok,
   FaWhatsapp,
-  FaWindowClose,
 } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { UserNameContext } from "../App";
@@ -241,7 +240,6 @@ export default function Navigation() {
       {windowWidth > 800 ? (
         <Card
           className="bg-primary w-100 text-white text-center rounded-0 shadow"
-          style={{ position: "fixed", bottom: "0" }}
         >
           <Row>
             <Col>
@@ -291,7 +289,6 @@ export default function Navigation() {
       ) : (
         <Card
           className="bg-primary w-100 text-white text-center rounded-0 shadow"
-          style={{ position: "fixed", bottom: "0" }}
         >
           <Row>
             <Col>
