@@ -22,11 +22,13 @@ const router = createBrowserRouter([
 
 export const UserNameContext = createContext();
 export const WindowWidthContext = createContext();
+export const EditProductContext = createContext();
 
 function App() {
   //You need to wrap the routes in a context to access the variables
-  const [userName, setUserName] = useState("Guest");
+  const [userName, setUserName] = useState("Pablo Flores");
   const [userType, setUserType] = useState("Admin");
+  const [editProduct, setEditProduct] = useState(false);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -50,7 +52,9 @@ function App() {
         value={{ userName, setUserName, userType, setUserType }}
       >
         <WindowWidthContext.Provider value={{ windowWidth }}>
-          <RouterProvider router={router} />
+          <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
+            <RouterProvider router={router} />
+          </EditProductContext.Provider>
         </WindowWidthContext.Provider>
       </UserNameContext.Provider>
     </React.StrictMode>
