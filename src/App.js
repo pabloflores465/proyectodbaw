@@ -26,7 +26,7 @@ export const WindowWidthContext = createContext();
 function App() {
   //You need to wrap the routes in a context to access the variables
   const [userName, setUserName] = useState("Guest");
-  const [userType, setUserType] = useState("Guest");
+  const [userType, setUserType] = useState("Admin");
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 

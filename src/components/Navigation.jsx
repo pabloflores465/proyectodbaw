@@ -1,39 +1,48 @@
-import React, { useContext, useRef, useState } from 'react'
-import { Button, Card, Dropdown, Form, Image, Nav, Navbar, Offcanvas, OverlayTrigger } from 'react-bootstrap'
-import { FaSearch, FaShoppingCart } from 'react-icons/fa'
-import { IoCloseSharp } from 'react-icons/io5'
-import { RiLogoutBoxFill } from 'react-icons/ri'
-import { UserNameContext, WindowWidthContext } from '../App'
-import { MdPets } from 'react-icons/md'
-import { GiHamburgerMenu } from 'react-icons/gi'
-import { FaArrowsDownToPeople } from 'react-icons/fa6'
-import Login from '../pages/Login'
-import Profile from '../pages/Profile'
-import Signup from '../pages/Signup'
-import { IoMdPersonAdd } from 'react-icons/io'
+import React, { useContext, useRef, useState } from "react";
+import {
+  Button,
+  Card,
+  Dropdown,
+  Image,
+  Nav,
+  Navbar,
+  Offcanvas,
+  OverlayTrigger,
+} from "react-bootstrap";
+import { FaShoppingCart } from "react-icons/fa";
+import { IoCloseSharp } from "react-icons/io5";
+import { RiLogoutBoxFill } from "react-icons/ri";
+import { UserNameContext, WindowWidthContext } from "../App";
+import { MdPets } from "react-icons/md";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { FaArrowsDownToPeople } from "react-icons/fa6";
+import Login from "../pages/Login";
+import Profile from "../pages/Profile";
+import Signup from "../pages/Signup";
+import { IoMdPersonAdd } from "react-icons/io";
+import Search from "./Search";
 
 export default function Navigation() {
-    const { userName } = useContext(UserNameContext);
-    const { setUserName } = useContext(UserNameContext);
-    const { userType } = useContext(UserNameContext);
-    const { setUserType } = useContext(UserNameContext);
-    const { windowWidth } = useContext(WindowWidthContext);
+  const { userName } = useContext(UserNameContext);
+  const { userType } = useContext(UserNameContext);
+  const { setUserType } = useContext(UserNameContext);
+  const { windowWidth } = useContext(WindowWidthContext);
 
-    const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
 
-    const handleToggle = () => setShowOffcanvas(!showOffcanvas);
+  const handleToggle = () => setShowOffcanvas(!showOffcanvas);
 
-    const [showLogin, setShowLogin] = useState(false);
-    const [showSignup, setShowSignup] = useState(false);
-    const [showProfile, setShowProfile] = useState(false);
-  
-    const [showProducts, setShowProducts] = useState(false);
-  
-    const target = useRef(null);
-    
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  const [showProducts, setShowProducts] = useState(false);
+
+  const target = useRef(null);
+
   return (
     <>
-          <Navbar
+      <Navbar
         bg="primary"
         expand="lg"
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow"
@@ -72,28 +81,17 @@ export default function Navigation() {
                   <Nav.Link href="#action2">Log In</Nav.Link>
                   <Nav.Link href="#action3">Dropdown</Nav.Link>
                 </Nav>
-                <Form className="d-flex">
-                  <Form.Control
-                    placeholder="Buscar Productos"
-                    className="d-flex ms-auto me-1 rounded-pill"
-                  />
-                  <Button className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center">
-                    <FaSearch className="me-1" /> Search
-                  </Button>
-                </Form>
+                <div>
+                    <Search/>
+                </div>
               </Offcanvas.Body>
             </Offcanvas>
           </>
         ) : (
           <>
-            <Form.Control
-              placeholder="Buscar Productos"
-              className="d-flex ms-auto me-1 rounded-pill"
-              style={{ maxWidth: "50%" }}
-            />
-            <Button className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center">
-              <FaSearch className="me-1" /> Search
-            </Button>
+            <div className="d-flex justify-content-center align-items-center w-100 m-auto">
+                <Search/>
+            </div>
 
             <OverlayTrigger
               placement="bottom"
@@ -107,14 +105,16 @@ export default function Navigation() {
                   <Card.Body className="p-0">
                     <div className="d-flex justify-content-center rounded-bottom bg-white align-items-center">
                       <Image src="/hola.png" rounded height={80} width={80} />
-                        <p
-                          className="pe-2 ms-3 text-black"
-                          style={{ maxWidth: "55%" }}
-                        >
-                          <strong>title</strong><br/>
-                          ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
-                          <br /><strong>$.100.00</strong>
-                        </p>
+                      <p
+                        className="pe-2 ms-3 text-black"
+                        style={{ maxWidth: "55%" }}
+                      >
+                        <strong>title</strong>
+                        <br />
+                        ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
+                        <br />
+                        <strong>$.100.00</strong>
+                      </p>
 
                       <Button variant="link">
                         <IoCloseSharp size={"1.5rem"} />
@@ -137,13 +137,15 @@ export default function Navigation() {
               <>
                 <Button
                   onClick={() => setShowSignup(true)}
-                  className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
+                  className="bg-secondary text-white me-2 w-auto rounded-pill d-flex justify-content-center align-items-center"
+                  style={{ whiteSpace: "nowrap" }}
                 >
                   Sign Up
                 </Button>
                 <Button
                   onClick={() => setShowLogin(true)}
                   className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
+                  style={{ whiteSpace: "nowrap" }}
                 >
                   Log In
                 </Button>
@@ -203,5 +205,5 @@ export default function Navigation() {
       <Signup show={showSignup} setShow={setShowSignup} />
       <Profile show={showProfile} setShow={setShowProfile} />
     </>
-  )
+  );
 }
