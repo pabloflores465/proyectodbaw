@@ -7,14 +7,16 @@ export default function Product({
   productTitle,
   productDescription,
   productPrice,
+  cartProducts,
+  setCartProducts
 }) {
   return (
     <Card className="shadow w-100 h-100">
       <Card.Img
         variant="top"
         src="hola.png"
-        height={160}
-        width={200}
+        height={240}
+        width={320}
       />
       <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1">
         <Card.Title className="d-flex justify-content-center">
@@ -37,7 +39,11 @@ export default function Product({
           </Button>
           <Button
             variant="success"
-            className="rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-cente"
+            className="rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
+            onClick={()=>{
+              let temp = [... cartProducts];
+              temp.push({image:"hola.png", title: productTitle, text: productDescription, price: productPrice, })
+            }}
           >
             <IoInformationCircleSharp /> <strong>See Details</strong>
           </Button>

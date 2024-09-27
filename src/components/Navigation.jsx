@@ -1,75 +1,39 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Nav,
-  Navbar,
-  Button,
-  Form,
-  Offcanvas,
-  Dropdown,
-  OverlayTrigger,
-  Card,
-  Row,
-  Col,
-  Image,
-} from "react-bootstrap";
-import { Outlet } from "react-router-dom";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaPhone,
-  FaSearch,
-  FaShoppingCart,
-  FaTiktok,
-  FaWhatsapp,
-} from "react-icons/fa";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { UserNameContext } from "../App";
-import { RiLogoutBoxFill } from "react-icons/ri";
-import { IoMdPersonAdd } from "react-icons/io";
-import { MdEmail, MdPets } from "react-icons/md";
-import { FaArrowsDownToPeople } from "react-icons/fa6";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import { IoCloseSharp } from "react-icons/io5";
-import Profile from "../pages/Profile";
+import React, { useContext, useRef, useState } from 'react'
+import { Button, Card, Dropdown, Form, Image, Nav, Navbar, Offcanvas, OverlayTrigger } from 'react-bootstrap'
+import { FaSearch, FaShoppingCart } from 'react-icons/fa'
+import { IoCloseSharp } from 'react-icons/io5'
+import { RiLogoutBoxFill } from 'react-icons/ri'
+import { UserNameContext, WindowWidthContext } from '../App'
+import { MdPets } from 'react-icons/md'
+import { GiHamburgerMenu } from 'react-icons/gi'
+import { FaArrowsDownToPeople } from 'react-icons/fa6'
+import Login from '../pages/Login'
+import Profile from '../pages/Profile'
+import Signup from '../pages/Signup'
+import { IoMdPersonAdd } from 'react-icons/io'
 
 export default function Navigation() {
-  const { userName } = useContext(UserNameContext);
-  const { setUserName } = useContext(UserNameContext);
-  const { userType } = useContext(UserNameContext);
-  const { setUserType } = useContext(UserNameContext);
-  setUserName("Pablo Flores");
-  //setUserType("Admin");
-  const [showOffcanvas, setShowOffcanvas] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const { userName } = useContext(UserNameContext);
+    const { setUserName } = useContext(UserNameContext);
+    const { userType } = useContext(UserNameContext);
+    const { setUserType } = useContext(UserNameContext);
+    const { windowWidth } = useContext(WindowWidthContext);
 
-  //Function to detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
+    const [showOffcanvas, setShowOffcanvas] = useState(false);
 
-    window.addEventListener("resize", handleResize);
+    const handleToggle = () => setShowOffcanvas(!showOffcanvas);
 
-    // Cleanup listener by rezising the component
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const handleToggle = () => setShowOffcanvas(!showOffcanvas);
-
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-
-  const [showProducts, setShowProducts] = useState(false);
-
-  const target = useRef(null);
-
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignup, setShowSignup] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+  
+    const [showProducts, setShowProducts] = useState(false);
+  
+    const target = useRef(null);
+    
   return (
     <>
-      <Navbar
+          <Navbar
         bg="primary"
         expand="lg"
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow"
@@ -84,8 +48,6 @@ export default function Navigation() {
           />{" "}
           D&P Petshop
         </Navbar.Brand>
-
-        {/* Show sidebar only when with is less than 500px */}
         {windowWidth < 1000 ? (
           <>
             <Navbar.Toggle
@@ -151,6 +113,7 @@ export default function Navigation() {
                         >
                           <strong>title</strong><br/>
                           ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
+                          <br /><strong>$.100.00</strong>
                         </p>
 
                       <Button variant="link">
@@ -235,131 +198,10 @@ export default function Navigation() {
           </>
         )}
       </Navbar>
-      <Outlet />
 
       <Login show={showLogin} setShow={setShowLogin} />
       <Signup show={showSignup} setShow={setShowSignup} />
       <Profile show={showProfile} setShow={setShowProfile} />
-
-      {windowWidth > 800 ? (
-        <Card className="bg-primary w-100 text-white text-center rounded-0 shadow">
-          <Row>
-            <Col>
-              <strong>About D&P Petshop</strong>
-            </Col>
-            <Col>
-              <strong>Social Media</strong>
-            </Col>
-            <Col>
-              <strong>Contact Us</strong>
-            </Col>
-            <Col>
-              <strong>About</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col>¿Who are We?</Col>
-            <Col>
-              <FaFacebook /> Facebook
-            </Col>
-            <Col>
-              <FaWhatsapp /> Whatsapp
-            </Col>
-            <Col>Privacy Policy</Col>
-          </Row>
-          <Row>
-            <Col>Mision</Col>
-            <Col>
-              <FaInstagram /> Instagram
-            </Col>
-            <Col>
-              <FaPhone /> +502 1234-4321
-            </Col>
-            <Col>Devs: Pablo Flores & Nohel Estrada</Col>
-          </Row>
-          <Row>
-            <Col>Vision</Col>
-            <Col>
-              <FaTiktok /> Tik Tok
-            </Col>
-            <Col>
-              <MdEmail /> example@gmail.com
-            </Col>
-            <Col>License: GPLV3</Col>
-          </Row>
-        </Card>
-      ) : (
-        <Card className="bg-primary w-100 text-white text-center rounded-0 shadow">
-          <Row>
-            <Col>
-              <strong>About D&P Petshop</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col>¿Who are We?</Col>
-          </Row>
-          <Row>
-            <Col>Mision</Col>
-          </Row>
-          <Row>
-            <Col>Vision</Col>
-          </Row>
-          <Row>
-            <Col>
-              <strong>Social Media</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FaFacebook /> Facebook
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FaInstagram /> Instagram
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FaTiktok /> Tik Tok
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <strong>Contact Us</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FaWhatsapp /> Whatsapp
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <FaPhone /> +502 1234-4321
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <MdEmail /> example@gmail.com
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <strong>About</strong>
-            </Col>
-          </Row>
-          <Row>
-            <Col>Privacy Policy</Col>
-          </Row>
-          <Row>
-            <Col>Devs: Pablo Flores & Nohel Estrada</Col>
-          </Row>
-          <Row>
-            <Col>License: GPLV3</Col>
-          </Row>
-        </Card>
-      )}
     </>
-  );
+  )
 }

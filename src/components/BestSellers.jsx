@@ -9,7 +9,7 @@ function BestSellers() {
         <img
           src="hola.png"
           className="d-block w-100"
-          style={{ objectFit: "cover", height: "300px" }}
+          style={{ objectFit: "cover", width: "480px", height:"270px" }}
         />
 
         <Carousel.Caption>
@@ -21,7 +21,7 @@ function BestSellers() {
         <img
           src="hola.png"
           className="d-block w-100"
-          style={{ objectFit: "cover", height: "300px" }}
+          style={{ objectFit: "cover", width: "480px", height:"270px" }}
         />
         <Carousel.Caption>
           <h3>Second slide label</h3>
@@ -32,7 +32,7 @@ function BestSellers() {
         <img
           src="hola.png"
           className="d-block w-100"
-          style={{ objectFit: "cover", height: "300px" }}
+          style={{ objectFit: "cover", width: "480px", height:"270px" }}
         />
         <Carousel.Caption>
           <h3>Third slide label</h3>
