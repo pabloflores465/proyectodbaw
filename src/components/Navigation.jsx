@@ -1,18 +1,18 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
-  Card,
   Dropdown,
-  Image,
+  FormCheck,
   Nav,
   Navbar,
   Offcanvas,
-  OverlayTrigger,
 } from "react-bootstrap";
-import { FaShoppingCart } from "react-icons/fa";
-import { IoCloseSharp } from "react-icons/io5";
 import { RiLogoutBoxFill } from "react-icons/ri";
-import { UserNameContext, WindowWidthContext } from "../App";
+import {
+  EditProductContext,
+  UserNameContext,
+  WindowWidthContext,
+} from "../App";
 import { MdPets } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaArrowsDownToPeople } from "react-icons/fa6";
@@ -21,12 +21,15 @@ import Profile from "../pages/Profile";
 import Signup from "../pages/Signup";
 import { IoMdPersonAdd } from "react-icons/io";
 import Search from "./Search";
+import Cart from "./Cart";
+import { Form } from "react-router-dom";
 
 export default function Navigation() {
   const { userName } = useContext(UserNameContext);
   const { userType } = useContext(UserNameContext);
   const { setUserType } = useContext(UserNameContext);
   const { windowWidth } = useContext(WindowWidthContext);
+  const { editProduct, setEditProduct } = useContext(EditProductContext);
 
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
@@ -35,10 +38,6 @@ export default function Navigation() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-
-  const [showProducts, setShowProducts] = useState(false);
-
-  const target = useRef(null);
 
   return (
     <>
@@ -82,7 +81,7 @@ export default function Navigation() {
                   <Nav.Link href="#action3">Dropdown</Nav.Link>
                 </Nav>
                 <div>
-                    <Search/>
+                  <Search />
                 </div>
               </Offcanvas.Body>
             </Offcanvas>
@@ -90,49 +89,30 @@ export default function Navigation() {
         ) : (
           <>
             <div className="d-flex justify-content-center align-items-center w-100 m-auto">
-                <Search/>
+              <Search />
             </div>
 
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Card
-                  bg="secondary"
-                  className="text-white ps-0 pe-0"
-                  style={{ maxWidth: "350px" }}
-                >
-                  <Card.Header>Products</Card.Header>
-                  <Card.Body className="p-0">
-                    <div className="d-flex justify-content-center rounded-bottom bg-white align-items-center">
-                      <Image src="/hola.png" rounded height={80} width={80} />
-                      <p
-                        className="pe-2 ms-3 text-black"
-                        style={{ maxWidth: "55%" }}
-                      >
-                        <strong>title</strong>
-                        <br />
-                        ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
-                        <br />
-                        <strong>$.100.00</strong>
-                      </p>
+            {editProduct === false ? (
+              <div className="d-flex flex-row justify-content-center align-items-center text-white">
+                <Cart />
+              </div>
+            ) : null}
 
-                      <Button variant="link">
-                        <IoCloseSharp size={"1.5rem"} />
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              }
-              trigger="click"
-            >
-              <Button
-                ref={target}
-                onClick={() => setShowProducts(!showProducts)}
-                className="ms-auto me-1 text-white"
-              >
-                <FaShoppingCart size={"2rem"} />
-              </Button>
-            </OverlayTrigger>
+            {userType === "Admin" || userType === "Employee" ? (
+              <>
+                <div className="text-white" style={{ whiteSpace: "nowrap" }}>Edit Products</div>
+                <FormCheck
+                  type="switch"
+                  style={{ whiteSpace: "nowrap" }}
+                  checked={editProduct}
+                  onChange={() => setEditProduct(!editProduct)}
+                  isValid
+                  reverse
+                  className="me-1"
+                />
+              </>
+            ) : null}
+
             {userType === "Guest" ? (
               <>
                 <Button
@@ -160,11 +140,6 @@ export default function Navigation() {
                     {userType === "Admin" ? (
                       <Dropdown.Item className="text-success">
                         <FaArrowsDownToPeople /> Users
-                      </Dropdown.Item>
-                    ) : null}
-                    {userType === "Employee" || userType === "Admin" ? (
-                      <Dropdown.Item className="text-success">
-                        <MdPets /> Products
                       </Dropdown.Item>
                     ) : null}
                     <Dropdown.Item>
