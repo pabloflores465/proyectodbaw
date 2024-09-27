@@ -13,7 +13,7 @@ import {
   UserNameContext,
   WindowWidthContext,
 } from "../App";
-import { MdPets } from "react-icons/md";
+
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaArrowsDownToPeople } from "react-icons/fa6";
 import Login from "../pages/Login";
@@ -22,7 +22,6 @@ import Signup from "../pages/Signup";
 import { IoMdPersonAdd } from "react-icons/io";
 import Search from "./Search";
 import Cart from "./Cart";
-import { Form } from "react-router-dom";
 
 export default function Navigation() {
   const { userName } = useContext(UserNameContext);
@@ -44,7 +43,8 @@ export default function Navigation() {
       <Navbar
         bg="primary"
         expand="lg"
-        className="m-0 ps-2 pe-2 pt-0 pb-0 shadow"
+        className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
+        style={{position:"fixed", top: 0, zIndex:999}}
       >
         <Navbar.Brand href="/" className="text-white">
           <img
@@ -153,7 +153,11 @@ export default function Navigation() {
                     </Dropdown.Item>
                     <Dropdown.Item>
                       <Button
-                        onClick={() => setUserType("Guest")}
+                        onClick={() => {
+                            setUserType("Guest")
+                            setEditProduct(false)
+
+                        }}
                         variant="link"
                         className="m-0 p-0 text-success"
                       >

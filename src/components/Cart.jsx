@@ -16,11 +16,11 @@ export default function Cart() {
           <Card
             bg="secondary"
             className="text-white ps-0 pe-0"
-            style={{ maxWidth: "350px" }}
+            style={{ maxWidth: "350px", zIndex:1000 }}
           >
             <Card.Header>Products</Card.Header>
             <Card.Body className="p-0">
-              <div className="d-flex justify-content-center rounded-bottom bg-white align-items-center">
+              <div className="d-flex justify-content-center rounded-bottom bg-white align-items-center" >
                 <Image src="/hola.png" rounded height={80} width={80} />
                 <p className="pe-2 ms-3 text-black" style={{ maxWidth: "55%" }}>
                   <strong>title</strong>

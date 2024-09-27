@@ -4,7 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 
 function BestSellers() {
   return (
-    <Carousel className="mb-4">
+    <Carousel style={{marginTop:'60px'}}>
       <Carousel.Item>
         <img
           src="hola.png"
