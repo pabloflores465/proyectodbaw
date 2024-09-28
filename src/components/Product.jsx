@@ -1,15 +1,13 @@
-import React, { useContext, useState } from "react";
-import { Button, Card, Dropdown, Form, FormControl, Stack } from "react-bootstrap";
-import { FaSave, FaShoppingCart } from "react-icons/fa";
+import React, { useContext } from "react";
+import { Button, Card, Dropdown, Form, FormControl } from "react-bootstrap";
+import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { EditProductContext } from "../App";
 import { IoMdInformationCircle } from "react-icons/io";
-import { AiFillDelete } from "react-icons/ai";
+
 
 export default function Product({ product, index }) {
   const { editProduct } = useContext(EditProductContext);
-
-  const [categories, setCategories] = useState(["Dogs", "Cats", "Collars"]);
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -51,14 +49,14 @@ export default function Product({ product, index }) {
                 <IoMdInformationCircle /> <strong>See Details</strong>
               </Button>
             </div>
-            <Dropdown>
-              <Dropdown.Toggle>Categories</Dropdown.Toggle>
-            <Dropdown.Menu>
+            <Dropdown className="d-flex justify-content-center align-items-center mt-2 ">
+              <Dropdown.Toggle className="text-white rounded-pill" ><FaListAlt/> Categories</Dropdown.Toggle>
+            <Dropdown.Menu className="pt-0 pb-0">
             {product.categories.map((category) => (
-                <Button variant="link" className="text-success">
+              <div className="text-success d-flex justify-content-center border-top">
                 {category}
-                </Button>
-              
+                <br/>
+              </div>
             ))}
             </Dropdown.Menu>
             </Dropdown>
