@@ -1,17 +1,50 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import axios from "axios"
 
 function Signup({ show, setShow }) {
   const [validated, setValidated] = useState(false);
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLatsname] = useState("");
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+  const [phonenumber, setPhonenumber]=useState("");
+  const [birthdate, setBirthdate]=useState("");
+  const [address, setAddress]=useState("");
+  const [cardnumber, setCardnumber]=useState("");
+  const [expdate, setExpdate]=useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
+    try{
+      const response = await axios.put('http://localhost/proyectodbaw/phpsql/signup.php',{
+        firstname : firstname,
+        lastname : lastname,
+        email : email,
+        password : password,
+        phonenumber : phonenumber,
+        birthdate : birthdate,
+        address : address,
+        cardnumber : cardnumber,
+        expdate : expdate
+      });
+      if (response.data.status==="success") {
+        console.log("Registrado");
+        setValidated(true);
+      }else{
 
-    setValidated(true);
+        console.log("no registrado");
+        console.log(email, password);
+        console.log(response);
+      }
+    }catch(error){
+      console.error('Error: ',error);
+    }
   };
 
   const [activeBilling, setActiveBilling] = useState(false);
@@ -47,12 +80,12 @@ function Signup({ show, setShow }) {
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateName">
             <Form.Label className="text-success">First Name</Form.Label>
-            <Form.Control required placeholder="John" type="text" />
+            <Form.Control required placeholder="John" type="text" onChange={(e)=>setFirstname(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateLastName">
             <Form.Label className="text-success">Last Name</Form.Label>
-            <Form.Control required placeholder="Doe" type="text" />
+            <Form.Control required placeholder="Doe" type="text" onChange={(e)=>setLatsname(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateEmail">
@@ -61,33 +94,30 @@ function Signup({ show, setShow }) {
               required
               placeholder="example@gmail.com"
               type="email"
+              onChange={(e)=>setEmail(e.target.value)}
             />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="validateUsername">
-            <Form.Label className="text-success">Username</Form.Label>
-            <Form.Control required placeholder="John Doe" type="text" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Password</Form.Label>
-            <Form.Control required placeholder="Password#123" type="text" />
+            <Form.Control required placeholder="Password#123" type="text" onChange={(e)=>setPassword(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Text>Forgot Password?</Form.Text>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
-            <Form.Label className="text-success">Born Date </Form.Label>
-            <Form.Control required placeholder="01/01/2024" type="date" />
+            <Form.Label className="text-success">Birth Date </Form.Label>
+            <Form.Control required placeholder="01/01/2024" type="date" onChange={(e)=>setBirthdate(e.target.value)}/>
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="validatePassword">
+            <Form.Label className="text-success">Address </Form.Label>
+            <Form.Control required placeholder="Fraijanes, Guatemala" type="text" onChange={(e)=>setAddress(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePhone">
-            <Form.Label className="text-success">Phone 1 </Form.Label>
-            <Form.Control required placeholder="12344321" type="number" />
+            <Form.Label className="text-success">Phone number </Form.Label>
+            <Form.Control required placeholder="12344321" type="number" onChange={(e)=>setPhonenumber(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label className="text-success">Phone 2 </Form.Label>
-            <Form.Control placeholder="12344321" type="number" />
           </Form.Group>
           <Form.Group>
             <Form.Label className="text-success">Billing Profile</Form.Label>
@@ -105,16 +135,14 @@ function Signup({ show, setShow }) {
                 className="mb-3"
                 placeholder="12344321"
                 type="number"
+                onChange={(e)=>setCardnumber(e.target.value)}
               />
-              <Form.Label className="text-success">CCV </Form.Label>
-              <Form.Control placeholder="123" type="number" />
               <Form.Label className="text-success">Expire Date </Form.Label>
-              <Form.Control required placeholder="01/01/2024" type="date" />
+              <Form.Control required placeholder="01/01/2024" type="date" onChange={(e)=>setExpdate(e.target.value)}/>
             </Form.Group>
           ) : null}
           <Button
             variant="secondary text-white rounded-pill w-100"
-            onSubmit={handleClose}
             type="submit"
           >
             Submit
