@@ -30,7 +30,7 @@ export default function Navigation() {
   const { setUserType } = useContext(UserNameContext);
   const { windowWidth } = useContext(WindowWidthContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
-  const {rol } = useContext(RolContext)
+  const {rol, setRol } = useContext(RolContext)
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
@@ -155,7 +155,7 @@ export default function Navigation() {
                     <Dropdown.Item>
                       <Button
                         onClick={() => {
-                            setUserType("Guest")
+                            setRol(0)
                             setEditProduct(false)
 
                         }}

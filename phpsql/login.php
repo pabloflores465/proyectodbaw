@@ -16,7 +16,7 @@ $user = $result->fetch_assoc();
 
 if ($result->num_rows > 0){
 
-    echo json_encode(["message" => "succesful", "status"=>"success", "email"=>$user["email"],"rol"=>$user["rol"]]);
+    echo json_encode(["message" => "succesful", "status"=>"success", "email"=>$user["email"],"rol"=>$user["rol"],"firstname"=>$user["first_name"],"lastname"=>$user["last_name"]]);
 
 }else{
     echo json_encode(["message" => "no matching data", "status"=>"error"]);

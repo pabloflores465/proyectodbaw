@@ -9,7 +9,7 @@ function Login({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [password, setPassword]=useState("");
   const {email, setEmail} = useContext(EmailContext);
-  const { setRol} = useContext(RolContext);
+  const { rol, setRol } = useContext(RolContext);
   const {userName, setUserName} = useContext(UserNameContext)
 
   const handleSubmit = async (event) => {
@@ -27,7 +27,9 @@ function Login({ show, setShow }) {
       });
       if (response.data.status==="success") {
         setEmail(response.data.email);
-        setRol(response.data.rol);
+        setRol(parseInt(response.data.rol));
+        console.log(rol)
+        console.log(typeof response.data.rol)
         let first = response.data.firstname;
         let last = response.data.lastname;
         let completeName = `${first} ${last}` 
