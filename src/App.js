@@ -32,7 +32,7 @@ function App() {
   const [userType, setUserType] = useState(0);
   const [editProduct, setEditProduct] = useState(false);
   const [email, setEmail]=useState("");
-  const [rol, setRol]=useState("");
+  const [rol, setRol]=useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
  
   //Function to detect screen size

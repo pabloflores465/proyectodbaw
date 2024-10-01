@@ -10,6 +10,7 @@ import {
 import { RiLogoutBoxFill } from "react-icons/ri";
 import {
   EditProductContext,
+  RolContext,
   UserNameContext,
   WindowWidthContext,
 } from "../App";
@@ -29,7 +30,7 @@ export default function Navigation() {
   const { setUserType } = useContext(UserNameContext);
   const { windowWidth } = useContext(WindowWidthContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
-
+  const {rol } = useContext(RolContext)
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
@@ -98,7 +99,7 @@ export default function Navigation() {
               </div>
             ) : null}
 
-            {userType === "Admin" || userType === "Employee" ? (
+            {rol === 3 || rol === 2 ? (
               <>
                 <div className="text-white" style={{ whiteSpace: "nowrap" }}>Edit Products</div>
                 <FormCheck
@@ -113,7 +114,7 @@ export default function Navigation() {
               </>
             ) : null}
 
-            {userType === "Guest" ? (
+            {rol === 0 ? (
               <>
                 <Button
                   onClick={() => setShowSignup(true)}
@@ -137,7 +138,7 @@ export default function Navigation() {
                     {userName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{ minWidth: "auto" }}>
-                    {userType === "Admin" ? (
+                    {rol === 3 ? (
                       <Dropdown.Item className="text-success">
                         <FaArrowsDownToPeople /> Users
                       </Dropdown.Item>

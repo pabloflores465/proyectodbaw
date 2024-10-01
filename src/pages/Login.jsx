@@ -9,8 +9,8 @@ function Login({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [password, setPassword]=useState("");
   const {email, setEmail} = useContext(EmailContext);
-  const {rol, setRol} = useContext(RolContext);
-  
+  const { setRol} = useContext(RolContext);
+  const {userName, setUserName} = useContext(UserNameContext)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,6 +28,11 @@ function Login({ show, setShow }) {
       if (response.data.status==="success") {
         setEmail(response.data.email);
         setRol(response.data.rol);
+        let first = response.data.firstname;
+        let last = response.data.lastname;
+        let completeName = `${first} ${last}` 
+        setUserName(completeName)
+        console.log(userName)
         console.log("Logueado",response.data.rol);
         setValidated(true);
         setShow(false);
