@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./pages/Layout";
 import Login from "./pages/Login";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 const router = createBrowserRouter([
   {
@@ -29,14 +29,10 @@ export const EmailContext = createContext();
 export const RolContext = createContext();
 
 function App() {
-  const { getItem: getUserName, setItem: setUser } = useLocalStorage("userName", "Guest");
-  const { getItem: getUserType, setItem: setType } = useLocalStorage("userType", "Guest");
-  //You need to wrap the routes in a context to access the variables
-  const [userName, setUserName] = useState(() => getItem());
-  const [userType, setUserType] = useState(0);
-  const [editProduct, setEditProduct] = useState(false);
+  const [ userName, setUserName ] = useLocalStorage("userName", "Guest");
+  const [ editProduct, setEditProduct ] = useLocalStorage("editProduct", false);
+  const [ rol, setRol ] = useLocalStorage("rol", 0); //0=Guest, 1=Invited, 2=Employee, 3=Admin
   const [email, setEmail]=useState("");
-  const [rol, setRol]=useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
  
   //Function to detect screen size
@@ -56,7 +52,7 @@ function App() {
   return (
     <React.StrictMode>
       <UserNameContext.Provider
-        value={{ userName, setUserName, userType, setUserType }}
+        value={{ userName, setUserName }}
       >
         <WindowWidthContext.Provider value={{ windowWidth }}>
           <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
