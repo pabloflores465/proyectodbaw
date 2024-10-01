@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap"
 import axios from "axios"
+import { EmailContext, RolContext, UserNameContext } from "../App";
 
 function Login({ show, setShow }) {
   const handleClose = () => setShow(false);
 
   const [validated, setValidated] = useState(false);
-  const [email, setEmail]=useState("");
   const [password, setPassword]=useState("");
+  const {email, setEmail} = useContext(EmailContext);
+  const {rol, setRol} = useContext(RolContext);
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
     
@@ -24,8 +26,11 @@ function Login({ show, setShow }) {
 
       });
       if (response.data.status==="success") {
-        console.log("Logueado");
+        setEmail(response.data.email);
+        setRol(response.data.rol);
+        console.log("Logueado",response.data.rol);
         setValidated(true);
+        setShow(false);
       }else{
 
         console.log("no logueado");
@@ -71,6 +76,7 @@ function Login({ show, setShow }) {
           <Button
             variant="secondary text-white rounded-pill w-100"
             type="submit"
+            onSubmit={handleSubmit}
           >
             Submit
           </Button>

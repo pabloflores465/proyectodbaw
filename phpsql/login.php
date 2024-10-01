@@ -12,10 +12,11 @@ $password = $data->password;
 
 $sql="SELECT * FROM users WHERE email = '$email' AND password = '$password'";
 $result = $connection->query($sql);
+$user = $result->fetch_assoc();
 
 if ($result->num_rows > 0){
 
-    echo json_encode(["message" => "succesful", "status"=>"success"]);
+    echo json_encode(["message" => "succesful", "status"=>"success", "email"=>$user["email"],"rol"=>$user["rol"]]);
 
 }else{
     echo json_encode(["message" => "no matching data", "status"=>"error"]);
