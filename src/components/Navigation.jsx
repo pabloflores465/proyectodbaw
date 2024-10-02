@@ -108,7 +108,7 @@ export default function Navigation() {
                     <div className="d-flex flex-row align-items-center mb-2">
                       <Dropdown>
                         <Dropdown.Toggle variant="link">
-                          `${userProfile.firstName} ${userProfile.lastName}`
+                          {userProfile.firstName}{" "}{userProfile.lastName}
                         
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="w-100">
