@@ -26,19 +26,20 @@ export const WindowWidthContext = createContext();
 export const EditProductContext = createContext();
 
 function App() {
-  const [userProfile, setUserProfile] = useLocalStorage("userName", {
-    firstName: "Guest",
-    lastName: null,
-    email: null,
-    birthDate: null,
-    address: null,
-    phoneNumber: null,
-    rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
-    active: false,
-    cardNumber: null,
-    expireDate: null,
-    lastConection: null
-  });
+  let guestProfile = {
+  firstName: "Guest",
+  lastName: null,
+  email: null,
+  birthDate: null,
+  address: null,
+  phoneNumber: null,
+  rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
+  active: false,
+  cardNumber: null,
+  expireDate: null,
+  lastConection: null
+}
+  const [userProfile, setUserProfile] = useLocalStorage("userName", guestProfile);
   const [editProduct, setEditProduct] = useLocalStorage("editProduct", false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -58,7 +59,7 @@ function App() {
 
   return (
     <React.StrictMode>
-      <UserProfileContext.Provider value={{ userProfile, setUserProfile }}>
+      <UserProfileContext.Provider value={{ userProfile, setUserProfile, guestProfile }}>
         <WindowWidthContext.Provider value={{ windowWidth }}>
           <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
             <RouterProvider router={router} />

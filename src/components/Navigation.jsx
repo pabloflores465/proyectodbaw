@@ -24,7 +24,7 @@ import Search from "./Search";
 import Cart from "./Cart";
 
 export default function Navigation() {
-  const { userProfile, setUserProfile } = useContext(UserProfileContext)
+  const { userProfile, setUserProfile, guestProfile } = useContext(UserProfileContext)
   const { windowWidth } = useContext(WindowWidthContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
@@ -152,21 +152,8 @@ export default function Navigation() {
                       <Button
                         onClick={() => {
                             localStorage.clear()
-                            setUserProfile({
-                              firstName: "Guest",
-                              lastName: null,
-                              email: null,
-                              birthDate: null,
-                              address: null,
-                              phoneNumber: null,
-                              rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
-                              active: false,
-                              cardNumber: null,
-                              expireDate: null,
-                              lastConection: null
-                            })
+                            setUserProfile(guestProfile)
                             setEditProduct(false)
-
                         }}
                         variant="link"
                         className="m-0 p-0 text-success"
