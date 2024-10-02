@@ -37,6 +37,7 @@ function App() {
   active: false,
   cardNumber: null,
   expireDate: null,
+  userId:null,
   lastConection: null
 }
   const [userProfile, setUserProfile] = useLocalStorage("userName", guestProfile);

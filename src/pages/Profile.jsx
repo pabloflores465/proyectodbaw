@@ -1,36 +1,46 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { UserProfileContext } from "../App";
+import { useContext } from "react";
+import axios from "axios";
 
 function Profile({ show, setShow }) {
   const [validated, setValidated] = useState(false);
-
-  const handleSubmit = (event) => {
+  const {userProfile, setUserProfile} = useContext(UserProfileContext)
+    let temp = userProfile;
+  
+  const handleSubmit = async (event) => {
+    
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-
+    try{
+      const response = await axios.put('http://localhost/proyectodbaw/phpsql/profile.php',{
+        firstname : temp.firstName,
+        lastname : temp.lastName,
+        email : temp.email,
+        birthdate : temp.birthDate,
+        address : temp.address,
+        phonenumber : parseInt(temp.phoneNumber),
+        cardnumber : parseInt(temp.cardNumber),
+        expiredate : temp.expireDate,
+        iduser : parseInt(temp.userId)
+      });
+      if (response.data.status==="success") {
+        console.log("Actualizado");
+      }else{
+        console.log("no actualizado");
+        console.log(response);
+      }
+    }catch(error){
+      console.error('Error: ',error);
+    }
     setValidated(true);
   };
 
-
-
-  let profile = {
-    name: "Pablo",
-    lastName: "Flores",
-    email: "hola@gmail.com",
-    userName: "Pablo Flores",
-    bornDate: "2024-01-01",
-    phone1: 12344321,
-    phone2: 43214321,
-    activeBilling: true,
-    cardNumber: 12345678,
-    ccv: 789,
-    expireDate: "2024-02-12",
-
-  }
-  const [activeBilling, setActiveBilling] = useState(profile.activeBilling);
+  const [activeBilling, setActiveBilling] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -65,48 +75,45 @@ function Profile({ show, setShow }) {
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateName">
             <Form.Label className="text-success">First Name</Form.Label>
-            <Form.Control required placeholder="John" value={profile.name} type="text" />
+            <Form.Control required placeholder={userProfile.firstName} onChange={(e)=>{
+              temp.firstName = e.target.value
+              setUserProfile(temp)
+            }} type="text" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateLastName">
             <Form.Label className="text-success">Last Name</Form.Label>
-            <Form.Control required placeholder="Doe" value={profile.lastName} type="text" />
+            <Form.Control required placeholder={userProfile.lastName} onChange={(e)=>{
+              temp.lastName = e.target.value
+              setUserProfile(temp)
+            }} type="text" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateEmail">
             <Form.Label className="text-success">E-Mail</Form.Label>
             <Form.Control
               required
-              value={profile.email}
-              placeholder="example@gmail.com"
+              placeholder={userProfile.email}
+              onChange={(e)=>{
+                temp.email = e.target.value
+                setUserProfile(temp)
+              }}
               type="email"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="validateUsername">
-            <Form.Label className="text-success">Username</Form.Label>
-            <Form.Control required value={profile.userName} placeholder="John Doe" type="text" />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="validatePassword">
-            <Form.Label className="text-success">Password</Form.Label>
-            <Form.Control required placeholder="Password#123" type="text" />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Text>Forgot Password?</Form.Text>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="validatePassword">
-            <Form.Label className="text-success">Born Date </Form.Label>
-            <Form.Control required value={profile.bornDate} placeholder="2024-01-01" type="date"  onChange={(e)=>{console.log(e.target.value)}}/>
+          <Form.Group className="mb-3" controlId="validateBirthdate">
+            <Form.Label className="text-success">BirthDate </Form.Label>
+            <Form.Control required placeholder={userProfile.birthDate} type="date"  onChange={(e)=>{console.log(e.target.value)}}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePhone">
-            <Form.Label className="text-success">Phone 1 </Form.Label>
-            <Form.Control required value={profile.phone1} placeholder="12344321" type="number" />
+            <Form.Label className="text-success">Phone Number </Form.Label>
+            <Form.Control required placeholder={userProfile.phoneNumber} onChange={(e)=>{
+              temp.phoneNumber = e.target.value
+              setUserProfile(temp)
+            }} type="number" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label className="text-success">Phone 2 </Form.Label>
-            <Form.Control value={profile.phone2} placeholder="12344321" type="number" />
           </Form.Group>
           <Form.Group>
             <Form.Label className="text-success">Billing Profile</Form.Label>
@@ -114,23 +121,27 @@ function Profile({ show, setShow }) {
               type="switch"
               id="custom-switch"
               className=" mb-3"
-              defaultChecked={profile.activeBilling}
+              defaultChecked={activeBilling}
               onChange={() => setActiveBilling(!activeBilling)}
             />
           </Form.Group>
-          {profile.activeBilling === true ? (
+          {activeBilling === true ? (
             <Form.Group className="mb-3">
               <Form.Label className="text-success">Card Number </Form.Label>
               <Form.Control
                 className="mb-3"
-                value={profile.cardNumber}
-                placeholder="12344321"
+                onChange={(e)=>{
+                  temp.cardNumber = e.target.value
+                  setUserProfile(temp)
+                }}
+                placeholder={userProfile.cardNumber}
                 type="number"
               />
-              <Form.Label className="text-success">CCV </Form.Label>
-              <Form.Control value={profile.ccv} placeholder="123" type="number" />
               <Form.Label className="text-success">Expire Date </Form.Label>
-              <Form.Control value={profile.expireDate} placeholder="01/01/2024" type="date" />
+              <Form.Control onChange={(e)=>{
+              temp.expireDate = e.target.value
+              setUserProfile(temp)
+            }} placeholder={userProfile.expireDate} type="date" />
             </Form.Group>
           ) : null}
           <Button
