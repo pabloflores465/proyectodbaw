@@ -28,8 +28,8 @@ function Login({ show, setShow }) {
       if (response.data.status==="success") {
         temp.email = response.data.email;
         temp.rol = parseInt(response.data.rol);
-        temp.first = response.data.firstname;
-        temp.last = response.data.lastname;
+        temp.firstName = response.data.firstname;
+        temp.lastName = response.data.lastname;
         console.log("Logueado",response.data.rol);
         setValidated(true);
         setShow(false);
