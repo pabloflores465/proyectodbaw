@@ -1,18 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useImperativeHandle, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap"
 import axios from "axios"
-import { EmailContext, RolContext, UserNameContext } from "../App";
+import { UserProfileContext } from "../App";
 
 function Login({ show, setShow }) {
   const handleClose = () => setShow(false);
 
   const [validated, setValidated] = useState(false);
   const [password, setPassword]=useState("");
-  const {email, setEmail} = useContext(EmailContext);
-  const { rol, setRol } = useContext(RolContext);
-  const {userName, setUserName} = useContext(UserNameContext)
+  //const {email, setEmail} = useContext(EmailContext);
+  const {userProfile, setUserProfile} = useContext(UserProfileContext)
 
   const handleSubmit = async (event) => {
+    let temp = userProfile
     event.preventDefault();
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -21,27 +21,22 @@ function Login({ show, setShow }) {
     
     try{
       const response = await axios.post('http://localhost/proyectodbaw/phpsql/login.php',{
-        email: email.trim(),
-        password: password.trim()
+        email: temp.email.trim(),
+        password: password
 
       });
       if (response.data.status==="success") {
-        setEmail(response.data.email);
-        setRol(parseInt(response.data.rol));
-        console.log(rol)
-        console.log(typeof response.data.rol)
-        let first = response.data.firstname;
-        let last = response.data.lastname;
-        let completeName = `${first} ${last}` 
-        setUserName(completeName)
-        console.log(userName)
+        temp.email = response.data.email;
+        temp.rol = parseInt(response.data.rol);
+        temp.first = response.data.firstname;
+        temp.last = response.data.lastname;
         console.log("Logueado",response.data.rol);
         setValidated(true);
         setShow(false);
+        setUserProfile(temp)
       }else{
 
         console.log("no logueado");
-        console.log(email, password);
         console.log(response);
       }
     }catch(error){
@@ -72,7 +67,11 @@ function Login({ show, setShow }) {
         >
           <Form.Group className="mb-3" controlId="validateUserName">
             <Form.Label className="text-success">E-mail</Form.Label>
-            <Form.Control required placeholder="John Doe" type="text" value= {email} onChange={(e)=>setEmail(e.target.value)}/>
+            <Form.Control required placeholder="John Doe" type="text" value= {userProfile.email} onChange={(e)=>{
+              let temp = userProfile
+              temp.email = e.target.value
+              setUserProfile(temp)
+            }}/>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="validatePassword">

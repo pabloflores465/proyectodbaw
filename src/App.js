@@ -5,7 +5,6 @@ import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./pages/Layout";
-import Login from "./pages/Login";
 import useLocalStorage from "./hooks/useLocalStorage";
 
 const router = createBrowserRouter([
@@ -22,19 +21,27 @@ const router = createBrowserRouter([
   },
 ]);
 
-export const UserNameContext = createContext();
+export const UserProfileContext = createContext();
 export const WindowWidthContext = createContext();
 export const EditProductContext = createContext();
-export const EmailContext = createContext();
-export const RolContext = createContext();
 
 function App() {
-  const [ userName, setUserName ] = useLocalStorage("userName", "Guest");
-  const [ editProduct, setEditProduct ] = useLocalStorage("editProduct", false);
-  const [ rol, setRol ] = useLocalStorage("rol", 0); //0=Guest, 1=Invited, 2=Employee, 3=Admin
-  const [email, setEmail]=useState("");
+  const [userProfile, setUserProfile] = useLocalStorage("userName", {
+    firstName: "Guest",
+    lastName: null,
+    email: null,
+    birthDate: null,
+    address: null,
+    phoneNumber: null,
+    rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
+    active: false,
+    cardNumber: null,
+    expireDate: null,
+    lastConection: null
+  });
+  const [editProduct, setEditProduct] = useLocalStorage("editProduct", false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
- 
+
   //Function to detect screen size
   useEffect(() => {
     const handleResize = () => {
@@ -51,19 +58,13 @@ function App() {
 
   return (
     <React.StrictMode>
-      <UserNameContext.Provider
-        value={{ userName, setUserName }}
-      >
+      <UserProfileContext.Provider value={{ userProfile, setUserProfile }}>
         <WindowWidthContext.Provider value={{ windowWidth }}>
           <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
-            <EmailContext.Provider value={{email, setEmail}}>
-              <RolContext.Provider value = {{rol, setRol}}>
-              <RouterProvider router={router} />
-              </RolContext.Provider>
-            </EmailContext.Provider>
+            <RouterProvider router={router} />
           </EditProductContext.Provider>
         </WindowWidthContext.Provider>
-      </UserNameContext.Provider>
+      </UserProfileContext.Provider>
     </React.StrictMode>
   );
 }

@@ -10,8 +10,7 @@ import {
 import { RiLogoutBoxFill } from "react-icons/ri";
 import {
   EditProductContext,
-  RolContext,
-  UserNameContext,
+  UserProfileContext,
   WindowWidthContext,
 } from "../App";
 
@@ -25,12 +24,9 @@ import Search from "./Search";
 import Cart from "./Cart";
 
 export default function Navigation() {
-  const { userName } = useContext(UserNameContext);
-  const { userType } = useContext(UserNameContext);
-  const { setUserType } = useContext(UserNameContext);
+  const { userProfile, setUserProfile } = useContext(UserProfileContext)
   const { windowWidth } = useContext(WindowWidthContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
-  const {rol, setRol } = useContext(RolContext)
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
@@ -99,7 +95,7 @@ export default function Navigation() {
               </div>
             ) : null}
 
-            {rol === 3 || rol === 2 ? (
+            {userProfile.rol === 3 || userProfile.rol === 2 ? (
               <>
                 <div className="text-white" style={{ whiteSpace: "nowrap" }}>Edit Products</div>
                 <FormCheck
@@ -114,7 +110,7 @@ export default function Navigation() {
               </>
             ) : null}
 
-            {rol === 0 ? (
+            {userProfile.rol === 0 ? (
               <>
                 <Button
                   onClick={() => setShowSignup(true)}
@@ -135,10 +131,10 @@ export default function Navigation() {
               <>
                 <Dropdown>
                   <Dropdown.Toggle className="text-white">
-                    {userName}
+                    {`${userProfile.first} ${userProfile.last}`}
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{ minWidth: "auto" }}>
-                    {rol === 3 ? (
+                    {userProfile.rol === 3 ? (
                       <Dropdown.Item className="text-success">
                         <FaArrowsDownToPeople /> Users
                       </Dropdown.Item>
@@ -155,7 +151,20 @@ export default function Navigation() {
                     <Dropdown.Item>
                       <Button
                         onClick={() => {
-                            setRol(0)
+                            localStorage.clear()
+                            setUserProfile({
+                              firstName: "Guest",
+                              lastName: null,
+                              email: null,
+                              birthDate: null,
+                              address: null,
+                              phoneNumber: null,
+                              rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
+                              active: false,
+                              cardNumber: null,
+                              expireDate: null,
+                              lastConection: null
+                            })
                             setEditProduct(false)
 
                         }}
