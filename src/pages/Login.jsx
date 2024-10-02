@@ -30,6 +30,13 @@ function Login({ show, setShow }) {
         temp.rol = parseInt(response.data.rol);
         temp.firstName = response.data.firstname;
         temp.lastName = response.data.lastname;
+        temp.birthDate = response.data.birthdate;
+        temp.address =  response.data.address;
+        temp.cardNumber = response.data.cardnumber;
+        temp.expireDate = response.data.expiredate;
+        temp.phoneNumber = response.data.phonenumber;
+        temp.lastConection = response.data.lastconnection;
+        temp.active = parseInt(response.data.active);
         console.log("Logueado",response.data.rol);
         setValidated(true);
         setShow(false);
