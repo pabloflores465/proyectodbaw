@@ -1,16 +1,18 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Card, Image, OverlayTrigger } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import { WindowWidthContext } from "../App";
 
-export default function Cart({showOffcanvas}) {
+export default function Cart() {
     const [showProducts, setShowProducts] = useState(false);
+    const {windowWidth} = useContext(WindowWidthContext)
     
     const target = useRef(null); 
 
   return (
     <>
-      {showOffcanvas === false ? ( 
+      {windowWidth > 1000 ? ( 
       <OverlayTrigger
         placement="bottom"
         overlay={

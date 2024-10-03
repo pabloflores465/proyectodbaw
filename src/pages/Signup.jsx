@@ -36,6 +36,7 @@ function Signup({ show, setShow }) {
       if (response.data.status==="success") {
         console.log("Registrado");
         setValidated(true);
+        setShow(false)
       }else{
 
         console.log("no registrado");
