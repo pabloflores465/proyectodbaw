@@ -39,7 +39,6 @@ export default function Navigation() {
   const [showProfile, setShowProfile] = useState(false);
   const [showNewUserAdmin, setShowNewUserAdmin] = useState(false);
 
-  console.log(userProfile)
   return (
     <>
       <Navbar

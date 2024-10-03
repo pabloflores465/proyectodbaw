@@ -41,11 +41,11 @@ function NewUserAdmin({ show, setShow }) {
     }
   };
 
-  const [activeBilling, setActiveBilling] = useState(false);
+  //const [activeBilling, setActiveBilling] = useState(false);
 
   const handleClose = () => {
     setShow(false);
-    setActiveBilling(false);
+    //setActiveBilling(false);
   };
 
   return (
