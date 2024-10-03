@@ -18,7 +18,7 @@ $address = $data->address;
 $cardnumber = $data->cardnumber;
 $expdate = $data->expdate;
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, state, card_number, expire_date, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28')";
+$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28')";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {
