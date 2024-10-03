@@ -151,11 +151,7 @@ export default function Navigation() {
                       />
                     </div>
                   )}
-                  {editProduct === false ? (
-                    <div className="d-flex flex-row justify-content-center align-items-center">
-                      <Cart />
-                    </div>
-                  ) : null}
+
                   {userProfile.rol === 3 || userProfile.rol === 2 ? (
                     <div className="d-flex flex-row mb-2">
                       <div>Edit Products</div>
@@ -171,9 +167,15 @@ export default function Navigation() {
                     </div>
                   ) : null}
 
-                  <div>
+
+                  <div className="mb-2">
                     <Search />
                   </div>
+
+                  {editProduct === false ? (
+                    <Cart showOffcanvas={showOffcanvas} />
+          
+                  ) : null}
                 </Nav>
               </Offcanvas.Body>
             </Offcanvas>
@@ -186,7 +188,7 @@ export default function Navigation() {
 
             {editProduct === false ? (
               <div className="d-flex flex-row justify-content-center align-items-center text-white">
-                <Cart />
+                <Cart showOffcanvas={showOffcanvas} />
               </div>
             ) : null}
 

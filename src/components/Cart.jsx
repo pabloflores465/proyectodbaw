@@ -3,13 +3,14 @@ import { Button, Card, Image, OverlayTrigger } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 
-export default function Cart() {
+export default function Cart({showOffcanvas}) {
     const [showProducts, setShowProducts] = useState(false);
     
     const target = useRef(null); 
 
   return (
     <>
+      {showOffcanvas === false ? ( 
       <OverlayTrigger
         placement="bottom"
         overlay={
@@ -47,6 +48,9 @@ export default function Cart() {
           <FaShoppingCart size={"2rem"} />
         </Button>
       </OverlayTrigger>
+      ):(<>
+      <Button className="text-white rounded-pill align-items-center bg-secondary"><FaShoppingCart/> Add to Cart</Button>
+      </>)}
     </>
   );
 }
