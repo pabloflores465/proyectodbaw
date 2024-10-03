@@ -8,6 +8,7 @@ import {
   Offcanvas,
 } from "react-bootstrap";
 import { RiLogoutBoxFill } from "react-icons/ri";
+import { CgUserList } from "react-icons/cg";
 import {
   EditProductContext,
   UserProfileContext,
@@ -114,6 +115,11 @@ export default function Navigation() {
                         
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="w-100">
+                        {userProfile.rol === 3 ? (
+                            <Dropdown.Item className="text-success">
+                              <CgUserList /> Users List
+                            </Dropdown.Item>
+                          ) : null}
                           {userProfile.rol === 3 ? (
                             <Dropdown.Item className="text-success">
                               <Button
@@ -121,7 +127,7 @@ export default function Navigation() {
                                 variant="link"
                                 className="m-0 p-0 text-success"
                             >
-                              <FaArrowsDownToPeople /> Users
+                              <FaArrowsDownToPeople /> Add User
                               </Button>
                             </Dropdown.Item>
                           ) : null}
@@ -239,6 +245,11 @@ export default function Navigation() {
                     {userProfile.firstName}{" "}{userProfile.lastName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{ minWidth: "auto" }}>
+                  {userProfile.rol === 3 ? (
+                            <Dropdown.Item className="text-success">
+                              <CgUserList /> Users List
+                            </Dropdown.Item>
+                          ) : null}
                     {userProfile.rol === 3 ? (
                       <Dropdown.Item className="text-success">
                         <Button
@@ -246,7 +257,7 @@ export default function Navigation() {
                         variant="link"
                         className="m-0 p-0 text-success"
                       >
-                        <FaArrowsDownToPeople /> Users
+                        <FaArrowsDownToPeople /> Add User
                         </Button>
                       </Dropdown.Item>
                     ) : null}

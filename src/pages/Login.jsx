@@ -26,6 +26,8 @@ function Login({ show, setShow }) {
 
       });
       if (response.data.status==="success") {
+        temp.active = parseInt(response.data.active);
+        if (temp.active===1){
         temp.email = response.data.email;
         temp.rol = parseInt(response.data.rol);
         temp.firstName = response.data.firstname;
@@ -36,16 +38,20 @@ function Login({ show, setShow }) {
         temp.expireDate = response.data.expiredate;
         temp.phoneNumber = response.data.phonenumber;
         temp.lastConection = response.data.lastconnection;
-        temp.active = parseInt(response.data.active);
         temp.userId = parseInt(response.data.userid)
         console.log("Logueado",response.data.rol);
         setValidated(true);
         setShow(false);
         setUserProfile(temp)
+        }else{
+          console.log("Usuario inactivo o no confirmado");
+          localStorage.clear();
+        }
       }else{
 
         console.log("no logueado");
         console.log(response);
+        localStorage.clear();
       }
     }catch(error){
       console.error('Error: ',error);
@@ -75,7 +81,7 @@ function Login({ show, setShow }) {
         >
           <Form.Group className="mb-3" controlId="validateUserName">
             <Form.Label className="text-success">E-mail</Form.Label>
-            <Form.Control required placeholder="John Doe" type="text" value= {userProfile.email} onChange={(e)=>{
+            <Form.Control required placeholder="John Doe" type="text" onChange={(e)=>{
               let temp = userProfile
               temp.email = e.target.value
               setUserProfile(temp)
@@ -84,7 +90,7 @@ function Login({ show, setShow }) {
 
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Password</Form.Label>
-            <Form.Control required placeholder="Password#123" type="password" value= {password} onChange={(e)=>setPassword(e.target.value)}/>
+            <Form.Control required placeholder="Password#123" type="password" onChange={(e)=>setPassword(e.target.value)}/>
             <Form.Text>Forgot Password?</Form.Text>
           </Form.Group>
           <Button
