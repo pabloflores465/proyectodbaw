@@ -6,6 +6,10 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $data = json_decode(file_get_contents("php://input"));
 
 $firstname = $data->firstname;
