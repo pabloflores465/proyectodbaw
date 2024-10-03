@@ -7,7 +7,7 @@ import axios from "axios";
 function Profile({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const {userProfile, setUserProfile} = useContext(UserProfileContext)
-    let temp = userProfile;
+    let temp = {...userProfile};
   
   const handleSubmit = async (event) => {
     
@@ -29,6 +29,7 @@ function Profile({ show, setShow }) {
         iduser : parseInt(temp.userId)
       });
       if (response.data.status==="success") {
+        setUserProfile(temp);
         console.log("Actualizado");
       }else{
         console.log("no actualizado");
@@ -75,9 +76,8 @@ function Profile({ show, setShow }) {
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateName">
             <Form.Label className="text-success">First Name</Form.Label>
-            <Form.Control required placeholder={userProfile.firstName} onChange={(e)=>{
+            <Form.Control required placeholder={temp.firstName} onChange={(e)=>{
               temp.firstName = e.target.value
-              setUserProfile(temp)
             }} type="text" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -85,7 +85,6 @@ function Profile({ show, setShow }) {
             <Form.Label className="text-success">Last Name</Form.Label>
             <Form.Control required placeholder={userProfile.lastName} onChange={(e)=>{
               temp.lastName = e.target.value
-              setUserProfile(temp)
             }} type="text" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -96,10 +95,16 @@ function Profile({ show, setShow }) {
               placeholder={userProfile.email}
               onChange={(e)=>{
                 temp.email = e.target.value
-                setUserProfile(temp)
               }}
               type="email"
             />
+             <Form.Group className="mb-3" controlId="validateLastName">
+            <Form.Label className="text-success">Address</Form.Label>
+            <Form.Control required placeholder={userProfile.address} onChange={(e)=>{
+              temp.address = e.target.value
+            }} type="text" />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateBirthdate">
@@ -111,8 +116,7 @@ function Profile({ show, setShow }) {
             <Form.Label className="text-success">Phone Number </Form.Label>
             <Form.Control required placeholder={userProfile.phoneNumber} onChange={(e)=>{
               temp.phoneNumber = e.target.value
-              setUserProfile(temp)
-            }} type="number" />
+            }} type="tel" />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
@@ -132,7 +136,6 @@ function Profile({ show, setShow }) {
                 className="mb-3"
                 onChange={(e)=>{
                   temp.cardNumber = e.target.value
-                  setUserProfile(temp)
                 }}
                 placeholder={userProfile.cardNumber}
                 type="number"
@@ -140,7 +143,6 @@ function Profile({ show, setShow }) {
               <Form.Label className="text-success">Expire Date </Form.Label>
               <Form.Control onChange={(e)=>{
               temp.expireDate = e.target.value
-              setUserProfile(temp)
             }} placeholder={userProfile.expireDate} type="date" />
             </Form.Group>
           ) : null}
