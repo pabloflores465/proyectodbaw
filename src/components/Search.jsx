@@ -32,7 +32,7 @@ export default function Search() {
           className="d-flex rounded-end-pill me-2"
         />
 
-        <Button className="bg-secondary text-white rounded-pill me-2 d-flex justify-content-center align-items-center">
+        <Button className="bg-success text-white rounded-pill me-2 d-flex justify-content-center align-items-center">
           <FaSearch className="me-1" /> Search
         </Button>
       </Form>
