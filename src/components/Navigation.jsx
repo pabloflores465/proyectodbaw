@@ -26,6 +26,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import Search from "./Search";
 import Cart from "./Cart";
 import { IoLogIn } from "react-icons/io5";
+import UsersList from "../pages/UsersList";
 
 export default function Navigation() {
   const { userProfile, setUserProfile, guestProfile } =
@@ -42,6 +43,7 @@ export default function Navigation() {
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showNewUserAdmin, setShowNewUserAdmin] = useState(false);
+  const [showUsersList, setShowUsersList] = useState(false);
 
   return (
     <>
@@ -126,9 +128,15 @@ export default function Navigation() {
                           />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="w-100">
-                          {userProfile.rol === 3 ? (
+                        {userProfile.rol === 3 ? (
                             <Dropdown.Item className="text-success" style={{textAlign: "center"}}>
+                              <Button
+                                onClick={() => setShowUsersList(true)}
+                                variant="link"
+                                className="m-0 p-0 text-success"
+                            >
                               <CgUserList /> Users List
+                              </Button>
                             </Dropdown.Item>
                           ) : null}
                           {userProfile.rol === 3 ? (
@@ -257,11 +265,17 @@ export default function Navigation() {
                     {userProfile.firstName} {userProfile.lastName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{ minWidth: "auto" }}>
-                    {userProfile.rol === 3 ? (
-                      <Dropdown.Item className="text-success">
-                        <CgUserList /> Users List
-                      </Dropdown.Item>
-                    ) : null}
+                  {userProfile.rol === 3 ? (
+                            <Dropdown.Item className="text-success">
+                              <Button
+                                onClick={() => setShowUsersList(true)}
+                                variant="link"
+                                className="m-0 p-0 text-success"
+                            >
+                              <CgUserList /> Users List
+                              </Button>
+                            </Dropdown.Item>
+                          ) : null}
                     {userProfile.rol === 3 ? (
                       <Dropdown.Item className="text-success">
                         <Button
@@ -324,6 +338,7 @@ export default function Navigation() {
       <NewUserAdmin show={showNewUserAdmin} setShow={setShowNewUserAdmin} />
       <Signup show={showSignup} setShow={setShowSignup} />
       <Profile show={showProfile} setShow={setShowProfile} />
+      <UsersList show={showUsersList} setShow={setShowUsersList}/>
     </>
   );
 }
