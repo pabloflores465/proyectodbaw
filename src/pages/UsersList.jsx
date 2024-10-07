@@ -88,7 +88,7 @@ const [formData, setFormData]=useState({});
           <th>birth_date</th>
           <th>address</th>
           <th>phone_number</th>
-          <th>current rol</th>
+          <th>current_rol</th>
           <th>active</th>
           <th>card_number</th>
           <th>expire_date</th>
