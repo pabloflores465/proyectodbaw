@@ -38,7 +38,8 @@ const [formData, setFormData]=useState({});
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setFormData({formData, [name]: value });
+    setFormData({... formData, [name]: value });
+    console.log(formData.rol)
   };
 
   const handleSave = async (id) => {
@@ -87,7 +88,7 @@ const [formData, setFormData]=useState({});
           <th>birth_date</th>
           <th>address</th>
           <th>phone_number</th>
-          <th>rol</th>
+          <th>current rol</th>
           <th>active</th>
           <th>card_number</th>
           <th>expire_date</th>
@@ -152,18 +153,22 @@ const [formData, setFormData]=useState({});
                     <td>
                       <Form.Control
                         type="text"
-                        name="rol"
+                        name="rollling stones"
                         value={formData.rol}
                         onChange={handleInput}
+                        
                       />
-                      {console.log(formData.rol)}
+                      
                     </td>
                     <td>
                       <Form.Control
                         type="text"
                         name="active"
                         value={formData.active}
-                        onChange={handleInput}
+                        onChange={()=>{
+                          handleInput()
+                          
+                        }}
                       />
                     </td>
                     <td>
