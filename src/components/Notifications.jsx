@@ -21,8 +21,8 @@ export default function Notifications({ notifications, setNotifications }) {
   return (
     <ToastContainer
       position={position}
-      style={{ zIndex: 2000 }}
-      className="mb-2"
+      style={{ position: "fixed", marginTop:windowWidth > 1000 ? 70:0 ,zIndex: 2000 }}
+      className={windowWidth > 1000 ? "ms-2":"mb-2"}
     >
       {notifications.map((notification, index) => (
         <Toast
