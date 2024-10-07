@@ -24,6 +24,7 @@ const router = createBrowserRouter([
 export const UserProfileContext = createContext();
 export const WindowWidthContext = createContext();
 export const EditProductContext = createContext();
+export const NotificationContext = createContext();
 
 function App() {
   let guestProfile = {
@@ -61,6 +62,17 @@ function App() {
     };
   }, []);
 
+  let defaultNotification = {
+    showNotification: true,
+    headerMessage: "Hola",
+    bodyMessage: "",
+    loading: false,
+    type: "default"
+  };
+
+  const [notifications, setNotifications] = useState([]);
+
+  
   return (
     <React.StrictMode>
       <UserProfileContext.Provider
@@ -68,7 +80,11 @@ function App() {
       >
         <WindowWidthContext.Provider value={{ windowWidth }}>
           <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
-            <RouterProvider router={router} />
+            <NotificationContext.Provider
+              value={{ notifications, setNotifications, defaultNotification }}
+            >
+              <RouterProvider router={router} />
+            </NotificationContext.Provider>
           </EditProductContext.Provider>
         </WindowWidthContext.Provider>
       </UserProfileContext.Provider>

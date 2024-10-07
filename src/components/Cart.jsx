@@ -46,12 +46,13 @@ export default function Cart() {
           ref={target}
           onClick={() => setShowProducts(!showProducts)}
           className="ms-auto me-1 text-white"
+          
         >
           <FaShoppingCart size={"2rem"} />
         </Button>
       </OverlayTrigger>
       ):(<>
-      <Button className="text-white rounded-pill align-items-center bg-secondary"><FaShoppingCart/> Add to Cart</Button>
+      <Button className="text-white rounded-pill align-items-center bg-secondary" style={{border:'none'}}><FaShoppingCart size={'2rem'}/></Button>
       </>)}
     </>
   );

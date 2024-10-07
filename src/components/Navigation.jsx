@@ -11,6 +11,7 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
 import {
   EditProductContext,
+  NotificationContext,
   UserProfileContext,
   WindowWidthContext,
 } from "../App";
@@ -24,12 +25,15 @@ import NewUserAdmin from "../pages/NewUserAdmin";
 import { IoMdPersonAdd } from "react-icons/io";
 import Search from "./Search";
 import Cart from "./Cart";
+import { IoLogIn } from "react-icons/io5";
 
 export default function Navigation() {
   const { userProfile, setUserProfile, guestProfile } =
     useContext(UserProfileContext);
   const { windowWidth } = useContext(WindowWidthContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
+  const { setNotifications } = useContext(NotificationContext);
+
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
@@ -93,44 +97,52 @@ export default function Navigation() {
                     <>
                       <Button
                         onClick={() => setShowSignup(true)}
-                        className="bg-secondary text-white me-2 w-auto rounded-pill d-flex justify-content-center align-items-center"
-                        style={{ whiteSpace: "nowrap" }}
+                        className="bg-secondary text-white me-2 w-auto rounded-pill d-flex justify-content-center align-items-center mb-2"
+                        style={{ whiteSpace: "nowrap", border: "none" }}
                       >
-                        Sign Up
+                        <IoMdPersonAdd className="me-1" /> Sign Up
                       </Button>
                       <Button
                         onClick={() => setShowLogin(true)}
-                        className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
-                        style={{ whiteSpace: "nowrap" }}
+                        className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center border-none mb-2"
+                        style={{ whiteSpace: "nowrap", border: "none" }}
                       >
-                        Log In
+                        <IoLogIn className="me-1" /> Log In
                       </Button>
                     </>
                   ) : (
                     <div className="d-flex flex-row align-items-center mb-2">
-                      <Dropdown>
-                        <Dropdown.Toggle variant="link">
-                          {userProfile.firstName}{" "}{userProfile.lastName}
-                        
+                      <Dropdown className="w-100">
+                        <Dropdown.Toggle variant="link" className="d-flex flex-row w-100 align-items-center">
+                          <div className="d-flex flex-row ">
+                          {userProfile.firstName} {userProfile.lastName}
+                          </div>
+                          <img
+                            alt="Logo"
+                            src="/logo512.png"
+                            width="50"
+                            height="50"
+                            className="d-inline-block align-center ms-auto"
+                          />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="w-100">
-                        {userProfile.rol === 3 ? (
-                            <Dropdown.Item className="text-success">
+                          {userProfile.rol === 3 ? (
+                            <Dropdown.Item className="text-success" style={{textAlign: "center"}}>
                               <CgUserList /> Users List
                             </Dropdown.Item>
                           ) : null}
                           {userProfile.rol === 3 ? (
-                            <Dropdown.Item className="text-success">
+                            <Dropdown.Item className="text-success border-top" style={{textAlign: "center"}}>
                               <Button
                                 onClick={() => setShowNewUserAdmin(true)}
                                 variant="link"
                                 className="m-0 p-0 text-success"
-                            >
-                              <FaArrowsDownToPeople /> Add User
+                              >
+                                <FaArrowsDownToPeople /> Add User
                               </Button>
                             </Dropdown.Item>
                           ) : null}
-                          <Dropdown.Item>
+                          <Dropdown.Item className="border-top" style={{textAlign: "center"}}>
                             <Button
                               onClick={() => setShowProfile(true)}
                               variant="link"
@@ -139,12 +151,21 @@ export default function Navigation() {
                               <IoMdPersonAdd /> Profile
                             </Button>
                           </Dropdown.Item>
-                          <Dropdown.Item>
+                          <Dropdown.Item  className="border-top" style={{textAlign: "center"}}>
                             <Button
                               onClick={() => {
                                 localStorage.clear();
                                 setUserProfile(guestProfile);
                                 setEditProduct(false);
+                                setNotifications((prevNotifications) => [
+                                  ...prevNotifications,
+                                  {
+                                    showNotification: true,
+                                    type: "success",
+                                    headerMessage: "Success",
+                                    bodyMessage: "Logout Successful",
+                                  },
+                                ]);
                               }}
                               variant="link"
                               className="m-0 p-0 text-success"
@@ -154,14 +175,6 @@ export default function Navigation() {
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-
-                      <img
-                        alt="Logo"
-                        src="/logo512.png"
-                        width="50"
-                        height="50"
-                        className="d-inline-block align-center ms-auto"
-                      />
                     </div>
                   )}
 
@@ -180,14 +193,12 @@ export default function Navigation() {
                     </div>
                   ) : null}
 
-
                   <div className="mb-2">
                     <Search />
                   </div>
 
                   {editProduct === false ? (
                     <Cart showOffcanvas={showOffcanvas} />
-          
                   ) : null}
                 </Nav>
               </Offcanvas.Body>
@@ -229,36 +240,36 @@ export default function Navigation() {
                   className="bg-secondary text-white me-2 w-auto rounded-pill d-flex justify-content-center align-items-center"
                   style={{ whiteSpace: "nowrap" }}
                 >
-                  Sign Up
+                  <IoMdPersonAdd className="me-1" /> Sign Up
                 </Button>
                 <Button
                   onClick={() => setShowLogin(true)}
                   className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
                   style={{ whiteSpace: "nowrap" }}
                 >
-                  Log In
+                  <IoLogIn className="me-1" /> Log In
                 </Button>
               </>
             ) : (
               <>
                 <Dropdown>
                   <Dropdown.Toggle className="text-white">
-                    {userProfile.firstName}{" "}{userProfile.lastName}
+                    {userProfile.firstName} {userProfile.lastName}
                   </Dropdown.Toggle>
                   <Dropdown.Menu style={{ minWidth: "auto" }}>
-                  {userProfile.rol === 3 ? (
-                            <Dropdown.Item className="text-success">
-                              <CgUserList /> Users List
-                            </Dropdown.Item>
-                          ) : null}
+                    {userProfile.rol === 3 ? (
+                      <Dropdown.Item className="text-success">
+                        <CgUserList /> Users List
+                      </Dropdown.Item>
+                    ) : null}
                     {userProfile.rol === 3 ? (
                       <Dropdown.Item className="text-success">
                         <Button
-                        onClick={() => setShowNewUserAdmin(true)}
-                        variant="link"
-                        className="m-0 p-0 text-success"
-                      >
-                        <FaArrowsDownToPeople /> Add User
+                          onClick={() => setShowNewUserAdmin(true)}
+                          variant="link"
+                          className="m-0 p-0 text-success"
+                        >
+                          <FaArrowsDownToPeople /> Add User
                         </Button>
                       </Dropdown.Item>
                     ) : null}
@@ -277,6 +288,15 @@ export default function Navigation() {
                           localStorage.clear();
                           setUserProfile(guestProfile);
                           setEditProduct(false);
+                          setNotifications((prevNotifications) => [
+                            ...prevNotifications,
+                            {
+                              showNotification: true,
+                              type: "success",
+                              headerMessage: "Success",
+                              bodyMessage: "Logout Successful",
+                            },
+                          ]);
                         }}
                         variant="link"
                         className="m-0 p-0 text-success"
@@ -301,7 +321,7 @@ export default function Navigation() {
       </Navbar>
 
       <Login show={showLogin} setShow={setShowLogin} />
-      <NewUserAdmin show={showNewUserAdmin} setShow={setShowNewUserAdmin}/>
+      <NewUserAdmin show={showNewUserAdmin} setShow={setShowNewUserAdmin} />
       <Signup show={showSignup} setShow={setShowSignup} />
       <Profile show={showProfile} setShow={setShowProfile} />
     </>
