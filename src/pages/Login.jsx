@@ -9,7 +9,7 @@ function Login({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [password, setPassword] = useState("");
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
-  const { notifications, setNotifications } = useContext(NotificationContext)
+  const { notifications, setNotifications } = useContext(NotificationContext);
 
   const handleSubmit = async (event) => {
     let temp = userProfile;
@@ -20,12 +20,12 @@ function Login({ show, setShow }) {
       event.stopPropagation();
     }
 
-    let temp2 = [... notifications]
+    let temp2 = [...notifications];
     temp2.push({
       showNotification: true,
-      type: "loading"
-    })
-    setNotifications(temp2)
+      type: "loading",
+    });
+    setNotifications(temp2);
 
     try {
       const response = await axios.post(
@@ -55,15 +55,14 @@ function Login({ show, setShow }) {
           setUserProfile(temp);
 
           setNotifications((prevNotifications) => [
-            ... prevNotifications.slice(0, -1), 
+            ...prevNotifications.slice(0, -1),
             {
               showNotification: true,
               type: "success",
               headerMessage: "Success",
-              bodyMessage: "Login Successful"
-            }
-          ])
-
+              bodyMessage: "Login Successful",
+            },
+          ]);
         } else {
           console.log("Usuario inactivo o no confirmado");
           localStorage.clear();
@@ -133,7 +132,6 @@ function Login({ show, setShow }) {
           </Form>
         </Modal.Body>
       </Modal>
-
     </>
   );
 }

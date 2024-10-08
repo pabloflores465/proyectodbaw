@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
 import AboutUS from "../components/AboutUs";
-import Navigation from "../components/Navigation";
+import Navigation from "./Navigation";
 import { NotificationContext } from "../App";
 import Notifications from "../components/Notifications";
 
