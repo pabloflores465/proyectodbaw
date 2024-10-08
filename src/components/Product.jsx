@@ -4,8 +4,10 @@ import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { EditProductContext, WindowWidthContext } from "../App";
 import { IoMdInformationCircle } from "react-icons/io";
+import axios from "axios";
 
-export default function Product({ product, index }) {
+
+export default function Product({ product, index, handleData}) {
   const { editProduct } = useContext(EditProductContext);
   const { windowWidth } = useContext(WindowWidthContext);
 
@@ -18,6 +20,15 @@ export default function Product({ product, index }) {
     document.body.removeChild(link);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost/proyectodbaw/phpsql/products.php?id=${id}`);
+      handleData();
+    } catch (error) {
+      console.error('Error: ',error);
+    }
+  }
+
   return (
     <>
       {editProduct === false ? (
@@ -25,7 +36,7 @@ export default function Product({ product, index }) {
           <Card.Img variant="top" src="hola.png" height={240} width={320} />
           <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1">
             <Card.Title className="d-flex justify-content-center">
-              {product.title}
+              {product.product_name}
             </Card.Title>
             <Card.Text className="ms-1 me-1">{product.description}</Card.Text>
             <Card.Text className="d-flex justify-content-center">
@@ -62,7 +73,6 @@ export default function Product({ product, index }) {
               >
                 <IoMdInformationCircle /> <strong>See Details</strong>
               </Button>
-
             </div>
             <div className="w-100">
             <Dropdown
@@ -75,7 +85,7 @@ export default function Product({ product, index }) {
                 <Dropdown.Toggle className={windowWidth > 1300 ? "text-white rounded-pill":"w-100 text-white rounded-pill"}>
                   <FaListAlt /> Categories
                 </Dropdown.Toggle>
-                <Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                {/*<Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
                 <div className="container mt-2">
                   {product.categories.map((category, index) => (
                     <div key={index} className={`d-flex justify-content-center align-items-center ${index === product.categories.length - 1 ?  "":"border-bottom" } mb-2`} >
@@ -84,7 +94,7 @@ export default function Product({ product, index }) {
                   ))}
                   </div>
             
-                </Dropdown.Menu>
+                </Dropdown.Menu>*/}
               </Dropdown>
               </div>
           </Card.Body>
@@ -109,7 +119,7 @@ export default function Product({ product, index }) {
               <Form.Control
                 type="text"
                 className="mb-2"
-                value={product.title}
+                value={product.product_name}
               />
             </Form.Group>
             <Form.Group>
@@ -156,6 +166,9 @@ export default function Product({ product, index }) {
               >
                 <IoInformationCircleSharp className="me-1" />{" "}
                 <strong>See Details</strong>
+              </Button>
+              <Button 
+              variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(product.id_products)} >Delete {console.log(product.id_products)}
               </Button>
             </div>
           </Form>
