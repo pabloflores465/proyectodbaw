@@ -76,12 +76,14 @@ export default function Product({ product, index }) {
                   <FaListAlt /> Categories
                 </Dropdown.Toggle>
                 <Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                <div className="container mt-2">
                   {product.categories.map((category, index) => (
-                    <div key={index} className="text-success d-flex justify-content-center border-top">
+                    <div key={index} className={`d-flex justify-content-center align-items-center ${index === product.categories.length - 1 ?  "":"border-bottom" } mb-2`} >
                       {category}
-                      <br />
                     </div>
                   ))}
+                  </div>
+            
                 </Dropdown.Menu>
               </Dropdown>
               </div>
