@@ -37,7 +37,7 @@ const [formData, setFormData]=useState({});
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setFormData({... formData, [name]: value });
+    setFormData({...formData, [name]: value });
     console.log(formData.rol)
   };
 
@@ -195,10 +195,10 @@ const [formData, setFormData]=useState({});
                       />
                     </td>
                     <td>
-                      <Button variant="success" onClick={() => handleSave(item.id_user)}>
+                      <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={() => handleSave(item.id_user)}>
                         Save
                       </Button>
-                      <Button variant="secondary" onClick={handleCancel}>
+                      <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={handleCancel}>
                         Cancel
                       </Button>
                     </td>
@@ -218,8 +218,8 @@ const [formData, setFormData]=useState({});
             <td>{item.expire_date}</td>
             <td>{item.last_connection}</td>
             <td>
-              <Button variant="danger" onClick={()=> handleDelete(item.id_user)}>Delete</Button>
-              <Button variant="danger" onClick={()=> handleEdit(item)}>Edit</Button>
+              <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(item.id_user)}>Delete</Button>
+              <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleEdit(item)}>Edit</Button>
             </td>
           </>
           )}
