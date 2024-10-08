@@ -1,14 +1,14 @@
 import { Col, Container, Pagination, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import BestSellers from "../components/BestSellers";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { EditProductContext } from "../App";
 import NewProducts from "../components/NewProducts";
 
 function Home() {
   const { editProduct } = useContext(EditProductContext);
 
-  const [products, setProducts] = useState([
+  let products = [
     {
       id: 1,
       title: "Product 1",
@@ -89,10 +89,10 @@ function Home() {
       image: "https://via.placeholder.com/200x160",
       categories: ["Cats", "Dogs", "Pets"],
     },
-  ]);
+  ];
 
   return (
-    <div style={{ backgroundColor: "#fcf3f4" }}>
+    <div style={{ backgroundColor: "#fcf3f4", marginTop: "60px" }}>
       {editProduct === false ? (
         <BestSellers />
       ) : (
