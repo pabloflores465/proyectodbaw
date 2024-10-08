@@ -1,64 +1,17 @@
+import React from 'react'
+import { Card, Carousel, Container } from 'react-bootstrap'
 
-import Carousel from "react-bootstrap/Carousel";
-//import ExampleCarouselImage from 'components/ExampleCarouselImage';
-
-function BestSellers() {
+export default function BestSellers() {
   return (
-    <Carousel style={{marginTop:'60px'}}>
-      <Carousel.Item>
-        <img
-          src="hola.png"
-          className="d-block w-100"
-          alt="1"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          src="hola.png"
-          className="d-block w-100"
-          alt="2"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          src="hola.png"
-          className="d-block w-100"
-          alt="3"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          src="hola.png"
-          className="d-block w-100"
-          alt="4"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
-  );
+    <Container style={{overflowX:'auto', whiteSpace: 'nowrap', padding:10}}>
+    <div className="d-flex" style={{gap:10}}>
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+        <Card style={{minWidth:200, flex: '0 0 auto',}} key={index}>
+          <Card.Img variant="top" src={`hola.png`} style={{ width: '300px', height: '300px' }} />
+          {/* Puedes agregar más detalles si lo necesitas */}
+        </Card>
+      ))}
+    </div>
+  </Container>
+  )
 }
-
-export default BestSellers;

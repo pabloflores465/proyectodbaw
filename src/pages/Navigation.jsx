@@ -11,20 +11,6 @@ import NavigationMobile from "../components/NavigationMobile";
 import { useNavigate } from "react-router";
 
 export default function Navigation() {
-  const navigate = useNavigate();
-
-  //function that navigates to a location when you click arrow back
-  useEffect(() => {
-    const handlePopState = () => {
-      navigate("/");
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [navigate]);
   
   const { windowWidth } = useContext(WindowWidthContext);
 

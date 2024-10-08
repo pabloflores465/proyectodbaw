@@ -6,7 +6,7 @@ import {
   UserProfileContext,
 } from "../App";
 
-import { Button, Dropdown, FormCheck, Navbar } from "react-bootstrap";
+import { Button, Collapse, Dropdown, FormCheck, Navbar } from "react-bootstrap";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
 
@@ -48,7 +48,7 @@ export default function NavigationDesktop({
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
         style={{ position: "fixed", top: 0, zIndex: 1000 }}
       >
-        <Navbar.Brand href="/" className="text-white me-0">
+        <Navbar.Brand as={Link} to="/" className="text-white me-0">
           <img
             alt="Logo"
             src="/logo512.png"
@@ -183,29 +183,36 @@ export default function NavigationDesktop({
           </>
         )}
       </Navbar>
-      {showCategories === true ? (
-        <Navbar
-          bg="white"
-          expand="lg"
-          className="m-0 ps-2 pe-2 pt-1 pb-1 shadow w-100"
-          style={{ position: "fixed", top: 60, zIndex: 999 }}
-        >
-          <div className="d-flex flew-row w-100">
-            {categories.map((element, index) => (
-              <div
-                key={index}
-                className={`d-flex flex-column ms-auto ${
-                  index === categories.length - 1 ? "me-auto" : ""
-                }`}
-              >
-                <Link key={element} to={`/${element}`}>
-                  {element}
-                </Link>
-              </div>
-            ))}
-          </div>
-        </Navbar>
-      ) : null}
+      <Collapse in={showCategories}>
+        <div>
+          <Navbar
+            bg="white"
+            expand="lg"
+            className="m-0 px-2 py-2 shadow w-100"
+            style={{ position: "fixed", top: 60, zIndex: 999 }}
+          >
+            <div className="d-flex flew-row w-100 overflow-auto">
+              {categories.map((element, index) => (
+                <div
+                  key={index}
+                  className={`d-flex flex-column ms-auto ${
+                    index === categories.length - 1 ? "me-auto" : ""
+                  }`}
+                >
+                  <Link
+                    key={element}
+                    to={`/${element}`}
+                    className="text-black"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <strong className="ms-1 me-1">{element}</strong>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </Navbar>
+        </div>
+      </Collapse>
     </>
   );
 }

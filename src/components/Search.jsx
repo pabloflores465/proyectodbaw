@@ -4,7 +4,7 @@ import { FaFilter, FaSearch } from "react-icons/fa";
 
 export default function Search() {
   
-  const CustomToggle = React.forwardRef(({ onClick }) => (
+  const CustomToggle = React.forwardRef(({ onClick }, ref) => (
     <Button
       variant="secondary"
       className="rounded-start-pill ms-0 text-white" style={{ whiteSpace: "nowrap" }}
