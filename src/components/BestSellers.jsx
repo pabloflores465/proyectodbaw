@@ -1,14 +1,15 @@
-import { Image } from "react-bootstrap";
+
 import Carousel from "react-bootstrap/Carousel";
 //import ExampleCarouselImage from 'components/ExampleCarouselImage';
 
 function BestSellers() {
   return (
-    <Carousel className="mb-4">
+    <Carousel style={{marginTop:'60px'}}>
       <Carousel.Item>
         <img
           src="hola.png"
           className="d-block w-100"
+          alt="1"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
         />
 
@@ -21,6 +22,7 @@ function BestSellers() {
         <img
           src="hola.png"
           className="d-block w-100"
+          alt="2"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
         />
         <Carousel.Caption>
@@ -32,6 +34,7 @@ function BestSellers() {
         <img
           src="hola.png"
           className="d-block w-100"
+          alt="3"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
         />
         <Carousel.Caption>
@@ -39,6 +42,19 @@ function BestSellers() {
           <p>
             Praesent commodo cursus magna, vel scelerisque nisl consectetur.
           </p>
+        </Carousel.Caption>
+      </Carousel.Item>
+      <Carousel.Item>
+        <img
+          src="hola.png"
+          className="d-block w-100"
+          alt="4"
+          style={{ objectFit: "cover", width: "480px", height:"270px" }}
+        />
+
+        <Carousel.Caption>
+          <h3>First slide label</h3>
+          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
         </Carousel.Caption>
       </Carousel.Item>
     </Carousel>

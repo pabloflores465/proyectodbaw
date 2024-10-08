@@ -1,52 +1,42 @@
-import React, { useRef, useState } from "react";
-import { Button, Card, Image, OverlayTrigger } from "react-bootstrap";
+import React, { useContext, useRef, useState } from "react";
+import { Button, Card, Dropdown, Image, OverlayTrigger } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import { WindowWidthContext } from "../App";
 
 export default function Cart() {
-    const [showProducts, setShowProducts] = useState(false);
-    
-    const target = useRef(null); 
+  const [showProducts, setShowProducts] = useState(false);
+  const { windowWidth } = useContext(WindowWidthContext);
+
+  const target = useRef(null);
 
   return (
     <>
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Card
-            bg="secondary"
-            className="text-white ps-0 pe-0"
-            style={{ maxWidth: "350px" }}
-          >
-            <Card.Header>Products</Card.Header>
-            <Card.Body className="p-0">
-              <div className="d-flex justify-content-center rounded-bottom bg-white align-items-center">
-                <Image src="/hola.png" rounded height={80} width={80} />
-                <p className="pe-2 ms-3 text-black" style={{ maxWidth: "55%" }}>
-                  <strong>title</strong>
-                  <br />
-                  ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
-                  <br />
-                  <strong>$.100.00</strong>
-                </p>
-
+      <Dropdown>
+        <Dropdown.Toggle className="text-white">
+          <FaShoppingCart size={"2rem"} />
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <div className="container" >
+            <div className="d-flex flex-column">
+              <div className="d-flex align-items-center border-bottom mb-2">
+                <Image src="/hola.png" rounded height={80} width={80}  className="me-2 mb-2"/>
+                <div className="d-flex flex-column">
+                  <strong>Name: title</strong>
+                  <strong>Description:</strong>
+                  <div className='w-80 border rounded ps-1 pe-1' style={{ wordBreak: 'break-word', whiteSpace: 'normal', maxHeight: '100px', width:'200px' ,overflowY: 'auto' }}> 
+                    asfjdjkhfkjhdsakjlhsdfklkdfsadjlfkhkjsadhfjhijasdhfjkhjksadhfkjhfgjdaskdfghjksagsjadkhfkjasdbhfjksankjlfnkjsadbnjvbnfjkshadbnvkjsandljknbfvjksdabjhvcbkjsadbvkhjbsakjdbvjkasbkjdvbnkjdvbnskjabdvkjbvkjsa
+                  </div>
+                  <strong>Price: $.100.00</strong>
+                </div>
                 <Button variant="link">
                   <IoCloseSharp size={"1.5rem"} />
                 </Button>
               </div>
-            </Card.Body>
-          </Card>
-        }
-        trigger="click"
-      >
-        <Button
-          ref={target}
-          onClick={() => setShowProducts(!showProducts)}
-          className="ms-auto me-1 text-white"
-        >
-          <FaShoppingCart size={"2rem"} />
-        </Button>
-      </OverlayTrigger>
+            </div>
+          </div>
+        </Dropdown.Menu>
+      </Dropdown>
     </>
   );
 }

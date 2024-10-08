@@ -5,6 +5,7 @@ import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./pages/Layout";
+import useLocalStorage from "./hooks/useLocalStorage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,16 +21,31 @@ const router = createBrowserRouter([
   },
 ]);
 
-export const UserNameContext = createContext();
+export const UserProfileContext = createContext();
 export const WindowWidthContext = createContext();
 export const EditProductContext = createContext();
+export const NotificationContext = createContext();
 
 function App() {
-  //You need to wrap the routes in a context to access the variables
-  const [userName, setUserName] = useState("Pablo Flores");
-  const [userType, setUserType] = useState("Admin");
-  const [editProduct, setEditProduct] = useState(false);
-
+  let guestProfile = {
+    firstName: "Guest",
+    lastName: null,
+    email: null,
+    birthDate: null,
+    address: null,
+    phoneNumber: null,
+    rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
+    active: false,
+    cardNumber: null,
+    expireDate: null,
+    userId: null,
+    lastConection: null,
+  };
+  const [userProfile, setUserProfile] = useLocalStorage(
+    "userName",
+    guestProfile
+  );
+  const [editProduct, setEditProduct] = useLocalStorage("editProduct", false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   //Function to detect screen size
@@ -46,17 +62,32 @@ function App() {
     };
   }, []);
 
+  let defaultNotification = {
+    showNotification: true,
+    headerMessage: "Hola",
+    bodyMessage: "",
+    loading: false,
+    type: "default"
+  };
+
+  const [notifications, setNotifications] = useState([]);
+
+  
   return (
     <React.StrictMode>
-      <UserNameContext.Provider
-        value={{ userName, setUserName, userType, setUserType }}
+      <UserProfileContext.Provider
+        value={{ userProfile, setUserProfile, guestProfile }}
       >
         <WindowWidthContext.Provider value={{ windowWidth }}>
           <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
-            <RouterProvider router={router} />
+            <NotificationContext.Provider
+              value={{ notifications, setNotifications, defaultNotification }}
+            >
+              <RouterProvider router={router} />
+            </NotificationContext.Provider>
           </EditProductContext.Provider>
         </WindowWidthContext.Provider>
-      </UserNameContext.Provider>
+      </UserProfileContext.Provider>
     </React.StrictMode>
   );
 }
