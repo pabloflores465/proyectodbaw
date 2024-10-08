@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./pages/Layout";
 import useLocalStorage from "./hooks/useLocalStorage.jsx";
+import ProductDetail from "./pages/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
         path: "/:category",
         element: <Home />,
       },
+      {
+        path: "/:category/:products",
+        element: <ProductDetail />
+      }
     ],
   },
 ]);

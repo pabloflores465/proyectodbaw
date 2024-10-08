@@ -5,7 +5,7 @@ import { IoCloseSharp } from "react-icons/io5";
 
 export default function Cart() {
 
-  const CustomToggle = React.forwardRef(({ onClick }) => (
+  const CustomToggle = React.forwardRef(({ onClick },ref) => (
     <Button
       className="text-white"
       onClick={(e) => {

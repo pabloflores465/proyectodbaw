@@ -66,11 +66,29 @@ function Login({ show, setShow }) {
         } else {
           console.log("Usuario inactivo o no confirmado");
           localStorage.clear();
+          setNotifications((prevNotifications) => [
+            ...prevNotifications.slice(0, -1),
+            {
+              showNotification: true,
+              type: "error",
+              headerMessage: "Error",
+              bodyMessage: "User inactive or not confirmed",
+            },
+          ]);
         }
       } else {
         console.log("no logueado");
         console.log(response);
         localStorage.clear();
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "Username or password are not correct",
+          },
+        ]);
       }
     } catch (error) {
       console.error("Error: ", error);
