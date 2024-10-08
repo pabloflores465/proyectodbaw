@@ -4,9 +4,12 @@ import BestSellers from "../components/BestSellers";
 import { useContext } from "react";
 import { EditProductContext } from "../App";
 import NewProducts from "../components/NewProducts";
+import { useParams } from "react-router";
 
 function Home() {
+
   const { editProduct } = useContext(EditProductContext);
+  const params = useParams()
 
   let products = [
     {
@@ -96,8 +99,9 @@ function Home() {
       {editProduct === false ? (
         <BestSellers />
       ) : (
-        <div style={{ marginTop: "60px" }} />
+        <div style={{ marginTop: "70px" }} />
       )}
+      <h1 className="text-center">{params.category}</h1>
       <Container >
         <div className="d-flex flex-row">
           

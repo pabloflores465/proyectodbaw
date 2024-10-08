@@ -16,6 +16,7 @@ import Search from "../components/Search";
 import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function NavigationDesktop({
   setShowSignup,
@@ -31,6 +32,14 @@ export default function NavigationDesktop({
 
   const [showCategories, setShowCategories] = useState(true);
 
+  let categories = [
+    "category1",
+    "category2",
+    "category3",
+    "category4",
+    "category5",
+  ];
+
   return (
     <>
       <Navbar
@@ -39,7 +48,7 @@ export default function NavigationDesktop({
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
         style={{ position: "fixed", top: 0, zIndex: 1000 }}
       >
-        <Navbar.Brand href="/" className="text-white">
+        <Navbar.Brand href="/" className="text-white me-0">
           <img
             alt="Logo"
             src="/logo512.png"
@@ -49,7 +58,10 @@ export default function NavigationDesktop({
           />{" "}
           D&P Petshop
         </Navbar.Brand>
-        <Button className="text-white rounded-pill d-flex justify-content-center align-items-center" onClick={()=>setShowCategories(!showCategories)}>
+        <Button
+          className="text-white rounded-pill d-flex justify-content-center align-items-center"
+          onClick={() => setShowCategories(!showCategories)}
+        >
           <MdMenu size={"2rem"} />
         </Button>
         <div className="d-flex justify-content-center align-items-center w-100 m-auto">
@@ -178,7 +190,20 @@ export default function NavigationDesktop({
           className="m-0 ps-2 pe-2 pt-1 pb-1 shadow w-100"
           style={{ position: "fixed", top: 60, zIndex: 999 }}
         >
-          hola
+          <div className="d-flex flew-row w-100">
+            {categories.map((element, index) => (
+              <div
+                key={index}
+                className={`d-flex flex-column ms-auto ${
+                  index === categories.length - 1 ? "me-auto" : ""
+                }`}
+              >
+                <Link key={element} to={`/${element}`}>
+                  {element}
+                </Link>
+              </div>
+            ))}
+          </div>
         </Navbar>
       ) : null}
     </>

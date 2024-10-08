@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { WindowWidthContext } from "../App";
 
 import Login from "./Login";
@@ -8,8 +8,24 @@ import NewUserAdmin from "./NewUserAdmin";
 import UsersList from "./UsersList";
 import NavigationDesktop from "../components/NavigationDesktop";
 import NavigationMobile from "../components/NavigationMobile";
+import { useNavigate } from "react-router";
 
 export default function Navigation() {
+  const navigate = useNavigate();
+
+  //function that navigates to a location when you click arrow back
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate("/");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
+  
   const { windowWidth } = useContext(WindowWidthContext);
 
   const [showLogin, setShowLogin] = useState(false);
