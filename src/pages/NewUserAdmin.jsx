@@ -2,17 +2,14 @@ import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios"
 
-function Signup({ show, setShow }) {
+function NewUserAdmin({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLatsname] = useState("");
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
-  const [phonenumber, setPhonenumber]=useState("");
   const [birthdate, setBirthdate]=useState("");
-  const [address, setAddress]=useState("");
-  const [cardnumber, setCardnumber]=useState("");
-  const [expdate, setExpdate]=useState("");
+  const [rol, setRol]=useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -22,21 +19,17 @@ function Signup({ show, setShow }) {
       event.stopPropagation();
     }
     try{
-      const response = await axios.put('http://localhost/proyectodbaw/phpsql/signup.php',{
+      const response = await axios.put('http://localhost/proyectodbaw/phpsql/signupadmn.php',{
         firstname : firstname,
         lastname : lastname,
         email : email,
         password : password,
-        phonenumber : phonenumber,
         birthdate : birthdate,
-        address : address,
-        cardnumber : cardnumber,
-        expdate : expdate
+        rol : rol
       });
       if (response.data.status==="success") {
         console.log("Registrado");
         setValidated(true);
-        setShow(false)
       }else{
 
         console.log("no registrado");
@@ -48,11 +41,11 @@ function Signup({ show, setShow }) {
     }
   };
 
-  const [activeBilling, setActiveBilling] = useState(false);
+  //const [activeBilling, setActiveBilling] = useState(false);
 
   const handleClose = () => {
     setShow(false);
-    setActiveBilling(false);
+    //setActiveBilling(false);
   };
 
   return (
@@ -66,7 +59,7 @@ function Signup({ show, setShow }) {
         className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
         closeButton
       >
-        <Modal.Title>Sign Up</Modal.Title>
+        <Modal.Title>Sign Up Especial User</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form
@@ -105,43 +98,28 @@ function Signup({ show, setShow }) {
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Text>Forgot Password?</Form.Text>
           </Form.Group>
+          <Form.Group className="mb-3" controlId="validateEmail">
+            <Form.Label className="text-success">Rol</Form.Label>
+            <Form.Control
+              required
+              placeholder="2 or 3"
+              type="number"
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '2' || value === '3') {
+                  setRol(parseInt(value)); 
+                } else {
+                  e.target.value = ""; 
+                }
+              }}
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Birth Date </Form.Label>
             <Form.Control required placeholder="01/01/2024" type="date" onChange={(e)=>setBirthdate(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="validatePassword">
-            <Form.Label className="text-success">Address </Form.Label>
-            <Form.Control required placeholder="Fraijanes, Guatemala" type="text" onChange={(e)=>setAddress(e.target.value)}/>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="validatePhone">
-            <Form.Label className="text-success">Phone number </Form.Label>
-            <Form.Control required placeholder="12344321" type="number" onChange={(e)=>setPhonenumber(e.target.value)}/>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label className="text-success">Billing Profile</Form.Label>
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              className=" mb-3"
-              onChange={() => setActiveBilling(!activeBilling)}
-            />
-          </Form.Group>
-          {activeBilling === true ? (
-            <Form.Group className="mb-3">
-              <Form.Label className="text-success">Card Number </Form.Label>
-              <Form.Control
-                className="mb-3"
-                placeholder="12344321"
-                type="number"
-                onChange={(e)=>setCardnumber(e.target.value)}
-              />
-              <Form.Label className="text-success">Expire Date </Form.Label>
-              <Form.Control required placeholder="01/01/2024" type="date" onChange={(e)=>setExpdate(e.target.value)}/>
-            </Form.Group>
-          ) : null}
           <Button
             variant="secondary text-white rounded-pill w-100"
             type="submit"
@@ -154,4 +132,4 @@ function Signup({ show, setShow }) {
   );
 }
 
-export default Signup;
+export default NewUserAdmin;

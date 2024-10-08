@@ -1,11 +1,11 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./pages/Layout";
-import Login from "./pages/Login";
+import useLocalStorage from "./hooks/useLocalStorage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,20 +21,33 @@ const router = createBrowserRouter([
   },
 ]);
 
-export const UserNameContext = createContext();
+export const UserProfileContext = createContext();
 export const WindowWidthContext = createContext();
 export const EditProductContext = createContext();
-export const EmailContext = createContext();
-export const RolContext = createContext();
+export const NotificationContext = createContext();
 
 function App() {
-  const [userName, setUserName] = useState("");
-  const [userType, setUserType] = useState(0);
-  const [editProduct, setEditProduct] = useState(false);
-  const [email, setEmail]=useState("");
-  const [rol, setRol]=useState(0);
+  let guestProfile = {
+    firstName: "Guest",
+    lastName: null,
+    email: null,
+    birthDate: null,
+    address: null,
+    phoneNumber: null,
+    rol: 0, //0=Guest, 1=Invited, 2=Employee, 3=Admin
+    active: false,
+    cardNumber: null,
+    expireDate: null,
+    userId: null,
+    lastConection: null,
+  };
+  const [userProfile, setUserProfile] = useLocalStorage(
+    "userName",
+    guestProfile
+  );
+  const [editProduct, setEditProduct] = useLocalStorage("editProduct", false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
- 
+
   //Function to detect screen size
   useEffect(() => {
     const handleResize = () => {
@@ -49,21 +62,32 @@ function App() {
     };
   }, []);
 
+  let defaultNotification = {
+    showNotification: true,
+    headerMessage: "Hola",
+    bodyMessage: "",
+    loading: false,
+    type: "default"
+  };
+
+  const [notifications, setNotifications] = useState([]);
+
+  
   return (
     <React.StrictMode>
-      <UserNameContext.Provider
-        value={{ userName, setUserName, userType, setUserType }}
+      <UserProfileContext.Provider
+        value={{ userProfile, setUserProfile, guestProfile }}
       >
         <WindowWidthContext.Provider value={{ windowWidth }}>
           <EditProductContext.Provider value={{ editProduct, setEditProduct }}>
-            <EmailContext.Provider value={{email, setEmail}}>
-              <RolContext.Provider value = {{rol, setRol}}>
+            <NotificationContext.Provider
+              value={{ notifications, setNotifications, defaultNotification }}
+            >
               <RouterProvider router={router} />
-              </RolContext.Provider>
-            </EmailContext.Provider>
+            </NotificationContext.Provider>
           </EditProductContext.Provider>
         </WindowWidthContext.Provider>
-      </UserNameContext.Provider>
+      </UserProfileContext.Provider>
     </React.StrictMode>
   );
 }

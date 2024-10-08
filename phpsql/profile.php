@@ -1,32 +1,26 @@
 <?php
-
 include 'connection.php';
-
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT");
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 $data = json_decode(file_get_contents("php://input"));
 
 $firstname = $data->firstname;
 $lastname = $data->lastname;
 $email = $data->email;
-$password = $data->password;
-$phonenumber = $data->phonenumber;
 $birthdate = $data->birthdate;
-$address = $data->address;
+$address = $data ->address;
+$phonenumber = $data->phonenumber;
 $cardnumber = $data->cardnumber;
-$expdate = $data->expdate;
+$expiredate = $data->expiredate;
+$iduser = $data->iduser;
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28')";
+$sql="UPDATE users SET first_name = '$firstname', email = '$email', birth_date = '$birthdate', address = '$address', phone_number = $phonenumber, card_number = $cardnumber, expire_date = '$expiredate' WHERE users.id_user = $iduser";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($connection);
 }
-
 ?>

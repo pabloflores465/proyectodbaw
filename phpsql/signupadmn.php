@@ -6,10 +6,6 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT");
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $data = json_decode(file_get_contents("php://input"));
 
 $firstname = $data->firstname;
@@ -18,11 +14,9 @@ $email = $data->email;
 $password = $data->password;
 $phonenumber = $data->phonenumber;
 $birthdate = $data->birthdate;
-$address = $data->address;
-$cardnumber = $data->cardnumber;
-$expdate = $data->expdate;
+$rol = $data->rol;
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28')";
+$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, rol, active, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate',$rol, 1, '2024-09-28')";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {
