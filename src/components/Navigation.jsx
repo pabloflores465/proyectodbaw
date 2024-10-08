@@ -1,68 +1,62 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
+  Button,
+  Dropdown,
+  FormCheck,
   Nav,
   Navbar,
-  Button,
-  Form,
   Offcanvas,
-  Dropdown,
-  OverlayTrigger,
-  Card,
-  Row, 
-  Col,
 } from "react-bootstrap";
-import { Outlet } from "react-router-dom";
-import { FaFacebook, FaInstagram, FaPhone, FaSearch, FaShoppingCart, FaTiktok, FaWhatsapp, FaWindowClose } from "react-icons/fa";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { UserNameContext } from "../App";
 import { RiLogoutBoxFill } from "react-icons/ri";
-import { IoMdPersonAdd } from "react-icons/io";
-import { MdEmail, MdPets } from "react-icons/md";
+import { CgUserList } from "react-icons/cg";
+import {
+  EditProductContext,
+  NotificationContext,
+  UserProfileContext,
+  WindowWidthContext,
+} from "../App";
+
+import { GiHamburgerMenu } from "react-icons/gi";
 import { FaArrowsDownToPeople } from "react-icons/fa6";
 import Login from "../pages/Login";
+import Profile from "../pages/Profile";
 import Signup from "../pages/Signup";
-import { IoCloseSharp } from "react-icons/io5";
+import NewUserAdmin from "../pages/NewUserAdmin";
+import { IoMdPersonAdd } from "react-icons/io";
+import Search from "./Search";
+import Cart from "./Cart";
+import { IoLogIn } from "react-icons/io5";
+import UsersList from "../pages/UsersList";
+
+let Desktop;
+let Mobile;
 
 export default function Navigation() {
-  const { userName } = useContext(UserNameContext);
-  const { setUserName } = useContext(UserNameContext);
-  const { userType } = useContext(UserNameContext);
-  const { setUserType } = useContext(UserNameContext);
-  setUserName("Pablo Flores");
-  //setUserType("Admin");
+  const { userProfile, setUserProfile, guestProfile } =
+    useContext(UserProfileContext);
+  const { windowWidth } = useContext(WindowWidthContext);
+  const { editProduct, setEditProduct } = useContext(EditProductContext);
+  const { setNotifications } = useContext(NotificationContext);
+
   const [showOffcanvas, setShowOffcanvas] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  //Function to detect screen size
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup listener by rezising the component
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
 
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-
-  const [showProducts, setShowProducts] = useState(false);
-  const target = useRef(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showNewUserAdmin, setShowNewUserAdmin] = useState(false);
+  const [showUsersList, setShowUsersList] = useState(false);
 
   return (
     <>
       <Navbar
         bg="primary"
         expand="lg"
-        className="m-0 ps-2 pe-2 pt-0 pb-0 shadow"
+        className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
+        style={{ position: "fixed", top: 0, zIndex: 999 }}
       >
-        <Navbar.Brand href="/home" className="text-white">
+        <Navbar.Brand href="/" className="text-white">
           <img
             alt="Logo"
             src="/logo512.png"
@@ -72,223 +66,363 @@ export default function Navigation() {
           />{" "}
           D&P Petshop
         </Navbar.Brand>
-
-        {/* Show sidebar only when with is less than 500px */}
-        {windowWidth < 1000 ? (
-          <>
-            <Navbar.Toggle
-              className="bg-primary text-white custom"
-              aria-controls="offcanvasNavbar"
-              onClick={handleToggle}
-              style={{ color: "white", borderColor: "white" }}
-            >
-              <GiHamburgerMenu />
-            </Navbar.Toggle>
-            <Offcanvas
-              show={showOffcanvas}
-              onHide={handleToggle}
-              placement="end"
-            >
-              <Offcanvas.Header className="bg-primary text-white" closeButton>
-                <Offcanvas.Title>D&P</Offcanvas.Title>
-              </Offcanvas.Header>
-              <Offcanvas.Body>
-                <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="#action1">Sign Up</Nav.Link>
-                  <Nav.Link href="#action2">Log In</Nav.Link>
-                  <Nav.Link href="#action3">Dropdown</Nav.Link>
-                </Nav>
-                <Form className="d-flex">
-                  <Form.Control
-                    placeholder="Buscar Productos"
-                    className="d-flex ms-auto me-1 rounded-pill"
-                  />
-                  <Button className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center">
-                    <FaSearch className="me-1" /> Search
-                  </Button>
-                </Form>
-              </Offcanvas.Body>
-            </Offcanvas>
-          </>
+        {windowWidth > 1000 ? (
+          <Desktop
+            userProfile={userProfile}
+            editProduct={editProduct}
+            setEditProduct={setEditProduct}
+            setShowSignup={setShowSignup}
+            setShowLogin={setShowLogin}
+            setShowProfile={setShowProfile}
+            setShowUsersList={setShowUsersList}
+            setShowNewUserAdmin={setShowNewUserAdmin}
+            guestProfile={guestProfile}
+            setUserProfile={setUserProfile}
+            setNotifications={setNotifications}
+            showOffcanvas={showOffcanvas}
+          />
         ) : (
-          <>
-            <Form.Control
-              placeholder="Buscar Productos"
-              className="d-flex ms-auto me-1 rounded-pill"
-              style={{ maxWidth: "50%" }}
-            />
-            <Button className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center">
-              <FaSearch className="me-1" /> Search
-            </Button>
-
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Card
-                  bg="secondary"
-                  className="text-white ps-0 pe-0"
-                  style={{maxWidth:"350px"}}
-                >
-                  <Card.Header>Products</Card.Header>
-                  <Card.Body>
-                    <div className="d-flex justify-content-center align-items-center p-0 m-0">
-                      <p className="pe-2" style={{maxWidth:"80%"}}>
-                        ohoiahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfahkjfhssdajkjadoadjkfa
-                      </p>
-                      
-                        <Button variant = "link" className="text-white"><IoCloseSharp size={"1.5rem"}/></Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              }
-              trigger="click"
-            >
-              <Button
-                ref={target}
-                onClick={() => setShowProducts(!showProducts)}
-                className="ms-auto me-1 text-white"
-              >
-                <FaShoppingCart size={"2rem"} />
-              </Button>
-            </OverlayTrigger>
-            {userType === "Guest" ? (
-              <>
-                <Button
-                  onClick={() => setShowSignup(true)}
-                  className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
-                >
-                  Sign Up
-                </Button>
-                <Button
-                  onClick={() => setShowLogin(true)}
-                  className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
-                >
-                  Log In
-                </Button>
-              </>
-            ) : (
-              <>
-                <Dropdown>
-                  <Dropdown.Toggle className="text-white">
-                    {userName}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu style={{ minWidth: "auto" }}>
-                    {userType === "Admin" ? (
-                      <Dropdown.Item className="text-success">
-                        <FaArrowsDownToPeople /> Users
-                      </Dropdown.Item>
-                    ) : null}
-                    {userType === "Employee" || userType === "Admin" ? (
-                      <Dropdown.Item className="text-success">
-                        <MdPets /> Products
-                      </Dropdown.Item>
-                    ) : null}
-                    <Dropdown.Item href="#action/3.1" className="text-success">
-                      <IoMdPersonAdd /> Profile
-                    </Dropdown.Item>
-                    <Dropdown.Item  className="text-success">
-                      <Button onClick={()=>setUserType('Guest')} variant="link">
-                        <RiLogoutBoxFill /> Log Out
-                      </Button>
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <img
-                  alt="Logo"
-                  src="/logo512.png"
-                  width="50"
-                  height="50"
-                  className="d-inline-block align-center"
-                />
-              </>
-            )}
-          </>
+          <Mobile
+            userProfile={userProfile}
+            editProduct={editProduct}
+            setEditProduct={setEditProduct}
+            setShowSignup={setShowSignup}
+            setShowLogin={setShowLogin}
+            setShowProfile={setShowProfile}
+            setShowUsersList={setShowUsersList}
+            setShowNewUserAdmin={setShowNewUserAdmin}
+            guestProfile={guestProfile}
+            setUserProfile={setUserProfile}
+            setNotifications={setNotifications}
+            showOffcanvas={showOffcanvas}
+            handleToggle={handleToggle}
+          />
         )}
       </Navbar>
-      <Outlet />
 
       <Login show={showLogin} setShow={setShowLogin} />
+      <NewUserAdmin show={showNewUserAdmin} setShow={setShowNewUserAdmin} />
       <Signup show={showSignup} setShow={setShowSignup} />
-
-      {windowWidth > 800 ? (<Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
-        <Row>
-          <Col><strong>About D&P Petshop</strong></Col>
-          <Col><strong>Social Media</strong></Col>
-          <Col><strong>Contact Us</strong></Col>
-          <Col><strong>About</strong></Col>
-
-        </Row>
-        <Row>
-          <Col>¿Who are We?</Col>
-          <Col><FaFacebook/> Facebook</Col>
-          <Col><FaWhatsapp/> Whatsapp</Col>
-          <Col>Privacy Policy</Col>
-        </Row>
-        <Row>
-          <Col>Mision</Col>
-          <Col><FaInstagram/> Instagram</Col>
-          <Col><FaPhone/> +502 1234-4321</Col>
-          <Col>Devs: Pablo Flores & Nohel Estrada</Col>
-        </Row>
-        <Row>
-          <Col>Vision</Col>
-          <Col><FaTiktok/> Tik Tok</Col>
-          <Col><MdEmail/> example@gmail.com</Col>
-          <Col>License: GPLV3</Col> 
-        </Row>
-      </Card>):(<Card className="bg-primary w-100 text-white text-center rounded-0 shadow" style={{position:'fixed', bottom:'0'}}>
-        <Row>
-          <Col><strong>About D&P Petshop</strong></Col>
-        </Row>
-        <Row>
-          <Col>¿Who are We?</Col>
-        </Row>
-        <Row>
-          <Col>Mision</Col>
-        </Row>
-        <Row>
-          <Col>Vision</Col>
-        </Row>
-        <Row>
-          <Col><strong>Social Media</strong></Col>
-        </Row>
-        <Row>
-          <Col><FaFacebook/> Facebook</Col>
-        </Row>
-        <Row>
-          <Col><FaInstagram/> Instagram</Col>
-        </Row>
-        <Row>
-          <Col><FaTiktok/> Tik Tok</Col>
-        </Row>
-        <Row>
-          <Col><strong>Contact Us</strong></Col>
-        </Row>
-        <Row>
-          <Col><FaWhatsapp/> Whatsapp</Col>
-        </Row>
-        <Row>
-          <Col><FaPhone/> +502 1234-4321</Col>
-        </Row>
-        <Row>
-          <Col><MdEmail/> example@gmail.com</Col>
-        </Row>
-        <Row>
-          <Col><strong>About</strong></Col>
-        </Row>
-        <Row>
-          <Col>Privacy Policy</Col>
-        </Row>
-        <Row>
-          <Col>Devs: Pablo Flores & Nohel Estrada</Col>
-        </Row>
-        <Row>
-          <Col>License: GPLV3</Col> 
-        </Row>
-      </Card>
-        
-      ) }
+      <Profile show={showProfile} setShow={setShowProfile} />
+      <UsersList show={showUsersList} setShow={setShowUsersList} />
     </>
   );
 }
+
+Desktop = ({
+  userProfile,
+  editProduct,
+  setEditProduct,
+  setShowSignup,
+  setShowLogin,
+  setShowProfile,
+  setShowUsersList,
+  setShowNewUserAdmin,
+  guestProfile,
+  setUserProfile,
+  setNotifications,
+  showOffcanvas,
+}) => {
+  return (
+    <>
+      <div className="d-flex justify-content-center align-items-center w-100 m-auto">
+        <Search />
+      </div>
+
+      {editProduct === false && userProfile.rol !== 0 ? (
+        <div className="d-flex flex-row justify-content-center align-items-center text-white">
+          <Cart showOffcanvas={showOffcanvas} />
+        </div>
+      ) : null}
+
+      {userProfile.rol === 3 || userProfile.rol === 2 ? (
+        <>
+          <div className="text-white" style={{ whiteSpace: "nowrap" }}>
+            Edit Products
+          </div>
+          <FormCheck
+            type="switch"
+            style={{ whiteSpace: "nowrap" }}
+            checked={editProduct}
+            onChange={() => setEditProduct(!editProduct)}
+            isValid
+            reverse
+            className="me-1"
+          />
+        </>
+      ) : null}
+
+      {userProfile.rol === 0 ? (
+        <>
+          <Button
+            onClick={() => setShowSignup(true)}
+            className="bg-secondary text-white me-2 w-auto rounded-pill d-flex justify-content-center align-items-center"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            <IoMdPersonAdd className="me-1" /> Sign Up
+          </Button>
+          <Button
+            onClick={() => setShowLogin(true)}
+            className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            <IoLogIn className="me-1" /> Log In
+          </Button>
+        </>
+      ) : (
+        <>
+          <Dropdown>
+            <Dropdown.Toggle className="text-white">
+              {userProfile.firstName} {userProfile.lastName}
+            </Dropdown.Toggle>
+            <Dropdown.Menu style={{ minWidth: "auto" }}>
+              <div className="container">
+                {userProfile.rol === 3 ? (
+                  <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
+                    <Button
+                      onClick={() => setShowUsersList(true)}
+                      variant="link"
+                      className="m-0 p-0 text-success"
+                    >
+                      <CgUserList /> Users List
+                    </Button>
+                  </Dropdown.Item>
+                ) : null}
+                {userProfile.rol === 3 ? (
+                  <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
+                    <Button
+                      onClick={() => setShowNewUserAdmin(true)}
+                      variant="link"
+                      className="m-0 p-0 text-success"
+                    >
+                      <FaArrowsDownToPeople /> Add User
+                    </Button>
+                  </Dropdown.Item>
+                ) : null}
+                <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
+                  <Button
+                    onClick={() => setShowProfile(true)}
+                    variant="link"
+                    className="m-0 p-0 text-success"
+                  >
+                    <IoMdPersonAdd /> Profile
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item className="d-flex align-items-center mb-2 text-success">
+                  <Button
+                    onClick={() => {
+                      localStorage.clear();
+                      setUserProfile(guestProfile);
+                      setEditProduct(false);
+                      setNotifications((prevNotifications) => [
+                        ...prevNotifications,
+                        {
+                          showNotification: true,
+                          type: "success",
+                          headerMessage: "Success",
+                          bodyMessage: "Logout Successful",
+                        },
+                      ]);
+                    }}
+                    variant="link"
+                    className="m-0 p-0 text-success"
+                  >
+                    <RiLogoutBoxFill /> Log Out
+                  </Button>
+                </Dropdown.Item>
+              </div>
+            </Dropdown.Menu>
+          </Dropdown>
+
+          <img
+            alt="Logo"
+            src="/logo512.png"
+            width="50"
+            height="50"
+            className="d-inline-block align-center"
+          />
+        </>
+      )}
+    </>
+  );
+};
+
+Mobile = ({
+  userProfile,
+  editProduct,
+  setEditProduct,
+  setShowSignup,
+  setShowLogin,
+  setShowProfile,
+  setShowUsersList,
+  setShowNewUserAdmin,
+  guestProfile,
+  setUserProfile,
+  setNotifications,
+  showOffcanvas,
+  handleToggle,
+}) => {
+  return (
+    <>
+      <Navbar.Toggle
+        className="bg-primary text-white custom"
+        aria-controls="offcanvasNavbar"
+        onClick={handleToggle}
+        style={{ color: "white", borderColor: "white" }}
+      >
+        <GiHamburgerMenu />
+      </Navbar.Toggle>
+      <Offcanvas show={showOffcanvas} onHide={handleToggle} placement="end">
+        <Offcanvas.Header
+          className="bg-primary text-white pb-0 pt-0"
+          closeButton
+        >
+          <Offcanvas.Title>
+            <img
+              alt="Logo"
+              src="/logo512.png"
+              width="50"
+              height="50"
+              className="d-inline-block align-center"
+            />
+            D&P
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <Nav className="justify-content-end flex-grow-1 pe-3">
+            {userProfile.rol === 0 ? (
+              <>
+                <Button
+                  onClick={() => setShowSignup(true)}
+                  className="bg-secondary text-white me-2 w-auto rounded-pill d-flex justify-content-center align-items-center mb-2"
+                  style={{ whiteSpace: "nowrap", border: "none" }}
+                >
+                  <IoMdPersonAdd className="me-1" /> Sign Up
+                </Button>
+                <Button
+                  onClick={() => setShowLogin(true)}
+                  className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center border-none mb-2"
+                  style={{ whiteSpace: "nowrap", border: "none" }}
+                >
+                  <IoLogIn className="me-1" /> Log In
+                </Button>
+              </>
+            ) : (
+              <div className="d-flex flex-row align-items-center mb-2">
+                <Dropdown className="w-100">
+                  <Dropdown.Toggle
+                    variant="link"
+                    className="d-flex flex-row w-100 align-items-center"
+                  >
+                    <div className="d-flex flex-row ">
+                      {userProfile.firstName} {userProfile.lastName}
+                    </div>
+                    <img
+                      alt="Logo"
+                      src="/logo512.png"
+                      width="50"
+                      height="50"
+                      className="d-inline-block align-center ms-auto"
+                    />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="w-100">
+                  <div className="container">
+                    {userProfile.rol === 3 ? (
+                      <Dropdown.Item
+                        className="text-success"
+                        style={{ textAlign: "center" }}
+                      >
+                        <Button
+                          onClick={() => setShowUsersList(true)}
+                          variant="link"
+                          className="m-0 p-0 text-success"
+                        >
+                          <CgUserList /> Users List
+                        </Button>
+                      </Dropdown.Item>
+                    ) : null}
+                    {userProfile.rol === 3 ? (
+                      <Dropdown.Item
+                        className="text-success border-top"
+                        style={{ textAlign: "center" }}
+                      >
+                        <Button
+                          onClick={() => setShowNewUserAdmin(true)}
+                          variant="link"
+                          className="m-0 p-0 text-success"
+                        >
+                          <FaArrowsDownToPeople /> Add User
+                        </Button>
+                      </Dropdown.Item>
+                    ) : null}
+                    <Dropdown.Item
+                      className="border-top"
+                      style={{ textAlign: "center" }}
+                    >
+                      <Button
+                        onClick={() => setShowProfile(true)}
+                        variant="link"
+                        className="m-0 p-0 text-success"
+                      >
+                        <IoMdPersonAdd /> Profile
+                      </Button>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      className="border-top"
+                      style={{ textAlign: "center" }}
+                    >
+                      <Button
+                        onClick={() => {
+                          localStorage.clear();
+                          setUserProfile(guestProfile);
+                          setEditProduct(false);
+                          setNotifications((prevNotifications) => [
+                            ...prevNotifications,
+                            {
+                              showNotification: true,
+                              type: "success",
+                              headerMessage: "Success",
+                              bodyMessage: "Logout Successful",
+                            },
+                          ]);
+                        }}
+                        variant="link"
+                        className="m-0 p-0 text-success"
+                      >
+                        <RiLogoutBoxFill /> Log Out
+                      </Button>
+                    </Dropdown.Item>
+                    </div>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            )}
+
+            {userProfile.rol === 3 || userProfile.rol === 2 ? (
+              <div className="d-flex flex-row mb-2">
+                <div>Edit Products</div>
+                <FormCheck
+                  type="switch"
+                  style={{ whiteSpace: "nowrap" }}
+                  checked={editProduct}
+                  onChange={() => setEditProduct(!editProduct)}
+                  isValid
+                  reverse
+                  className="me-1 ms-auto"
+                />
+              </div>
+            ) : null}
+
+            <div className="mb-2">
+              <Search />
+            </div>
+
+            {editProduct === false && userProfile.rol !== 0 ? (
+              <Cart showOffcanvas={showOffcanvas} />
+            ) : null}
+          </Nav>
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
+  );
+};
