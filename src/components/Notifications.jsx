@@ -12,6 +12,9 @@ export default function Notifications({ notifications, setNotifications }) {
     if(windowWidth < 1000){
       setPosition('bottom-center')
     }
+    else {
+      setPosition('top-start')
+    }
   },[windowWidth])
 
   if (!notifications || !Array.isArray(notifications)) {

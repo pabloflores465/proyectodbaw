@@ -16,7 +16,6 @@ const [formData, setFormData]=useState({});
   const handleData = async () => {
     try {
       const response = await axios.get ('http://localhost/proyectodbaw/phpsql/userslist.php');
-      console.log(response.data);
       setData(response.data);
     }catch(error){
       console.error('Error: ', error);
