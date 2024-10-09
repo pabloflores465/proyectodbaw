@@ -50,15 +50,6 @@ export default function NavigationDesktop({
     handleData();
   }, []);
 
-
-  /*let categories = [
-    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category2", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category3", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category4", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-  ];*/
-
   return (
     <>
       <Navbar
@@ -221,7 +212,7 @@ export default function NavigationDesktop({
                   <div className="d-flex flex-row align-items-center m-0 p-0">
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="text-black" />
-                      <Dropdown.Menu>
+                      {/*<Dropdown.Menu>
                         <div className="container">
                         {element.subCategories.map((category, index2) => (
                           <div
@@ -243,7 +234,7 @@ export default function NavigationDesktop({
                           </div>
                         ))}
                         </div>
-                      </Dropdown.Menu>
+                      </Dropdown.Menu>*/}
                     </Dropdown>
                     
                     <Link
