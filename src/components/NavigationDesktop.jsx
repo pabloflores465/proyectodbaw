@@ -204,6 +204,7 @@ export default function NavigationDesktop({
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="text-black" />
                       <Dropdown.Menu>
+                        <div className="container">
                         {element.subCategories.map((category, index2) => (
                           <div
                             key={index2}
@@ -223,8 +224,10 @@ export default function NavigationDesktop({
                             </Link>
                           </div>
                         ))}
+                        </div>
                       </Dropdown.Menu>
                     </Dropdown>
+                    
                     <Link
                       key={element.name}
                       to={`/categories/${element.name}`}

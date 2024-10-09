@@ -12,7 +12,7 @@ export default function Search() {
         e.preventDefault();
         onClick(e);
       }}
-    ><FaFilter /> Filter</Button>
+    ><FaFilter /></Button>
   ));
 
   return (
@@ -43,14 +43,14 @@ export default function Search() {
           id="search-input"
           type="search"
           placeholder="Search Products"
-          className="d-flex rounded-end-pill me-2"
+          className="d-flex rounded-0"
         />
 
         <Button
-          className="bg-success text-white rounded-pill me-2 d-flex justify-content-center align-items-center"
+          className="bg-success text-white rounded-end-pill me-2 d-flex justify-content-center align-items-center"
           style={{ border: "none" }}
         >
-          <FaSearch className="me-1" /> Search
+          <FaSearch className="me-1" />
         </Button>
       </Form>
     </>
