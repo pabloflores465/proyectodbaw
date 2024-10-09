@@ -23,6 +23,8 @@ import { IoMdPersonAdd } from "react-icons/io";
 import Search from "../components/Search";
 import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
+import { MdEdit } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function NavigationMobile({
   setShowSignup,
@@ -39,23 +41,46 @@ export default function NavigationMobile({
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
+
+  let categories = [
+    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category2", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category3", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category4", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+  ];
+
   return (
     <Navbar
-    bg="primary"
-    expand="lg"
-    className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
-    style={{ position: "fixed", top: 0, zIndex: 1000 }}
-  >
-    <Navbar.Brand href="/" className="text-white">
-      <img
-        alt="Logo"
-        src="/logo512.png"
-        width="50"
-        height="50"
-        className="d-inline-block align-center"
-      />{" "}
-      D&P Petshop
-    </Navbar.Brand>
+      bg="primary"
+      expand="lg"
+      className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
+      style={{ position: "fixed", top: 0, zIndex: 1000 }}
+    >
+      <Navbar.Brand href="/" className="text-white">
+        <img
+          alt="Logo"
+          src="/logo512.png"
+          width="50"
+          height="50"
+          className="d-inline-block align-center"
+        />{" "}
+        D&P Petshop
+      </Navbar.Brand>
+      <div className="d-flex flex-row text-white">
+        Edit Mode
+        {userProfile.rol === 3 || userProfile.rol === 2 ? (
+          <FormCheck
+            type="switch"
+            style={{ whiteSpace: "nowrap" }}
+            checked={editProduct}
+            onChange={() => setEditProduct(!editProduct)}
+            isValid
+            reverse
+            className="me-1 ms-auto"
+          />
+        ) : null}
+      </div>
       <Navbar.Toggle
         className="bg-primary text-white custom"
         aria-controls="offcanvasNavbar"
@@ -64,6 +89,10 @@ export default function NavigationMobile({
       >
         <GiHamburgerMenu />
       </Navbar.Toggle>
+      <div className="w-100 mb-2 d-flex fle-row align-items-center">
+        {editProduct === false && userProfile.rol !== 0 ? <Cart /> : null}
+        <Search />
+      </div>
       <Offcanvas show={showOffcanvas} onHide={handleToggle} placement="end">
         <Offcanvas.Header
           className="bg-primary text-white pb-0 pt-0"
@@ -190,26 +219,46 @@ export default function NavigationMobile({
               </div>
             )}
 
-            {userProfile.rol === 3 || userProfile.rol === 2 ? (
-              <div className="d-flex flex-row mb-2">
-                <div>Edit Products</div>
-                <FormCheck
-                  type="switch"
-                  style={{ whiteSpace: "nowrap" }}
-                  checked={editProduct}
-                  onChange={() => setEditProduct(!editProduct)}
-                  isValid
-                  reverse
-                  className="me-1 ms-auto"
-                />
+            {categories.map((element, index) => (
+              <div key={index} className="d-flex w-100 mt-2 justify-content-center">
+                <Dropdown className="border-bottom">
+                  <Dropdown.Toggle variant="link" className="text-black"></Dropdown.Toggle>
+                  <Link
+                  key={element.name}
+                  to={`/categories/${element.name}`}
+                  className="text-black"
+                  style={{ textDecoration: "none" }}
+                >
+                  <strong className="ms-1 me-1">{element.name}</strong>
+                </Link>
+                  <Dropdown.Menu className="mb-2">
+                    <div className="container">
+                      {element.subCategories.map((category, index2) => (
+                        <div
+                          key={index2}
+                          className={`d-flex justify-content-center align-items-center ${
+                            index2 === element.subCategories.length - 1
+                              ? ""
+                              : "border-bottom"
+                          } mb-2`}
+                        >
+                          <Link
+                            key={category}
+                            to={`/categories/${element.name}/${category}`}
+                            className="text-black"
+                            style={{ textDecoration: "none" }}
+                          >
+                            {category}
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </Dropdown.Menu>
+                </Dropdown>
+
+   
               </div>
-            ) : null}
-
-            <div className="mb-2">
-              <Search />
-            </div>
-
-            {editProduct === false && userProfile.rol !== 0 ? <Cart /> : null}
+            ))}
           </Nav>
         </Offcanvas.Body>
       </Offcanvas>

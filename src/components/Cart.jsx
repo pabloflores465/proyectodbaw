@@ -7,7 +7,8 @@ export default function Cart() {
 
   const CustomToggle = React.forwardRef(({ onClick },ref) => (
     <Button
-      className="text-white"
+      className="text-white rounded-pill"
+      variant="link"
       onClick={(e) => {
         e.preventDefault();
         onClick(e);
