@@ -1,106 +1,39 @@
-import React, { useContext } from 'react'
-import FeaturedProducts from '../components/FeaturedProducts'
-import { Col, Container, Pagination, Row } from 'react-bootstrap'
-import Product from '../components/Product'
-import { EditProductContext } from '../App';
-import { useParams } from 'react-router';
-import NewProducts from '../components/NewProducts';
+import { Col, Container, Pagination, Row } from "react-bootstrap";
+import Product from "../components/Product";
+import BestSellers from "../components/BestSellers";
+import { useContext, useState, useEffect } from "react";
+import { EditProductContext } from "../App";
+import NewProducts from "../components/NewProducts";
+import axios from "axios";
+import FeaturedProducts from "../components/FeaturedProducts";
 
 function CategoryPage() {
-    const { editProduct } = useContext(EditProductContext);
-    const params = useParams()
-    
-    let products = [
-        {
-          id: 1,
-          title: "Hola 1",
-          description: "A cool product with awesome features.",
-          price: 120,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 2,
-          title: "Product 2",
-          description: "This product is top quality and affordable.",
-          price: 80,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 3,
-          title: "Product 3",
-          description: "An innovative product for everyday use.",
-          price: 150,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 4,
-          title: "Product 4",
-          description: "Durable and long-lasting, a must-have.",
-          price: 200,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 5,
-          title: "Product 5",
-          description: "Stylish design with great functionality.",
-          price: 60,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 6,
-          title: "Product 6",
-          description: "An eco-friendly product that reduces waste.",
-          price: 95,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 7,
-          title: "Product 7",
-          description: "A gadget that simplifies your life.",
-          price: 130,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 8,
-          title: "Product 8",
-          description: "Compact and efficient, perfect for small spaces.",
-          price: 75,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 9,
-          title: "Product 9",
-          description: "A premium product for the discerning buyer.",
-          price: 220,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-        {
-          id: 10,
-          title: "Product 10",
-          description: "An affordable yet highly functional product.",
-          price: 50,
-          image: "https://via.placeholder.com/200x160",
-          categories: ["Cats", "Dogs", "Pets"],
-        },
-      ];
-    
+  const { editProduct } = useContext(EditProductContext);
+  const [data, setData] = useState([]);
+
+  const handleData = async () => {
+    try {
+      const response = await axios.get ('http://localhost/proyectodbaw/phpsql/products.php');
+      setData(response.data);
+      if (response.data.status === "success"){
+        console.log(response.data.message);
+      }
+    }catch(error){
+      console.error('Error: ', error);
+    }
+  }
+  useEffect(() => {
+    handleData();
+    console.log(data);
+  }, []);
+
   return (
-    <div>
-            <div style={{ backgroundColor: "#fcf3f4" }}>
+    <div style={{ backgroundColor: "#fcf3f4", marginTop: "60px" }}>
       {editProduct === false ? (
         <FeaturedProducts />
-      ) : null}
-      <h1 className="text-center">{params.category}</h1>
-      {params.category===undefined ? <div>Bienvenido</div>:null}
+      ) : (
+        <div style={{ marginTop: "60px" }} />
+      )}
       <Container >
         <div className="d-flex flex-row">
           
@@ -108,7 +41,6 @@ function CategoryPage() {
             <strong>Show Items</strong>
           </p>
           <Pagination className="mt-0">
-            
             <Pagination.Prev />
             <Pagination.Item>{1}</Pagination.Item>
             <Pagination.Next />
@@ -116,18 +48,15 @@ function CategoryPage() {
           {editProduct === true ? <NewProducts /> : null}
         </div>
         <Row>
-          {products.map((product, index) => (
+          {!Array.isArray(data) === true ? (null) : (data.map((product, index) => (
             <Col xs={12} sm={6} md={4} lg={3} key={index} className="mt-2 mb-2">
-                
-              <Product product={product} index={index} />
-
-            </Col>
+              <Product product={product} index={index} handleData={handleData} />
+            </Col>)
           ))}
         </Row>
       </Container>
     </div>
-    </div>
-  )
+  );
 }
 
-export default CategoryPage
+export default CategoryPage;
