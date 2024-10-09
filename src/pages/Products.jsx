@@ -17,6 +17,9 @@ function Products() {
         console.error('Error: ', error);
       }
     }
+
+    
+
     useEffect(() => {
       handleData();
     }, []);
@@ -41,6 +44,7 @@ function Products() {
         </Col>)
       ))}
     </Row>
+    
   </Container>
   )
 }

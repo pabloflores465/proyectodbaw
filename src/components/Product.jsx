@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { Button, Card, Dropdown, Form, FormControl } from "react-bootstrap";
 import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoInformationCircleSharp } from "react-icons/io5";
@@ -11,6 +11,11 @@ import axios from "axios";
 export default function Product({ product, index, handleData}) {
   const { editProduct } = useContext(EditProductContext);
   const { windowWidth } = useContext(WindowWidthContext);
+  const [formData, setFormData] = useState({});
+  const [name, setName]=useState();
+  const [desc, setDesc] = useState();
+  const [price, setPrice] = useState();
+  const [stock, setStock] = useState();
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -32,7 +37,53 @@ export default function Product({ product, index, handleData}) {
       console.error('Error: ',error);
     }
   }
+  const handleSave = async (id,e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        `http://localhost/proyectodbaw/phpsql/products.php?id=${id}`,
+        formData
+      );
+      handleData();
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setFormData({...formData, [name]: value });
+    
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try{
+      const response = await axios.post('http://localhost/proyectodbaw/phpsql/products.php',{
+        name : name,
+        desc : desc,
+        price : price,
+        stock : stock
+      });
+      if (response.data.status==="success") {
+        console.log("Registrado");
+      }else{
 
+        console.log("no registrado");
+      }
+      handleData();
+    }catch(error){
+      console.error('Error: ',error);
+    }
+  };
+
+  useEffect(() => {
+    setFormData({
+      id_products: product.id_products,
+      product_name: product.product_name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+    });
+  }, [product]);
   return (
     <>
       {editProduct === false ? (
@@ -106,6 +157,7 @@ export default function Product({ product, index, handleData}) {
           </Card.Body>
         </Card>
       ) : (
+        <>
         <Card className="shadow w-100 h-100">
           <Form className="m-2">
             <Form.Group>
@@ -123,21 +175,35 @@ export default function Product({ product, index, handleData}) {
             <Form.Group>
               <Form.Label>Product Title</Form.Label>
               <Form.Control
+                name = "product_name"
                 type="text"
                 className="mb-2"
-                value={product.product_name}
+                placeholder="Title"
+                onChange={(e)=>setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Product Description</Form.Label>
-              <FormControl as="textarea" rows={3} value={product.description} />
+              <FormControl as="textarea" rows={3} placeholder="Description" onChange={(e)=>setDesc(e.target.value)} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Price:</Form.Label>
               <Form.Control
+                name = "price"
                 type="number"
                 className="mb-2"
-                value={product.price}
+                placeholder="000"
+                onChange={(e)=>setPrice(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>stock:</Form.Label>
+              <Form.Control
+                name = "stock"
+                type="number"
+                className="mb-2"
+                placeholder="000"
+                onChange={(e)=>setStock(e.target.value)}
               />
             </Form.Group>
             <div
@@ -156,9 +222,83 @@ export default function Product({ product, index, handleData}) {
                     : "text-white rounded-pill d-flex align-items-center justify-content-center mb-2"
                 }
                 style={{ whiteSpace: "nowrap" }}
+                onClick={(e) => handleSubmit(e)}
               >
                 <strong>
-                  <FaSave /> Save Changes
+                  <FaSave /> Save New Product 
+                </strong>
+              </Button>
+            </div>
+          </Form>
+        </Card>
+        <Card className="shadow w-100 h-100">
+          <Form className="m-2">
+            <Form.Group>
+              <Form.Label>Product Image</Form.Label>
+              <Form.Control type="file" className="mb-2" />
+              <Form.Control
+                type="text"
+                value={"Image: hola.png"}
+                readOnly
+                onClick={handleDownload}
+                className="mb-2"
+                style={{ cursor: "pointer" }}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Product Title</Form.Label>
+              <Form.Control
+                name = "product_name"
+                type="text"
+                className="mb-2"
+                defaultValue={formData.product_name}
+                onChange={handleInput}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Product Description</Form.Label>
+              <FormControl as="textarea" rows={3} defaultValue={product.description} onChange={handleInput} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Price:</Form.Label>
+              <Form.Control
+                name = "price"
+                type="number"
+                className="mb-2"
+                defaultValue={formData.price}
+                onChange={handleInput}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>stock:</Form.Label>
+              <Form.Control
+                name = "stock"
+                type="number"
+                className="mb-2"
+                defaultValue={formData.stock}
+                onChange={handleInput}
+              />
+            </Form.Group>
+            <div
+              className={
+                windowWidth > 1000
+                  ? "d-flex flex-row justify-content-center"
+                  : "d-flex flex-column justify-content-center"
+              }
+            >
+              <Button
+                variant="secondary"
+                type="submmit"
+                className={
+                  windowWidth > 1000
+                    ? "text-white rounded-pill d-flex align-items-center justify-content-center"
+                    : "text-white rounded-pill d-flex align-items-center justify-content-center mb-2"
+                }
+                style={{ whiteSpace: "nowrap" }}
+                onClick={(e) => handleSave(product.id_products,e)}
+              >
+                <strong>
+                  <FaSave /> Save Changes 
                 </strong>
               </Button>
               <Button
@@ -174,11 +314,12 @@ export default function Product({ product, index, handleData}) {
                 <strong>See Details</strong>
               </Button>
               <Button 
-              variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(product.id_products)} >Delete {console.log(product.id_products)}
+              variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(product.id_products)} >Delete 
               </Button>
             </div>
           </Form>
         </Card>
+        </>
       )}
     </>
   );

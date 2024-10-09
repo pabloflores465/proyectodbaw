@@ -50,6 +50,7 @@ function deleteUser($connection){
     }
 }
 
+
 function updateUser($connection){
     $id = $_GET['id'];
     $data = json_decode(file_get_contents("php://input"));
@@ -73,4 +74,5 @@ function updateUser($connection){
     }
 
 }
+
 ?>

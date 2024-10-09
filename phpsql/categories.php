@@ -11,7 +11,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        getProduct($connection);
+        getCategories($connection);
         break;
     case 'POST':
         createProduct($connection);
@@ -29,17 +29,17 @@ switch ($method) {
 
 $connection->close();
 
-function getProduct($connection) {
-    $sql = "SELECT id_products, product_name, description, price, stock FROM products";
+function getCategories($connection) {
+    $sql = "SELECT name FROM category";
     $result = $connection->query($sql);
 
-    $products = [];
+    $category = [];
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            $products[] = $row;
+            $category[] = $row;
         }
-        echo json_encode($products);
+        echo json_encode($category);
     } else {
         // Si no hay resultados
         echo json_encode(["message" => "No se encontraron productos"]);
@@ -47,7 +47,7 @@ function getProduct($connection) {
     }
 }
 
-function deleteProduct($connection){
+{/*function deleteProduct($connection){
     $id = $_GET['id'];
     $sql = "DELETE FROM products WHERE id_products = $id";
     if ($connection -> query($sql)===FALSE){
@@ -85,5 +85,5 @@ function createProduct($connection){
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }
 }
-
+*/}
 ?>
