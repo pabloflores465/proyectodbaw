@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import {
   EditProductContext,
@@ -17,6 +17,7 @@ import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function NavigationDesktop({
   setShowSignup,
@@ -31,15 +32,32 @@ export default function NavigationDesktop({
   const { setNotifications } = useContext(NotificationContext);
 
   const [showCategories, setShowCategories] = useState(true);
+  const [categories, setCategories]=useState([]);
+
+  const handleData = async () => {
+    try {
+      const response = await axios.get ('http://localhost/proyectodbaw/phpsql/categories.php');
+      console.log(response.data);
+      setCategories(response.data);
+      if (response.data.status === "success"){
+        console.log(response.data.message);
+      }
+    }catch(error){
+      console.error('Error: ', error);
+    }
+  }
+  useEffect(() => {
+    handleData();
+  }, []);
 
 
-  let categories = [
+  /*let categories = [
     { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
     { name: "category2", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
     { name: "category3", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
     { name: "category4", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
     { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-  ];
+  ];*/
 
   return (
     <>
@@ -203,8 +221,7 @@ export default function NavigationDesktop({
                   <div className="d-flex flex-row align-items-center m-0 p-0">
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="text-black" />
-                      <Dropdown.Menu>
-                        <div className="container">
+                      {/*<Dropdown.Menu>
                         {element.subCategories.map((category, index2) => (
                           <div
                             key={index2}
@@ -224,8 +241,7 @@ export default function NavigationDesktop({
                             </Link>
                           </div>
                         ))}
-                        </div>
-                      </Dropdown.Menu>
+                      </Dropdown.Menu>*/}
                     </Dropdown>
                     
                     <Link
