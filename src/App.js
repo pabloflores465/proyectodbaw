@@ -2,11 +2,13 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React, { createContext, useEffect, useState } from "react";
 import ErrorPage from "./pages/ErrorPage";
-import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./pages/Layout";
 import useLocalStorage from "./hooks/useLocalStorage.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
+import CategoryPage from "./pages/CategoryPage.jsx";
+import Products from "./pages/Products.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,17 +17,21 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
-        element: <Home />,
+        index: true,
+        element: <LandingPage />,
       },
       {
-        path: "/:category",
-        element: <Home />,
+        path: "/categories/:categoryId",
+        element: <CategoryPage />,
       },
       {
-        path: "/:category/:products",
-        element: <ProductDetail />
-      }
+        path: "/categories/:categoryId/:subcategoryId",
+        element: <Products />,
+      },
+      {
+        path: "/products/:id/",
+        element: <ProductDetail />,
+      },
     ],
   },
 ]);

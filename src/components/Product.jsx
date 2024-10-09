@@ -37,7 +37,7 @@ export default function Product({ product, index, handleData}) {
     <>
       {editProduct === false ? (
         <Card className="shadow w-100 h-100">
-          <Card.Img variant="top" src="hola.png" height={240} width={320} />
+          <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/hola.png`} height={240} width={320} />
           <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1">
             <Card.Title className="d-flex justify-content-center">
               {product.product_name}

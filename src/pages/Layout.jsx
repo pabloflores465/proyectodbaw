@@ -16,7 +16,7 @@ export default function Layout() {
 
       <Navigation/>
       {/*this for navigation styling*/}
-      <div style={{height:'32px', backgroundColor: "#fcf3f4" }}/>
+      <div style={{height:'38px', backgroundColor: "#fcf3f4" }}/>
       
       <Outlet />
       

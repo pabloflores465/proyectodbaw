@@ -32,12 +32,13 @@ export default function NavigationDesktop({
 
   const [showCategories, setShowCategories] = useState(true);
 
+
   let categories = [
-    "category1",
-    "category2",
-    "category3",
-    "category4",
-    "category5",
+    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category2", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category3", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category4", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
+    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
   ];
 
   return (
@@ -188,10 +189,10 @@ export default function NavigationDesktop({
           <Navbar
             bg="white"
             expand="lg"
-            className="m-0 px-2 py-2 shadow w-100"
+            className="m-0 px-2 py-0 shadow w-100"
             style={{ position: "fixed", top: 60, zIndex: 999 }}
           >
-            <div className="d-flex flew-row w-100 overflow-auto">
+            <div className="d-flex flew-row w-100">
               {categories.map((element, index) => (
                 <div
                   key={index}
@@ -199,14 +200,40 @@ export default function NavigationDesktop({
                     index === categories.length - 1 ? "me-auto" : ""
                   }`}
                 >
-                  <Link
-                    key={element}
-                    to={`/${element}`}
-                    className="text-black"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <strong className="ms-1 me-1">{element}</strong>
-                  </Link>
+                  <div className="d-flex flex-row align-items-center m-0 p-0">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="link" className="text-black" />
+                      <Dropdown.Menu>
+                        {element.subCategories.map((category, index2) => (
+                          <div
+                            key={index2}
+                            className={`d-flex justify-content-center align-items-center ${
+                              index2 === element.subCategories.length - 1
+                                ? ""
+                                : "border-bottom"
+                            } mb-2`}
+                          >
+                            <Link
+                              key={category}
+                              to={`/categories/${element.name}/${category}`}
+                              className="text-black"
+                              style={{ textDecoration: "none" }}
+                            >
+                              {category}
+                            </Link>
+                          </div>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <Link
+                      key={element.name}
+                      to={`/categories/${element.name}`}
+                      className="text-black"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <strong className="ms-1 me-1">{element.name}</strong>
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>

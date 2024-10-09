@@ -7,7 +7,7 @@ function FeaturedProducts() {
     <Carousel style={{marginTop:'60px'}}>
       <Carousel.Item>
         <img
-          src="hola.png"
+          src={`${process.env.PUBLIC_URL}/hola.png`}
           className="d-block w-100"
           alt="1"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
@@ -20,7 +20,7 @@ function FeaturedProducts() {
       </Carousel.Item>
       <Carousel.Item>
         <img
-          src="hola.png"
+          src={`${process.env.PUBLIC_URL}/hola.png`}
           className="d-block w-100"
           alt="2"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
@@ -32,7 +32,7 @@ function FeaturedProducts() {
       </Carousel.Item>
       <Carousel.Item>
         <img
-          src="hola.png"
+          src={`${process.env.PUBLIC_URL}/hola.png`}
           className="d-block w-100"
           alt="3"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
@@ -46,7 +46,7 @@ function FeaturedProducts() {
       </Carousel.Item>
       <Carousel.Item>
         <img
-          src="hola.png"
+          src={`${process.env.PUBLIC_URL}/hola.png`}
           className="d-block w-100"
           alt="4"
           style={{ objectFit: "cover", width: "480px", height:"270px" }}
