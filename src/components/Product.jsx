@@ -4,6 +4,7 @@ import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoInformationCircleSharp } from "react-icons/io5";
 import { EditProductContext, WindowWidthContext } from "../App";
 import { IoMdInformationCircle } from "react-icons/io";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 
 
@@ -19,6 +20,9 @@ export default function Product({ product, index, handleData}) {
     link.click();
     document.body.removeChild(link);
   };
+
+  const navigate = useNavigate()
+  const params = useParams()
 
   const handleDelete = async (id) => {
     try {
@@ -70,6 +74,8 @@ export default function Product({ product, index, handleData}) {
                     ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
                     : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
+                onClick={()=>navigate(`/:${params.category}/:${product.title}`)}
+                
               >
                 <IoMdInformationCircle /> <strong>See Details</strong>
               </Button>
