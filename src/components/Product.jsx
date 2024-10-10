@@ -2,15 +2,18 @@ import React, { useContext, useState, useEffect} from "react";
 import { Button, Card, Dropdown, Form, FormControl } from "react-bootstrap";
 import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoInformationCircleSharp } from "react-icons/io5";
-import { EditProductContext, WindowWidthContext } from "../App";
 import { IoMdInformationCircle } from "react-icons/io";
 import { useNavigate, useParams } from "react-router";
+import { WindowWidthContext } from "../context/WindowWidthContext";
+import { EditProductContext } from "../context/EditProductContext";
 import axios from "axios";
 
 
 export default function Product({ product, index, handleData}) {
   const { editProduct } = useContext(EditProductContext);
+
   const { windowWidth } = useContext(WindowWidthContext);
+
   const [formData, setFormData] = useState({});
   const [name, setName]=useState();
   const [desc, setDesc] = useState();
@@ -87,7 +90,7 @@ export default function Product({ product, index, handleData}) {
   return (
     <>
       {editProduct === false ? (
-        <Card className="shadow w-100 h-100">
+        <Card className="shadow">
           <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/hola.png`} height={240} width={320} />
           <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1">
             <Card.Title className="d-flex justify-content-center">
@@ -158,7 +161,7 @@ export default function Product({ product, index, handleData}) {
         </Card>
       ) : (
         <>
-        <Card className="shadow w-100 h-100">
+        <Card className="shadow">
           <Form className="m-2">
             <Form.Group>
               <Form.Label>Product Image</Form.Label>

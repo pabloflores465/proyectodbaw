@@ -1,11 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 
-import {
-  EditProductContext,
-  NotificationContext,
-  UserProfileContext,
-} from "../App";
-
 import { Button, Collapse, Dropdown, FormCheck, Navbar } from "react-bootstrap";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
@@ -18,6 +12,9 @@ import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { UserProfileContext } from "../context/UserProfileContext";
+import { EditProductContext } from "../context/EditProductContext";
+import { NotificationContext } from "../context/NotificationContext";
 
 export default function NavigationDesktop({
   setShowSignup,

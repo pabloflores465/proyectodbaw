@@ -1,12 +1,6 @@
 import React, { useContext, useState } from "react";
 
 import {
-  EditProductContext,
-  NotificationContext,
-  UserProfileContext,
-} from "../App";
-
-import {
   Button,
   Dropdown,
   FormCheck,
@@ -25,6 +19,9 @@ import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { UserProfileContext } from "../context/UserProfileContext";
+import { EditProductContext } from "../context/EditProductContext";
+import { NotificationContext } from "../context/NotificationContext";
 
 export default function NavigationMobile({
   setShowSignup,
@@ -37,7 +34,7 @@ export default function NavigationMobile({
     useContext(UserProfileContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
   const { setNotifications } = useContext(NotificationContext);
-
+  
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);

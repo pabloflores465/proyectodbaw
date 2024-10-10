@@ -4,8 +4,8 @@ import { Outlet } from "react-router-dom";
 
 import AboutUS from "../components/AboutUs";
 import Navigation from "./Navigation";
-import { NotificationContext } from "../App";
 import Notifications from "../components/Notifications";
+import { NotificationContext } from "../context/NotificationContext";
 
 export default function Layout() {
   const {notifications, setNotifications} = useContext(NotificationContext)

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { UserProfileContext } from "../App";
 import { useContext } from "react";
 import axios from "axios";
+import { UserProfileContext } from "../context/UserProfileContext";
 
 function Profile({ show, setShow }) {
   const [activeBilling, setActiveBilling] = useState(false);
@@ -14,6 +14,7 @@ function Profile({ show, setShow }) {
 
   const [validated, setValidated] = useState(false);
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
+
   let temp = userProfile;
 
   const handleSubmit = async (event) => {

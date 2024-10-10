@@ -1,11 +1,13 @@
 import React, { useContext } from 'react'
-import { WindowWidthContext } from '../App'
+
 import { Card, Col, Row } from 'react-bootstrap';
 import { FaFacebook, FaInstagram, FaPhone, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import { WindowWidthContext } from '../context/WindowWidthContext';
 
 export default function AboutUS() {
     const { windowWidth } = useContext(WindowWidthContext);
+    
 
   return (
     <>

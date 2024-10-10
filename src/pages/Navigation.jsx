@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { WindowWidthContext } from "../App";
 
 import Login from "./Login";
 import Profile from "./Profile";
@@ -8,6 +7,7 @@ import NewUserAdmin from "./NewUserAdmin";
 import UsersList from "./UsersList";
 import NavigationDesktop from "../components/NavigationDesktop";
 import NavigationMobile from "../components/NavigationMobile";
+import { WindowWidthContext } from "../context/WindowWidthContext";
 import { useNavigate } from "react-router";
 
 export default function Navigation() {

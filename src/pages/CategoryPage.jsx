@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { EditProductContext } from "../App";
+
 import FeaturedProducts from "../components/FeaturedProducts";
 import Products from "./Products";
+import { EditProductContext } from "../context/EditProductContext";
 
 function CategoryPage() {
   const { editProduct } = useContext(EditProductContext);

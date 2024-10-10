@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { NotificationContext } from "../context/NotificationContext";
+import { UserProfileContext } from "../context/UserProfileContext";
 import axios from "axios";
-import { NotificationContext, UserProfileContext } from "../App";
 
 function Login({ show, setShow }) {
   const handleClose = () => setShow(false);
