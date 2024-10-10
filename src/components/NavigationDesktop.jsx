@@ -209,29 +209,30 @@ export default function NavigationDesktop({
                   <div className="d-flex flex-row align-items-center m-0 p-0">
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="text-black" />
-                      {/*<Dropdown.Menu>
+                      <Dropdown.Menu>
                         <div className="container">
-                        {element.subCategories.map((category, index2) => (
-                          <div
-                            key={index2}
-                            className={`d-flex justify-content-center align-items-center ${
-                              index2 === element.subCategories.length - 1
-                                ? ""
-                                : "border-bottom"
-                            } mb-2`}
+                        {categories
+                      .filter((category) => category.name !== element.name)
+                      .map((filteredCategory, index2) => (
+                        <div
+                          key={index2}
+                          className={`d-flex justify-content-center align-items-center ${
+                            index2 === categories.length - 1 ? "" : "border-bottom"
+                          } mb-2`}
+                        >
+                          <Link
+                            key={filteredCategory.name}
+                            to={`/categories/${element.name}/${filteredCategory.name}`}
+                            className="text-black"
+                            style={{ textDecoration: "none" }}
                           >
-                            <Link
-                              key={category}
-                              to={`/categories/${element.name}/${category}`}
-                              className="text-black"
-                              style={{ textDecoration: "none" }}
-                            >
-                              {category}
-                            </Link>
+
+                            {filteredCategory.name}
+                          </Link>
                           </div>
                         ))}
                         </div>
-                      </Dropdown.Menu>*/}
+                      </Dropdown.Menu>
                     </Dropdown>
                     
                     <Link
