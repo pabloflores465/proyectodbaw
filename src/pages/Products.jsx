@@ -4,12 +4,15 @@ import { Col, Container, Pagination, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import NewProducts from "../components/NewProducts";
 import { EditProductContext } from "../context/EditProductContext";
+import LoadingState from "../components/LoadingState";
 
 function Products() {
   const [data, setData] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true)
   const { editProduct } = useContext(EditProductContext);
   const handleData = async () => {
     try {
+      setLoadingProducts(true)
       const response = await axios.get(
         "http://localhost/proyectodbaw/phpsql/products.php"
       );
@@ -19,6 +22,9 @@ function Products() {
       }
     } catch (error) {
       console.error("Error: ", error);
+      //setLoadingProducts(false)
+    } finally {
+      setLoadingProducts(false)
     }
   };
 
@@ -39,7 +45,7 @@ function Products() {
         </Pagination>
       </div>
       <Row>
-        {!Array.isArray(data) === true ? null : (
+        {loadingProducts === true ? <LoadingState/> : (
           <>
             {editProduct === true ? (
               <Col xs={12} sm={6} md={4} lg={3} className="mt-2 mb-2">

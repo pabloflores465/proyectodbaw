@@ -156,7 +156,7 @@ export default function NavigationDesktop({
                         variant="link"
                         className=" m-0 p-0 text-success"
                         as={Link}
-                        to="/categories"
+                        to="/categories/edit"
                       >
                         <BiSolidCategoryAlt className="me-1" /> Categories
                       </Button>

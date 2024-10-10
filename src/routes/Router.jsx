@@ -32,7 +32,7 @@ function Router() {
               element: <ProductDetail />,
             },
             {
-              path: "/categories",
+              path: "/categories/edit",
               element: <EditCategories/>
             }
           ],
