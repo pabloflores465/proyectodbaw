@@ -10,11 +10,12 @@ import Search from "../components/Search";
 import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserProfileContext } from "../context/UserProfileContext";
 import { EditProductContext } from "../context/EditProductContext";
 import { NotificationContext } from "../context/NotificationContext";
+import { BiSolidCategoryAlt } from "react-icons/bi";
 
 export default function NavigationDesktop({
   setShowSignup,
@@ -29,20 +30,24 @@ export default function NavigationDesktop({
   const { setNotifications } = useContext(NotificationContext);
 
   const [showCategories, setShowCategories] = useState(true);
-  const [categories, setCategories]=useState([]);
+  const [categories, setCategories] = useState([]);
+
+  const navigate = useNavigate()
 
   const handleData = async () => {
     try {
-      const response = await axios.get ('http://localhost/proyectodbaw/phpsql/categories.php');
+      const response = await axios.get(
+        "http://localhost/proyectodbaw/phpsql/categories.php"
+      );
       console.log(response.data);
       setCategories(response.data);
-      if (response.data.status === "success"){
+      if (response.data.status === "success") {
         console.log(response.data.message);
       }
-    }catch(error){
-      console.error('Error: ', error);
+    } catch (error) {
+      console.error("Error: ", error);
     }
-  }
+  };
   useEffect(() => {
     handleData();
   }, []);
@@ -145,6 +150,18 @@ export default function NavigationDesktop({
                       </Button>
                     </Dropdown.Item>
                   ) : null}
+                  {userProfile.rol === 2 || userProfile.rol === 3 ? (
+                    <Dropdown.Item className="d-flex align-items-center mb-2 text-success border-bottom">
+                      <Button
+                        variant="link"
+                        className=" m-0 p-0 text-success"
+                        as={Link}
+                        to="/categories"
+                      >
+                        <BiSolidCategoryAlt className="me-1" /> Categories
+                      </Button>
+                    </Dropdown.Item>
+                  ) : null}
                   <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
                     <Button
                       onClick={() => setShowProfile(true)}
@@ -169,6 +186,7 @@ export default function NavigationDesktop({
                             bodyMessage: "Logout Successful",
                           },
                         ]);
+                        navigate('/')
                       }}
                       variant="link"
                       className="m-0 p-0 text-success"
@@ -211,30 +229,33 @@ export default function NavigationDesktop({
                       <Dropdown.Toggle variant="link" className="text-black" />
                       <Dropdown.Menu>
                         <div className="container">
-                        {categories
-                      .filter((category) => category.name !== element.name)
-                      .map((filteredCategory, index2) => (
-                        <div
-                          key={index2}
-                          className={`d-flex justify-content-center align-items-center ${
-                            index2 === categories.length - 1 ? "" : "border-bottom"
-                          } mb-2`}
-                        >
-                          <Link
-                            key={filteredCategory.name}
-                            to={`/categories/${element.name}/${filteredCategory.name}`}
-                            className="text-black"
-                            style={{ textDecoration: "none" }}
-                          >
-
-                            {filteredCategory.name}
-                          </Link>
-                          </div>
-                        ))}
+                          {categories
+                            .filter(
+                              (category) => category.name !== element.name
+                            )
+                            .map((filteredCategory, index2) => (
+                              <div
+                                key={index2}
+                                className={`d-flex justify-content-center align-items-center ${
+                                  index2 === categories.length - 1
+                                    ? ""
+                                    : "border-bottom"
+                                } mb-2`}
+                              >
+                                <Link
+                                  key={filteredCategory.name}
+                                  to={`/categories/${element.name}/${filteredCategory.name}`}
+                                  className="text-black"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  {filteredCategory.name}
+                                </Link>
+                              </div>
+                            ))}
                         </div>
                       </Dropdown.Menu>
                     </Dropdown>
-                    
+
                     <Link
                       key={element.name}
                       to={`/categories/${element.name}`}
