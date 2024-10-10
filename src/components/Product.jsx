@@ -114,9 +114,7 @@ export default function Product({ product, index, handleData }) {
                     ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
                     : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
-                onClick={() =>
-                  navigate(`/products/:${product.title}`)
-                }
+                onClick={() => navigate(`/products/:${product.title}`)}
               >
                 <IoMdInformationCircle /> <strong>See Details</strong>
               </Button>
@@ -230,20 +228,6 @@ export default function Product({ product, index, handleData }) {
                   </strong>
                 </Button>
                 <Button
-                  variant="success"
-                  className={
-                    windowWidth > 1000
-                      ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
-                      : "rounded-pill text-white d-flex d-flex align-items-center justify-content-center"
-                  }
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  <IoInformationCircleSharp className="me-1" />{" "}
-                  <strong>See Details</strong>
-                </Button>
-              </div>
-              <div className="d-flex justify-content-center align-items-center">
-                <Button
                   className={
                     windowWidth > 1000
                       ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
@@ -253,7 +237,7 @@ export default function Product({ product, index, handleData }) {
                   onClick={() => handleDelete(product.id_products)}
                 >
                   <strong>
-                    <MdDelete className="me-1" /> Delete{" "}
+                    <MdDelete className="me-1" /> Delete
                   </strong>
                 </Button>
               </div>
