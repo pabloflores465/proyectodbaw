@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
-import { Button, Card, Form, FormControl } from "react-bootstrap";
-import { FaSave } from "react-icons/fa";
+import React, { useContext, useState, useEffect } from "react";
+import { Button, Card, Form, FormControl, Dropdown } from "react-bootstrap";
+import { FaSave, FaListAlt } from "react-icons/fa";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import axios from "axios";
 
@@ -20,6 +20,34 @@ export default function NewProducts({ handleData }) {
   const [desc, setDesc] = useState();
   const [price, setPrice] = useState();
   const [stock, setStock] = useState();
+  const [category, setCategory]=useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+const handleCheckboxChange = (e, categoryitem) => {
+  if (e.target.checked) {
+    setSelectedCategories([...selectedCategories, categoryitem]);
+  } else {
+    setSelectedCategories(
+      selectedCategories.filter((category) => category.id !== categoryitem.id)
+    );
+  }
+};
+  
+  const handleCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost/proyectodbaw/phpsql/categories2.php"
+      );
+      setCategory(response.data);
+      
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleCategories();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -120,6 +148,38 @@ export default function NewProducts({ handleData }) {
                 <FaSave /> Save New Product
               </strong>
             </Button>
+            <Dropdown
+                className={
+                  windowWidth > 1300
+                    ? "d-flex justify-content-center align-items-center mt-2 "
+                    : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
+                }
+              >
+                <Dropdown.Toggle
+                  className={
+                    windowWidth > 1300
+                      ? "text-white rounded-pill"
+                      : "w-100 text-white rounded-pill"
+                  }
+                >
+                  <FaListAlt /> Categories
+                </Dropdown.Toggle>
+                <Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                <div className="container mt-2">
+                {category.map((categoryitem, index) => (
+                    <Form.Check
+                      key={index}
+                      type="checkbox"
+                      id={`category-checkbox-${index}`}
+                      label={categoryitem.name}
+                      className={`d-flex justify-content-center align-items-center ${index === category.length - 1 ? "" : "border-bottom"} mb-2`}
+                      onChange={(e) => handleCheckboxChange(e, categoryitem)} // Implementa esta función para manejar el cambio de estado
+                    />
+                  ))}
+                  </div>
+            
+                </Dropdown.Menu>
+              </Dropdown>
           </div>
         </Form>
       </Card>
