@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Button, Card, Dropdown, Form, FormControl } from "react-bootstrap";
 import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoInformationCircleSharp } from "react-icons/io5";
@@ -7,15 +7,15 @@ import { useNavigate, useParams } from "react-router";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import { EditProductContext } from "../context/EditProductContext";
 import axios from "axios";
+import { MdDelete } from "react-icons/md";
 
-
-export default function Product({ product, index, handleData}) {
+export default function Product({ product, index, handleData }) {
   const { editProduct } = useContext(EditProductContext);
 
   const { windowWidth } = useContext(WindowWidthContext);
 
   const [formData, setFormData] = useState({});
-  const [name, setName]=useState();
+  const [name, setName] = useState();
   const [desc, setDesc] = useState();
   const [price, setPrice] = useState();
   const [stock, setStock] = useState();
@@ -29,18 +29,20 @@ export default function Product({ product, index, handleData}) {
     document.body.removeChild(link);
   };
 
-  const navigate = useNavigate()
-  const params = useParams()
+  const navigate = useNavigate();
+  const params = useParams();
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost/proyectodbaw/phpsql/products.php?id=${id}`);
+      await axios.delete(
+        `http://localhost/proyectodbaw/phpsql/products.php?id=${id}`
+      );
       handleData();
     } catch (error) {
-      console.error('Error: ',error);
+      console.error("Error: ", error);
     }
-  }
-  const handleSave = async (id,e) => {
+  };
+  const handleSave = async (id, e) => {
     e.preventDefault();
     try {
       await axios.put(
@@ -54,28 +56,7 @@ export default function Product({ product, index, handleData}) {
   };
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setFormData({...formData, [name]: value });
-    
-  };
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try{
-      const response = await axios.post('http://localhost/proyectodbaw/phpsql/products.php',{
-        name : name,
-        desc : desc,
-        price : price,
-        stock : stock
-      });
-      if (response.data.status==="success") {
-        console.log("Registrado");
-      }else{
-
-        console.log("no registrado");
-      }
-      handleData();
-    }catch(error){
-      console.error('Error: ',error);
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   useEffect(() => {
@@ -91,7 +72,12 @@ export default function Product({ product, index, handleData}) {
     <>
       {editProduct === false ? (
         <Card className="shadow">
-          <Card.Img variant="top" src={`${process.env.PUBLIC_URL}/hola.png`} height={240} width={320} />
+          <Card.Img
+            variant="top"
+            src={`${process.env.PUBLIC_URL}/hola.png`}
+            height={240}
+            width={320}
+          />
           <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1">
             <Card.Title className="d-flex justify-content-center">
               {product.product_name}
@@ -128,21 +114,28 @@ export default function Product({ product, index, handleData}) {
                     ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
                     : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
-                onClick={()=>navigate(`/:${params.category}/:${product.title}`)}
-                
+                onClick={() =>
+                  navigate(`/:${params.category}/:${product.title}`)
+                }
               >
                 <IoMdInformationCircle /> <strong>See Details</strong>
               </Button>
             </div>
             <div className="w-100">
-            <Dropdown
+              <Dropdown
                 className={
                   windowWidth > 1300
                     ? "d-flex justify-content-center align-items-center mt-2 "
                     : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
               >
-                <Dropdown.Toggle className={windowWidth > 1300 ? "text-white rounded-pill":"w-100 text-white rounded-pill"}>
+                <Dropdown.Toggle
+                  className={
+                    windowWidth > 1300
+                      ? "text-white rounded-pill"
+                      : "w-100 text-white rounded-pill"
+                  }
+                >
                   <FaListAlt /> Categories
                 </Dropdown.Toggle>
                 {/*<Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
@@ -156,172 +149,116 @@ export default function Product({ product, index, handleData}) {
             
                 </Dropdown.Menu>*/}
               </Dropdown>
-              </div>
+            </div>
           </Card.Body>
         </Card>
       ) : (
         <>
-        <Card className="shadow">
-          <Form className="m-2">
-            <Form.Group>
-              <Form.Label>Product Image</Form.Label>
-              <Form.Control type="file" className="mb-2" />
-              <Form.Control
-                type="text"
-                value={"Image: hola.png"}
-                readOnly
-                onClick={handleDownload}
-                className="mb-2"
-                style={{ cursor: "pointer" }}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Product Title</Form.Label>
-              <Form.Control
-                name = "product_name"
-                type="text"
-                className="mb-2"
-                placeholder="Title"
-                onChange={(e)=>setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Product Description</Form.Label>
-              <FormControl as="textarea" rows={3} placeholder="Description" onChange={(e)=>setDesc(e.target.value)} />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Price:</Form.Label>
-              <Form.Control
-                name = "price"
-                type="number"
-                className="mb-2"
-                placeholder="000"
-                onChange={(e)=>setPrice(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>stock:</Form.Label>
-              <Form.Control
-                name = "stock"
-                type="number"
-                className="mb-2"
-                placeholder="000"
-                onChange={(e)=>setStock(e.target.value)}
-              />
-            </Form.Group>
-            <div
-              className={
-                windowWidth > 1000
-                  ? "d-flex flex-row justify-content-center"
-                  : "d-flex flex-column justify-content-center"
-              }
-            >
-              <Button
-                variant="secondary"
-                type="submmit"
+          <Card className="shadow w-100 h-100">
+            <Form className="m-2">
+              <Form.Group>
+                <Form.Label>Product Image</Form.Label>
+                <Form.Control type="file" className="mb-2" />
+                <Form.Control
+                  type="text"
+                  value={"Image: hola.png"}
+                  readOnly
+                  onClick={handleDownload}
+                  className="mb-2"
+                  style={{ cursor: "pointer" }}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Product Title</Form.Label>
+                <Form.Control
+                  name="product_name"
+                  type="text"
+                  className="mb-2"
+                  defaultValue={formData.product_name}
+                  onChange={handleInput}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Product Description</Form.Label>
+                <FormControl
+                  as="textarea"
+                  rows={3}
+                  defaultValue={product.description}
+                  onChange={handleInput}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Price:</Form.Label>
+                <Form.Control
+                  name="price"
+                  type="number"
+                  className="mb-2"
+                  defaultValue={formData.price}
+                  onChange={handleInput}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>stock:</Form.Label>
+                <Form.Control
+                  name="stock"
+                  type="number"
+                  className="mb-2"
+                  defaultValue={formData.stock}
+                  onChange={handleInput}
+                />
+              </Form.Group>
+              <div
                 className={
                   windowWidth > 1000
-                    ? "text-white rounded-pill d-flex align-items-center justify-content-center"
-                    : "text-white rounded-pill d-flex align-items-center justify-content-center mb-2"
+                    ? "d-flex flex-row justify-content-center mb-2"
+                    : "d-flex flex-column justify-content-center mb-2"
                 }
-                style={{ whiteSpace: "nowrap" }}
-                onClick={(e) => handleSubmit(e)}
               >
-                <strong>
-                  <FaSave /> Save New Product 
-                </strong>
-              </Button>
-            </div>
-          </Form>
-        </Card>
-        <Card className="shadow w-100 h-100">
-          <Form className="m-2">
-            <Form.Group>
-              <Form.Label>Product Image</Form.Label>
-              <Form.Control type="file" className="mb-2" />
-              <Form.Control
-                type="text"
-                value={"Image: hola.png"}
-                readOnly
-                onClick={handleDownload}
-                className="mb-2"
-                style={{ cursor: "pointer" }}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Product Title</Form.Label>
-              <Form.Control
-                name = "product_name"
-                type="text"
-                className="mb-2"
-                defaultValue={formData.product_name}
-                onChange={handleInput}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Product Description</Form.Label>
-              <FormControl as="textarea" rows={3} defaultValue={product.description} onChange={handleInput} />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Price:</Form.Label>
-              <Form.Control
-                name = "price"
-                type="number"
-                className="mb-2"
-                defaultValue={formData.price}
-                onChange={handleInput}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>stock:</Form.Label>
-              <Form.Control
-                name = "stock"
-                type="number"
-                className="mb-2"
-                defaultValue={formData.stock}
-                onChange={handleInput}
-              />
-            </Form.Group>
-            <div
-              className={
-                windowWidth > 1000
-                  ? "d-flex flex-row justify-content-center"
-                  : "d-flex flex-column justify-content-center"
-              }
-            >
-              <Button
-                variant="secondary"
-                type="submmit"
-                className={
-                  windowWidth > 1000
-                    ? "text-white rounded-pill d-flex align-items-center justify-content-center"
-                    : "text-white rounded-pill d-flex align-items-center justify-content-center mb-2"
-                }
-                style={{ whiteSpace: "nowrap" }}
-                onClick={(e) => handleSave(product.id_products,e)}
-              >
-                <strong>
-                  <FaSave /> Save Changes 
-                </strong>
-              </Button>
-              <Button
-                variant="success"
-                className={
-                  windowWidth > 1000
-                    ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
-                    : "rounded-pill text-white d-flex d-flex align-items-center justify-content-center"
-                }
-                style={{ whiteSpace: "nowrap" }}
-              >
-                <IoInformationCircleSharp className="me-1" />{" "}
-                <strong>See Details</strong>
-              </Button>
-              <Button 
-              variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(product.id_products)} >Delete 
-              </Button>
-            </div>
-          </Form>
-        </Card>
+                <Button
+                  variant="secondary"
+                  type="submmit"
+                  className={
+                    windowWidth > 1000
+                      ? "text-white rounded-pill d-flex align-items-center justify-content-center"
+                      : "text-white rounded-pill d-flex align-items-center justify-content-center mb-2"
+                  }
+                  style={{ whiteSpace: "nowrap" }}
+                  onClick={(e) => handleSave(product.id_products, e)}
+                >
+                  <strong>
+                    <FaSave /> Save Changes
+                  </strong>
+                </Button>
+                <Button
+                  variant="success"
+                  className={
+                    windowWidth > 1000
+                      ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
+                      : "rounded-pill text-white d-flex d-flex align-items-center justify-content-center"
+                  }
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  <IoInformationCircleSharp className="me-1" />{" "}
+                  <strong>See Details</strong>
+                </Button>
+              </div>
+              <div className="d-flex justify-content-center align-items-center">
+                <Button
+                  className={
+                    windowWidth > 1000
+                      ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
+                      : "rounded-pill text-white d-flex d-flex align-items-center justify-content-center"
+                  }
+                  style={{ whiteSpace: "nowrap" }}
+                  onClick={() => handleDelete(product.id_products)}
+                >
+                  <strong>
+                    <MdDelete className="me-1" /> Delete{" "}
+                  </strong>
+                </Button>
+              </div>
+            </Form>
+          </Card>
         </>
       )}
     </>
