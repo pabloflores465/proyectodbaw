@@ -49,9 +49,17 @@ function getProduct($connection) {
 
 function deleteProduct($connection){
     $id = $_GET['id'];
-    $sql = "DELETE FROM products WHERE id_products = $id";
-    if ($connection -> query($sql)===FALSE){
-        echo json_encode(["error"=> "No se pudo eliminar"]);
+    $sql2 = "DELETE FROM product_category WHERE id_products = $id";
+    
+    if ($connection->query($sql2) === TRUE) {
+        $sql = "DELETE FROM products WHERE id_products = $id";
+        if ($connection->query($sql) === TRUE) {
+            echo json_encode(["success" => "Producto eliminado correctamente"]);
+        } else {
+            echo json_encode(["error"=> "Error al eliminar de products"]);
+        }
+    } else {
+        echo json_encode(["error"=> "Error al eliminar de product_category"]);
     }
 }
 
