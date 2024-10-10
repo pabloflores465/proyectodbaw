@@ -1,6 +1,6 @@
 
 import React, { createContext } from 'react';
-import useLocalStorage from "../hooks/useLocalStorage.jsx";
+import useLocalStorage from "../hooks/useLocalStorage.js";
 
 export const UserProfileContext = createContext();
 
