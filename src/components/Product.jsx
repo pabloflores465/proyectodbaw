@@ -8,9 +8,11 @@ import { WindowWidthContext } from "../context/WindowWidthContext";
 import { EditProductContext } from "../context/EditProductContext";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
+import { UserProfileContext } from "../context/UserProfileContext";
 
 export default function Product({ product, index, handleData }) {
   const { editProduct } = useContext(EditProductContext);
+  const { userProfile }  = useContext(UserProfileContext);
 
   const { windowWidth } = useContext(WindowWidthContext);
 
@@ -94,6 +96,7 @@ export default function Product({ product, index, handleData }) {
                   : "d-flex flex-column justify-content-center"
               }
             >
+              {userProfile.rol != 0 ? (
               <Button
                 variant="secondary"
                 className={
@@ -106,7 +109,7 @@ export default function Product({ product, index, handleData }) {
                   {" "}
                   <FaShoppingCart /> Add to Card
                 </strong>
-              </Button>
+              </Button>): null}
               <Button
                 variant="success"
                 className={
