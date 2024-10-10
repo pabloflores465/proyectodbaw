@@ -115,7 +115,7 @@ export default function Product({ product, index, handleData }) {
                     : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
                 onClick={() =>
-                  navigate(`/:${params.category}/:${product.title}`)
+                  navigate(`/products/:${product.title}`)
                 }
               >
                 <IoMdInformationCircle /> <strong>See Details</strong>
