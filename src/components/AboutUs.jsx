@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
 
-import { Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import { FaFacebook, FaInstagram, FaPhone, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { WindowWidthContext } from '../context/WindowWidthContext';
+import { Link } from 'react-router-dom';
 
 export default function AboutUS() {
     const { windowWidth } = useContext(WindowWidthContext);
@@ -28,7 +29,7 @@ export default function AboutUS() {
             </Col>
           </Row>
           <Row>
-            <Col>¿Who are We?</Col>
+            <Col><Button as={Link} to='/about/who' className='text-white'>¿Who are We?</Button></Col>
             <Col>
               <FaFacebook /> Facebook
             </Col>
@@ -38,7 +39,7 @@ export default function AboutUS() {
             <Col>Privacy Policy</Col>
           </Row>
           <Row>
-            <Col>Mision</Col>
+            <Col><Button as={Link} to='/about/mission' className='text-white'>Mission</Button></Col>
             <Col>
               <FaInstagram /> Instagram
             </Col>
@@ -48,7 +49,7 @@ export default function AboutUS() {
             <Col>Devs: Pablo Flores & Nohel Estrada</Col>
           </Row>
           <Row>
-            <Col>Vision</Col>
+            <Col><Button as={Link} to='/about/vision' className='text-white'>Vision</Button></Col>
             <Col>
               <FaTiktok /> Tik Tok
             </Col>
@@ -66,13 +67,13 @@ export default function AboutUS() {
             </Col>
           </Row>
           <Row>
-            <Col>¿Who are We?</Col>
+            <Col><Button as={Link} to='/about/who' className='text-white'>¿Who are We?</Button></Col>
           </Row>
           <Row>
-            <Col>Mision</Col>
+            <Col><Button as={Link} to='/about/mission' className='text-white'>Mission</Button></Col>
           </Row>
           <Row>
-            <Col>Vision</Col>
+            <Col><Button as={Link} to='/about/vision' className='text-white'>Vision</Button></Col>
           </Row>
           <Row>
             <Col>

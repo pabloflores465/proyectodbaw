@@ -70,7 +70,7 @@ export default function Product({ product, index, handleData }) {
   return (
     <>
       {editProduct === false ? (
-        <Card className="shadow">
+        <Card className="shadow translate-up">
           <Card.Img
             variant="top"
             src={`${process.env.PUBLIC_URL}/hola.png`}

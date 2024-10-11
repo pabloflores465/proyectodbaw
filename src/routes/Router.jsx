@@ -7,6 +7,8 @@ import Products from '../pages/Products'
 import ProductDetail from '../pages/ProductDetail'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EditCategories from '../pages/EditCategories'
+import Information from '../pages/Information'
+
 
 function Router() {
     const router = createBrowserRouter([
@@ -41,6 +43,18 @@ function Router() {
           path: "/error",
           element: <ErrorPage />,
         },
+        {
+          path: "/about/who",
+          element: <Information/>,
+        },
+        {
+          path: "/about/mission",
+          element: <Information/>,
+        },
+        {
+          path: "/about/vision",
+          element: <Information/>,
+        }
       ]);
 
   return (
