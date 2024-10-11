@@ -17,10 +17,7 @@ export default function Product({ product, index, handleData }) {
   const { windowWidth } = useContext(WindowWidthContext);
 
   const [formData, setFormData] = useState({});
-  const [name, setName] = useState();
-  const [desc, setDesc] = useState();
-  const [price, setPrice] = useState();
-  const [stock, setStock] = useState();
+
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -73,7 +70,7 @@ export default function Product({ product, index, handleData }) {
   return (
     <>
       {editProduct === false ? (
-        <Card className="shadow">
+        <Card className="shadow translate-up">
           <Card.Img
             variant="top"
             src={`${process.env.PUBLIC_URL}/hola.png`}
@@ -215,6 +212,33 @@ export default function Product({ product, index, handleData }) {
                     : "d-flex flex-column justify-content-center mb-2"
                 }
               >
+              <Dropdown
+                className={
+                  windowWidth > 1300
+                    ? "d-flex justify-content-center align-items-center mt-2 "
+                    : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
+                }
+              >
+                <Dropdown.Toggle
+                  className={
+                    windowWidth > 1300
+                      ? "text-white rounded-pill"
+                      : "w-100 text-white rounded-pill"
+                  }
+                >
+                  <FaListAlt /> Categories
+                </Dropdown.Toggle>
+                {/*<Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                <div className="container mt-2">
+                  {product.categories.map((category, index) => (
+                    <div key={index} className={`d-flex justify-content-center align-items-center ${index === product.categories.length - 1 ?  "":"border-bottom" } mb-2`} >
+                      {category}
+                    </div>
+                  ))}
+                  </div>
+            
+                </Dropdown.Menu>*/}
+              </Dropdown>
                 <Button
                   variant="secondary"
                   type="submmit"

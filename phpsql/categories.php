@@ -47,7 +47,7 @@ function getCategories($connection) {
     }
 }
 
-{/*function deleteProduct($connection){
+/*function deleteProduct($connection){
     $id = $_GET['id'];
     $sql = "DELETE FROM products WHERE id_products = $id";
     if ($connection -> query($sql)===FALSE){
@@ -85,5 +85,5 @@ function createProduct($connection){
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }
 }
-*/}
+*/
 ?>

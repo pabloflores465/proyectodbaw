@@ -49,9 +49,17 @@ function getProduct($connection) {
 
 function deleteProduct($connection){
     $id = $_GET['id'];
-    $sql = "DELETE FROM products WHERE id_products = $id";
-    if ($connection -> query($sql)===FALSE){
-        echo json_encode(["error"=> "No se pudo eliminar"]);
+    $sql2 = "DELETE FROM product_category WHERE id_products = $id";
+    
+    if ($connection->query($sql2) === TRUE) {
+        $sql = "DELETE FROM products WHERE id_products = $id";
+        if ($connection->query($sql) === TRUE) {
+            echo json_encode(["success" => "Producto eliminado correctamente"]);
+        } else {
+            echo json_encode(["error"=> "Error al eliminar de products"]);
+        }
+    } else {
+        echo json_encode(["error"=> "Error al eliminar de product_category"]);
     }
 }
 
@@ -62,6 +70,7 @@ function updateProduct ($connection){
     $description = $data ->description;
     $price = $data->price;
     $stock = $data->stock;
+    $id_category = $data->id_category;
 
     $sql = "UPDATE products SET product_name = '$productname',description = '$description', price = $price, stock = $stock WHERE id_products = $id";
     if (mysqli_query($connection, $sql)) {
@@ -77,10 +86,25 @@ function createProduct($connection){
     $description = $data->desc;
     $price = $data->price;
     $stock = $data->stock;
-
-    $sql="INSERT INTO products (product_name, description, price, stock, image, important) VALUES ('$product_name', '$description', $price, $stock, NULL, 0)";
+    $id_categories = $data->category; 
+    
+    $sql = "INSERT INTO products (product_name, description, price, stock, image, important) 
+            VALUES ('$product_name', '$description', $price, $stock, NULL, 0)";
+    
     if (mysqli_query($connection, $sql)) {
-        echo json_encode(["message" => "succesful", "status"=>"success"]);
+
+        $id_products = mysqli_insert_id($connection);
+
+
+        foreach ($id_categories as $category_id) {
+            $sql_category = "INSERT INTO product_category (id_products, id_category) 
+                             VALUES ($id_products, $category_id)";
+            if (!mysqli_query($connection, $sql_category)) {
+                echo "Error al insertar en product_categories: " . mysqli_error($connection);
+            }
+        }
+
+        echo json_encode(["message" => "Producto registrado exitosamente", "status"=>"success"]);
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }

@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
-import { Button, Card, Form, FormControl } from "react-bootstrap";
-import { FaSave } from "react-icons/fa";
+import React, { useContext, useState, useEffect } from "react";
+import { Button, Card, Form, FormControl, Dropdown } from "react-bootstrap";
+import { FaSave, FaListAlt } from "react-icons/fa";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import axios from "axios";
 
-export default function NewProducts({ handleData }) {
+export default function NewProducts({ handleData, product }) {
   const {windowWidth} = useContext(WindowWidthContext)
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -20,15 +20,54 @@ export default function NewProducts({ handleData }) {
   const [desc, setDesc] = useState();
   const [price, setPrice] = useState();
   const [stock, setStock] = useState();
+  const [category, setCategory]=useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+const handleCheckboxChange = (e, categoryitem) => {
+  if (e.target.checked) {
+    setSelectedCategories([...selectedCategories, categoryitem.id_category]);
+  } else {
+    setSelectedCategories(
+      selectedCategories.filter((categoryId) => categoryId !== categoryitem.id_category)
+    );
+  }
+  console.log(selectedCategories);
+};
+  
+  const handleCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost/proyectodbaw/phpsql/categories2.php"
+      );
+      console.log("Categories response:", response.data); 
+      setCategory(response.data);
+      
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleCategories();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(selectedCategories)
+    console.log({
+      name: name,
+      desc: desc,
+      price: price,
+      stock: stock,
+      category: selectedCategories, // Verificar si es un array con los IDs correctos
+    });
     try{
       const response = await axios.post('http://localhost/proyectodbaw/phpsql/products.php',{
         name : name,
         desc : desc,
         price : price,
-        stock : stock
+        stock : stock,
+        category : selectedCategories
       });
       if (response.data.status==="success") {
         console.log("Registrado");
@@ -46,7 +85,9 @@ export default function NewProducts({ handleData }) {
   return (
     <>
       <Card className="shadow mx-auto">
-        <Form className="m-2">
+        <Form 
+        onSubmit={(e) => handleSubmit(e)}
+        className="m-2">
           <Form.Group>
             <Form.Label>Product Image</Form.Label>
             <Form.Control type="file" className="mb-2" />
@@ -120,6 +161,38 @@ export default function NewProducts({ handleData }) {
                 <FaSave /> Save New Product
               </strong>
             </Button>
+            <Dropdown
+                className={
+                  windowWidth > 1300
+                    ? "d-flex justify-content-center align-items-center mt-2 "
+                    : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
+                }
+              >
+                <Dropdown.Toggle
+                  className={
+                    windowWidth > 1300
+                      ? "text-white rounded-pill"
+                      : "w-100 text-white rounded-pill"
+                  }
+                >
+                  <FaListAlt /> Categories
+                </Dropdown.Toggle>
+                <Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                <div className="container mt-2">
+                {category.map((categoryitem, index) => (
+                    <Form.Check
+                      key={index}
+                      type="checkbox"
+                      id={`category-checkbox-${index}`}
+                      label={categoryitem.name}
+                      className={`d-flex justify-content-center align-items-center ${index === category.length - 1 ? "" : "border-bottom"} mb-2`}
+                      onChange={(e) => handleCheckboxChange(e, categoryitem)} 
+                    />
+                  ))}
+                  </div>
+            
+                </Dropdown.Menu>
+              </Dropdown>
           </div>
         </Form>
       </Card>
