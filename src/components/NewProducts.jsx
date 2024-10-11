@@ -4,7 +4,7 @@ import { FaSave, FaListAlt } from "react-icons/fa";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import axios from "axios";
 
-export default function NewProducts({ handleData }) {
+export default function NewProducts({ handleData, product }) {
   const {windowWidth} = useContext(WindowWidthContext)
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -25,12 +25,13 @@ export default function NewProducts({ handleData }) {
 
 const handleCheckboxChange = (e, categoryitem) => {
   if (e.target.checked) {
-    setSelectedCategories([...selectedCategories, categoryitem]);
+    setSelectedCategories([...selectedCategories, categoryitem.id_category]);
   } else {
     setSelectedCategories(
-      selectedCategories.filter((category) => category.id !== categoryitem.id)
+      selectedCategories.filter((categoryId) => categoryId !== categoryitem.id_category)
     );
   }
+  console.log(selectedCategories);
 };
   
   const handleCategories = async () => {
@@ -38,6 +39,7 @@ const handleCheckboxChange = (e, categoryitem) => {
       const response = await axios.get(
         "http://localhost/proyectodbaw/phpsql/categories2.php"
       );
+      console.log("Categories response:", response.data); 
       setCategory(response.data);
       
     } catch (error) {
@@ -51,12 +53,21 @@ const handleCheckboxChange = (e, categoryitem) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(selectedCategories)
+    console.log({
+      name: name,
+      desc: desc,
+      price: price,
+      stock: stock,
+      category: selectedCategories, // Verificar si es un array con los IDs correctos
+    });
     try{
       const response = await axios.post('http://localhost/proyectodbaw/phpsql/products.php',{
         name : name,
         desc : desc,
         price : price,
-        stock : stock
+        stock : stock,
+        category : selectedCategories
       });
       if (response.data.status==="success") {
         console.log("Registrado");
@@ -74,7 +85,9 @@ const handleCheckboxChange = (e, categoryitem) => {
   return (
     <>
       <Card className="shadow mx-auto">
-        <Form className="m-2">
+        <Form 
+        onSubmit={(e) => handleSubmit(e)}
+        className="m-2">
           <Form.Group>
             <Form.Label>Product Image</Form.Label>
             <Form.Control type="file" className="mb-2" />
@@ -173,7 +186,7 @@ const handleCheckboxChange = (e, categoryitem) => {
                       id={`category-checkbox-${index}`}
                       label={categoryitem.name}
                       className={`d-flex justify-content-center align-items-center ${index === category.length - 1 ? "" : "border-bottom"} mb-2`}
-                      onChange={(e) => handleCheckboxChange(e, categoryitem)} // Implementa esta función para manejar el cambio de estado
+                      onChange={(e) => handleCheckboxChange(e, categoryitem)} 
                     />
                   ))}
                   </div>
