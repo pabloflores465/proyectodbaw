@@ -10,12 +10,14 @@ function Products() {
   const [data, setData] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true)
   const { editProduct } = useContext(EditProductContext);
+
   const handleData = async () => {
     try {
       setLoadingProducts(true)
       const response = await axios.get(
         "http://localhost/proyectodbaw/phpsql/products.php"
       );
+      console.log(response.data)
       setData(response.data);
       if (response.data.status === "success") {
         console.log(response.data.message);
@@ -33,7 +35,7 @@ function Products() {
   }, []);
 
   return (
-    <Container>
+    <Container> {console.log(data)}
       <div className="d-flex flex-row">
         <p className="mt-2 mb-1">
           <strong>Show Items</strong>
@@ -66,6 +68,8 @@ function Products() {
                   product={product}
                   index={index}
                   handleData={handleData}
+                  data = {data}
+                  setData = {setData}
                 />
               </Col>
             ))}

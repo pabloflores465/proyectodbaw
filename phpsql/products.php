@@ -30,21 +30,37 @@ switch ($method) {
 $connection->close();
 
 function getProduct($connection) {
+    // Consultar los productos
     $sql = "SELECT id_products, product_name, description, price, stock FROM products";
+    
+    // Consultar los IDs de las categorías asociadas al producto desde la tabla de relación
+    $sql2 = "SELECT id_products, id_category 
+             FROM product_category";
+
     $result = $connection->query($sql);
+    $result2 = $connection->query($sql2);
 
     $products = [];
 
+    // Obtener los productos
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            $products[] = $row;
+            // Iniciar el array de categorías vacío para cada producto
+            $products[$row['id_products']] = $row;
+            $products[$row['id_products']]['categories'] = [];
         }
-        echo json_encode($products);
-    } else {
-        // Si no hay resultados
-        echo json_encode(["message" => "No se encontraron productos"]);
-        return;
     }
+
+    // Obtener los IDs de las categorías para cada producto desde la tabla de relación
+    if ($result2->num_rows > 0) {
+        while($row = $result2->fetch_assoc()) {
+            // Añadir los IDs de las categorías al array de categorías del producto correspondiente
+            $products[$row['id_products']]['categories'][] = $row['id_category'];
+        }
+    }
+
+    // Devolver los productos como un array indexado (reindexar)
+    echo json_encode(array_values($products));
 }
 
 function deleteProduct($connection){
@@ -70,11 +86,20 @@ function updateProduct ($connection){
     $description = $data ->description;
     $price = $data->price;
     $stock = $data->stock;
-    $id_category = $data->id_category;
+    $id_categories = $data->category; 
 
-    $sql = "UPDATE products SET product_name = '$productname',description = '$description', price = $price, stock = $stock WHERE id_products = $id";
+    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock WHERE id_products = $id";
+    
     if (mysqli_query($connection, $sql)) {
-        echo json_encode(["message" => "succesful", "status"=>"success"]);
+        $sql_delete = "DELETE FROM product_category WHERE id_products = $id";
+        mysqli_query($connection, $sql_delete);
+        foreach ($id_categories as $category_id) {
+            $sql_category = "INSERT INTO product_category (id_products, id_category) VALUES ($id, $category_id)";
+            if (!mysqli_query($connection, $sql_category)) {
+                echo "Error al insertar en product_categories: " . mysqli_error($connection);
+            }
+        }
+        echo json_encode(["message" => "Product and categories updated successfully", "status" => "success"]);
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }

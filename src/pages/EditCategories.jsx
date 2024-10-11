@@ -146,7 +146,7 @@ function EditCategories() {
             </Table>
           </div>
         </Container>
-      ) : null}
+      ) : <h1>You can't access to this page</h1>}
     </>
   );
 }

@@ -10,14 +10,32 @@ import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { UserProfileContext } from "../context/UserProfileContext";
 
-export default function Product({ product, index, handleData }) {
+export default function Product({ product, index, handleData}) {
   const { editProduct } = useContext(EditProductContext);
   const { userProfile }  = useContext(UserProfileContext);
 
   const { windowWidth } = useContext(WindowWidthContext);
+  const [category, setCategory]=useState([]);
 
   const [formData, setFormData] = useState({});
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const handleCategories = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost/proyectodbaw/phpsql/categories2.php"
+      );
+      console.log("Categories response:", response.data); 
+      setCategory(response.data);
+      
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleCategories();
+  }, []);
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -27,9 +45,11 @@ export default function Product({ product, index, handleData }) {
     link.click();
     document.body.removeChild(link);
   };
+  
 
   const navigate = useNavigate();
   const params = useParams();
+  
 
   const handleDelete = async (id) => {
     try {
@@ -43,6 +63,7 @@ export default function Product({ product, index, handleData }) {
   };
   const handleSave = async (id, e) => {
     e.preventDefault();
+    console.log(formData)
     try {
       await axios.put(
         `http://localhost/proyectodbaw/phpsql/products.php?id=${id}`,
@@ -57,6 +78,12 @@ export default function Product({ product, index, handleData }) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      category: selectedCategories,
+    }));
+  }, [selectedCategories]);
 
   useEffect(() => {
     setFormData({
@@ -65,12 +92,35 @@ export default function Product({ product, index, handleData }) {
       description: product.description,
       price: product.price,
       stock: product.stock,
+      category : selectedCategories
     });
+    console.log(product.categories)
+    if (product && product.categories) {
+      setSelectedCategories(product.categories);
+    }
+
   }, [product]);
+
+  const handleCheckboxChange = (e, categoryitem) => {
+    if (e.target.checked) {
+      setSelectedCategories([...selectedCategories, categoryitem.id_category]);
+    } else {
+      setSelectedCategories(
+        selectedCategories.filter((categoryId) => categoryId !== categoryitem.id_category)
+      );
+    }
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      category: selectedCategories,
+    }));
+    console.log(selectedCategories);
+    console.log(formData)
+  };
+
   return (
     <>
       {editProduct === false ? (
-        <Card className="shadow translate-up">
+        <Card className="shadow">
           <Card.Img
             variant="top"
             src={`${process.env.PUBLIC_URL}/hola.png`}
@@ -104,7 +154,7 @@ export default function Product({ product, index, handleData }) {
               >
                 <strong>
                   {" "}
-                  <FaShoppingCart /> Add to Card
+                  <FaShoppingCart /> Add to Card {console.log(product.categories)}
                 </strong>
               </Button>): null}
               <Button
@@ -136,16 +186,18 @@ export default function Product({ product, index, handleData }) {
                 >
                   <FaListAlt /> Categories
                 </Dropdown.Toggle>
-                {/*<Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                <Dropdown.Menu 
+                className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
                 <div className="container mt-2">
-                  {product.categories.map((category, index) => (
-                    <div key={index} className={`d-flex justify-content-center align-items-center ${index === product.categories.length - 1 ?  "":"border-bottom" } mb-2`} >
-                      {category}
+                {product && Array.isArray(product.categories) && product.categories.length > 0 ? (
+                  product.categories.map((category, index) => (
+                    <div key={index} className={`d-flex justify-content-center align-items-center mb-2`}>
+                      {category !== null ? category : " "}
                     </div>
-                  ))}
+                  )) ) : <div>No categories available</div> }
                   </div>
             
-                </Dropdown.Menu>*/}
+                </Dropdown.Menu>
               </Dropdown>
             </div>
           </Card.Body>
@@ -228,16 +280,22 @@ export default function Product({ product, index, handleData }) {
                 >
                   <FaListAlt /> Categories
                 </Dropdown.Toggle>
-                {/*<Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
+                <Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
                 <div className="container mt-2">
-                  {product.categories.map((category, index) => (
-                    <div key={index} className={`d-flex justify-content-center align-items-center ${index === product.categories.length - 1 ?  "":"border-bottom" } mb-2`} >
-                      {category}
-                    </div>
+                {category.map((categoryitem, index) => (
+                    <Form.Check
+                    key={index}
+                    type="checkbox"
+                    id={`category-checkbox-${index}`}
+                    label={categoryitem.name}
+                    className={`d-flex justify-content-center align-items-center ${index === category.length - 1 ? "" : "border-bottom"} mb-2`}
+                    checked={selectedCategories.includes(categoryitem.id_category)}
+                    onChange={(e) => handleCheckboxChange(e, categoryitem)}  
+                    />
                   ))}
                   </div>
             
-                </Dropdown.Menu>*/}
+                </Dropdown.Menu>
               </Dropdown>
                 <Button
                   variant="secondary"
