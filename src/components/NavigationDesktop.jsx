@@ -174,7 +174,7 @@ export default function NavigationDesktop({
                   <Dropdown.Item className="d-flex align-items-center mb-2 text-success">
                     <Button
                       onClick={() => {
-                        localStorage.clear();
+                        //localStorage.clear();
                         setUserProfile(guestProfile);
                         setEditProduct(false);
                         setNotifications((prevNotifications) => [

@@ -10,6 +10,7 @@ import NavigationMobile from "../components/NavigationMobile";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import { useNavigate } from "react-router";
 
+
 export default function Navigation() {
   
   const { windowWidth } = useContext(WindowWidthContext);
@@ -19,6 +20,8 @@ export default function Navigation() {
   const [showProfile, setShowProfile] = useState(false);
   const [showNewUserAdmin, setShowNewUserAdmin] = useState(false);
   const [showUsersList, setShowUsersList] = useState(false);
+
+  
 
   return (
     <>

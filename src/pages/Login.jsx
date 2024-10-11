@@ -12,6 +12,9 @@ function Login({ show, setShow }) {
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
   const { notifications, setNotifications } = useContext(NotificationContext);
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+  console.log(localIp)
+
   const handleSubmit = async (event) => {
     let temp = userProfile;
     event.preventDefault();
@@ -29,8 +32,8 @@ function Login({ show, setShow }) {
     setNotifications(temp2);
 
     try {
-      const response = await axios.post(
-        "http://localhost/proyectodbaw/phpsql/login.php",
+      const response = await axios.post(   
+        `http://${localIp}/proyectodbaw/phpsql/login.php`,
         {
           email: temp.email.trim(),
           password: password,
