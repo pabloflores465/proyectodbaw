@@ -59,7 +59,7 @@ function NewUserAdmin({ show, setShow }) {
         className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
         closeButton
       >
-        <Modal.Title>Sign Up Especial User</Modal.Title>
+        <Modal.Title>Sign Up Employee</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form

@@ -13,6 +13,9 @@ switch ($method) {
     case 'GET':
         getCategories($connection);
         break;
+    case 'POST':
+        createCategory($connection);
+        break;
     case 'PUT':
         updateCategory($connection);
         break;
@@ -22,6 +25,19 @@ switch ($method) {
 }
 
 $connection->close();
+function createCategory($connection){
+    $data = json_decode(file_get_contents("php://input"));
+
+    $name = $data->name;
+
+
+    $sql="INSERT INTO category (name) VALUES ('$name')";
+    if (mysqli_query($connection, $sql)) {
+        echo json_encode(["message" => "succesful", "status"=>"success"]);
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($connection);
+    }
+}
 
 function getCategories($connection) {
     $sql = "SELECT * FROM category";

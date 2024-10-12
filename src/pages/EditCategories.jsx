@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserProfileContext } from '../context/UserProfileContext';
-import { useNavigate } from 'react-router';
-import { Button, Table, Form, Container } from "react-bootstrap";
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from "react";
+import { UserProfileContext } from "../context/UserProfileContext";
+import { useNavigate } from "react-router";
+import { Button, Table, Form, Container, Modal } from "react-bootstrap";
+import axios from "axios";
 
 function EditCategories() {
   const { userProfile } = useContext(UserProfileContext);
@@ -11,7 +11,12 @@ function EditCategories() {
   const [data, setData] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
   const [formData, setFormData] = useState({});
-  const [name, setName]=useState("");
+  const [name, setName] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  // Funciones para abrir y cerrar el modal
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   const handleData = async () => {
     try {
@@ -19,7 +24,6 @@ function EditCategories() {
         "http://localhost/proyectodbaw/phpsql/categories2.php"
       );
       setData(response.data);
-      
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -44,7 +48,7 @@ function EditCategories() {
   const handleInput = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(formData)
+    console.log(formData);
   };
 
   const handleSave = async (id) => {
@@ -64,13 +68,31 @@ function EditCategories() {
     setEditRowId(null);
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try{
+      const response = await axios.post('http://localhost/proyectodbaw/phpsql/categories2.php',{
+        name : name
+      });
+      if (response.data.status==="success") {
+        console.log("Registrado");
+        handleData();
+      }else{
+        console.log("no registrado");
+      }
+    }catch(error){
+      console.error('Error: ',error);
+    }
+  };
+
+
   useEffect(() => {
     handleData();
   }, []);
 
   useEffect(() => {
     if (userProfile.rol !== 2 && userProfile.rol !== 3) {
-      navigate('/error');
+      navigate("/error");
     }
   }, [userProfile, navigate]);
 
@@ -79,6 +101,51 @@ function EditCategories() {
       {userProfile.rol === 2 || userProfile.rol === 3 ? (
         <Container fluid className="p-3">
           <div className="table-responsive">
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="secondary text-white rounded-pill"
+                onClick={handleOpenModal}
+                style={{ width: "auto" }}
+              >
+                Add Category
+              </Button>
+            </div>
+            <Modal
+              centered
+              className="text-white shadow"
+              show={showModal}
+              onHide={handleCloseModal}
+            >
+              <Modal.Header
+                className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
+                closeButton
+              >
+                <Modal.Title>Add Category</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form
+                  onSubmit={handleSubmit}
+                  className="ps-1 pe-1 overflow-auto"
+                >
+                  <Form.Group className="mb-3" controlId="validateName">
+                    <Form.Label className="text-success">Category name</Form.Label>
+                    <Form.Control
+                      required
+                      placeholder="Category"
+                      type="text"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  </Form.Group>
+                  <Button
+                    variant="secondary text-white rounded-pill w-100"
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                </Form>
+              </Modal.Body>
+            </Modal>
             <Table striped bordered hover className="w-100">
               <thead>
                 <tr>
@@ -146,7 +213,9 @@ function EditCategories() {
             </Table>
           </div>
         </Container>
-      ) : <h1>You can't access to this page</h1>}
+      ) : (
+        <h1>You can't access to this page</h1>
+      )}
     </>
   );
 }

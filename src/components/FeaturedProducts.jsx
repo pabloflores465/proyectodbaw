@@ -1,62 +1,66 @@
-
 import Carousel from "react-bootstrap/Carousel";
+import { useParams } from "react-router";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import LoadingState from "./LoadingState";
 //import ExampleCarouselImage from 'components/ExampleCarouselImage';
 
 function FeaturedProducts() {
+  const [data, setData] = useState([]);
+  const params = useParams();
+  console.log(params);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  const handleData = async (category1, category2) => {
+    try {
+      let url = `http://localhost/proyectodbaw/phpsql/Fproducts.php`;
+      if (category1) {
+        url += `?category=${category1}`;
+        if (category2) {
+          url += `&subCategory=${category2}`;
+        }
+      }
+      setLoadingProducts(true);
+      const response = await axios.get(url);
+      console.log(response.data);
+      setData(response.data);
+      if (response.data.status === "success") {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      //setLoadingProducts(false)
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  useEffect(() => {
+    handleData(params.categoryId, params.subcategoryId);
+  }, [params]);
+
   return (
-    <Carousel style={{marginTop:'60px'}}>
-      <Carousel.Item>
-        <img
-          src={`${process.env.PUBLIC_URL}/hola.png`}
-          className="d-block w-100"
-          alt="1"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          src={`${process.env.PUBLIC_URL}/hola.png`}
-          className="d-block w-100"
-          alt="2"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          src={`${process.env.PUBLIC_URL}/hola.png`}
-          className="d-block w-100"
-          alt="3"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          src={`${process.env.PUBLIC_URL}/hola.png`}
-          className="d-block w-100"
-          alt="4"
-          style={{ objectFit: "cover", width: "480px", height:"270px" }}
-        />
-
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
+    <Carousel style={{ marginTop: "60px" }}>
+      {loadingProducts ? (
+        <LoadingState />
+      ) : (
+        data
+          .filter((product) => product.product_name)
+          .map((product, index) => (
+            <Carousel.Item key={index}>
+              <img
+                src={`${process.env.PUBLIC_URL}/hola.png`} // Imagen fija
+                className="d-block w-100"
+                alt={`Product ${index}`}
+                style={{ objectFit: "cover", width: "480px", height: "270px" }}
+              />
+              <Carousel.Caption>
+                <h3>{product.product_name}</h3>
+                <p>{product.description}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))
+      )}
     </Carousel>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import {
   Button,
@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import { UserProfileContext } from "../context/UserProfileContext";
 import { EditProductContext } from "../context/EditProductContext";
 import { NotificationContext } from "../context/NotificationContext";
+import axios from "axios";
 
 export default function NavigationMobile({
   setShowSignup,
@@ -34,18 +35,30 @@ export default function NavigationMobile({
     useContext(UserProfileContext);
   const { editProduct, setEditProduct } = useContext(EditProductContext);
   const { setNotifications } = useContext(NotificationContext);
-  
+
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
+  const [categories, setCategories] = useState([]);
 
-  let categories = [
-    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category2", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category3", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category4", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-    { name: "category1", subCategories: ["sub1", "sub2", "sub3", "sub4"] },
-  ];
+
+  const handleData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost/proyectodbaw/phpsql/categories.php"
+      );
+      console.log(response.data);
+      setCategories(response.data);
+      if (response.data.status === "success") {
+        console.log(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+  useEffect(() => {
+    handleData();
+  }, []);
 
   return (
     <Navbar
@@ -217,43 +230,53 @@ export default function NavigationMobile({
             )}
 
             {categories.map((element, index) => (
-              <div key={index} className="d-flex w-100 mt-2 justify-content-center">
+              <div
+                key={index}
+                className="d-flex w-100 mt-2 justify-content-center"
+              >
                 <Dropdown className="border-bottom">
-                  <Dropdown.Toggle variant="link" className="text-black"></Dropdown.Toggle>
+                  <Dropdown.Toggle
+                    variant="link"
+                    className="text-black"
+                  ></Dropdown.Toggle>
                   <Link
-                  key={element.name}
-                  to={`/categories/${element.name}`}
-                  className="text-black"
-                  style={{ textDecoration: "none" }}
-                >
-                  <strong className="ms-1 me-1">{element.name}</strong>
-                </Link>
+                    key={element.name}
+                    to={`/categories/${element.name}`}
+                    className="text-black"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <strong className="ms-1 me-1">{element.name}</strong>
+                  </Link>
                   <Dropdown.Menu className="mb-2">
-                    <div className="container">
-                      {element.subCategories.map((category, index2) => (
-                        <div
-                          key={index2}
-                          className={`d-flex justify-content-center align-items-center ${
-                            index2 === element.subCategories.length - 1
-                              ? ""
-                              : "border-bottom"
-                          } mb-2`}
-                        >
-                          <Link
-                            key={category}
-                            to={`/categories/${element.name}/${category}`}
-                            className="text-black"
-                            style={{ textDecoration: "none" }}
-                          >
-                            {category}
-                          </Link>
+                  <div className="container">
+                          {categories
+                            .filter(
+                              (category) => category.name !== element.name
+                            )
+                            .map((filteredCategory, index2) => (
+                              <div
+                                key={index2}
+                                className={`d-flex justify-content-center align-items-center ${
+                                  index2 === categories.length - 1
+                                    ? ""
+                                    : "border-bottom"
+                                } mb-2`}
+                              >
+                                <Link
+                                  key={filteredCategory.name}
+                                  to={`/categories/${element.name}/${filteredCategory.name}`}
+                                  className="text-black"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  {filteredCategory.name}
+                                </Link>
+                                <Link to={`/categories/${element.name}/${filteredCategory.name}`}></Link>
+                              </div>
+                            ))
+                            }
                         </div>
-                      ))}
-                    </div>
                   </Dropdown.Menu>
                 </Dropdown>
-
-   
               </div>
             ))}
           </Nav>
