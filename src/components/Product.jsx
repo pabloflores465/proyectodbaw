@@ -10,12 +10,12 @@ import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { UserProfileContext } from "../context/UserProfileContext";
 
-export default function Product({ product, index, handleData}) {
+export default function Product({ product, index, handleData }) {
   const { editProduct } = useContext(EditProductContext);
-  const { userProfile }  = useContext(UserProfileContext);
+  const { userProfile } = useContext(UserProfileContext);
 
   const { windowWidth } = useContext(WindowWidthContext);
-  const [category, setCategory]=useState([]);
+  const [category, setCategory] = useState([]);
 
   const [formData, setFormData] = useState({});
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -25,9 +25,8 @@ export default function Product({ product, index, handleData}) {
       const response = await axios.get(
         "http://localhost/proyectodbaw/phpsql/categories2.php"
       );
-      console.log("Categories response:", response.data); 
+      console.log("Categories response:", response.data);
       setCategory(response.data);
-      
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -45,11 +44,9 @@ export default function Product({ product, index, handleData}) {
     link.click();
     document.body.removeChild(link);
   };
-  
 
   const navigate = useNavigate();
   const params = useParams();
-  
 
   const handleDelete = async (id) => {
     try {
@@ -63,7 +60,7 @@ export default function Product({ product, index, handleData}) {
   };
   const handleSave = async (id, e) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     try {
       await axios.put(
         `http://localhost/proyectodbaw/phpsql/products.php?id=${id}`,
@@ -92,13 +89,12 @@ export default function Product({ product, index, handleData}) {
       description: product.description,
       price: product.price,
       stock: product.stock,
-      category : selectedCategories
+      category: selectedCategories,
     });
-    console.log(product.categories)
+    console.log(product.categories);
     if (product && product.categories) {
       setSelectedCategories(product.categories);
     }
-
   }, [product]);
 
   const handleCheckboxChange = (e, categoryitem) => {
@@ -106,7 +102,9 @@ export default function Product({ product, index, handleData}) {
       setSelectedCategories([...selectedCategories, categoryitem.id_category]);
     } else {
       setSelectedCategories(
-        selectedCategories.filter((categoryId) => categoryId !== categoryitem.id_category)
+        selectedCategories.filter(
+          (categoryId) => categoryId !== categoryitem.id_category
+        )
       );
     }
     setFormData((prevFormData) => ({
@@ -114,7 +112,7 @@ export default function Product({ product, index, handleData}) {
       category: selectedCategories,
     }));
     console.log(selectedCategories);
-    console.log(formData)
+    console.log(formData);
   };
 
   return (
@@ -144,19 +142,21 @@ export default function Product({ product, index, handleData}) {
               }
             >
               {userProfile.rol != 0 ? (
-              <Button
-                variant="secondary"
-                className={
-                  windowWidth > 1300
-                    ? "text-white rounded-pill me-1 d-flex align-items-center justify-content-center"
-                    : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
-                }
-              >
-                <strong>
-                  {" "}
-                  <FaShoppingCart /> Add to Card {console.log(product.categories)}
-                </strong>
-              </Button>): null}
+                <Button
+                  variant="secondary"
+                  className={
+                    windowWidth > 1300
+                      ? "text-white rounded-pill me-1 d-flex align-items-center justify-content-center"
+                      : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
+                  }
+                >
+                  <strong>
+                    {" "}
+                    <FaShoppingCart /> Add to Card{" "}
+                    {console.log(product.categories)}
+                  </strong>
+                </Button>
+              ) : null}
               <Button
                 variant="success"
                 className={
@@ -184,19 +184,40 @@ export default function Product({ product, index, handleData}) {
                       : "w-100 text-white rounded-pill"
                   }
                 >
-                  <FaListAlt /> Categories
+                  <FaListAlt /> Categories {console.log(product.categories)}
                 </Dropdown.Toggle>
-                <Dropdown.Menu 
-                className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
-                <div className="container mt-2">
-                {product && Array.isArray(product.categories) && product.categories.length > 0 ? (
-                  product.categories.map((category, index) => (
-                    <div key={index} className={`d-flex justify-content-center align-items-center mb-2`}>
-                      {category !== null ? category : " "}
-                    </div>
-                  )) ) : <div>No categories available</div> }
+                <Dropdown.Menu
+                  className={
+                    windowWidth > 1300
+                      ? "pt-0 pb-0 justify-content-center"
+                      : "pt-0 pb-0 justify-content-center w-100"
+                  }
+                >
+                  <div className="container mt-2">
+                    {product &&
+                    Array.isArray(product.categories) &&
+                    product.categories.length > 0 ? (
+                      category
+                        .filter((categoryitem) =>
+                          selectedCategories.includes(categoryitem.id_category)
+                        )
+                        .map((categoryitem, index) => (
+                          <div
+                            key={index}
+                            className={`d-flex justify-content-center align-items-center ${
+                              index === category.length - 1
+                                ? ""
+                                : "border-bottom"
+                            } mb-2`}
+                          >
+                            {categoryitem.name}{" "}
+                            {/* Mostrar solo el nombre de la categoría */}
+                          </div>
+                        ))
+                    ) : (
+                      <div>No categories available</div>
+                    )}
                   </div>
-            
                 </Dropdown.Menu>
               </Dropdown>
             </div>
@@ -264,39 +285,50 @@ export default function Product({ product, index, handleData}) {
                     : "d-flex flex-column justify-content-center mb-2"
                 }
               >
-              <Dropdown
-                className={
-                  windowWidth > 1300
-                    ? "d-flex justify-content-center align-items-center mt-2 "
-                    : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
-                }
-              >
-                <Dropdown.Toggle
+                <Dropdown
                   className={
                     windowWidth > 1300
-                      ? "text-white rounded-pill"
-                      : "w-100 text-white rounded-pill"
+                      ? "d-flex justify-content-center align-items-center mt-2 "
+                      : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                   }
                 >
-                  <FaListAlt /> Categories
-                </Dropdown.Toggle>
-                <Dropdown.Menu className={windowWidth > 1300 ? "pt-0 pb-0 justify-content-center":"pt-0 pb-0 justify-content-center w-100"}>
-                <div className="container mt-2">
-                {category.map((categoryitem, index) => (
-                    <Form.Check
-                    key={index}
-                    type="checkbox"
-                    id={`category-checkbox-${index}`}
-                    label={categoryitem.name}
-                    className={`d-flex justify-content-center align-items-center ${index === category.length - 1 ? "" : "border-bottom"} mb-2`}
-                    checked={selectedCategories.includes(categoryitem.id_category)}
-                    onChange={(e) => handleCheckboxChange(e, categoryitem)}  
-                    />
-                  ))}
-                  </div>
-            
-                </Dropdown.Menu>
-              </Dropdown>
+                  <Dropdown.Toggle
+                    className={
+                      windowWidth > 1300
+                        ? "text-white rounded-pill"
+                        : "w-100 text-white rounded-pill"
+                    }
+                  >
+                    <FaListAlt /> Categories
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu
+                    className={
+                      windowWidth > 1300
+                        ? "pt-0 pb-0 justify-content-center"
+                        : "pt-0 pb-0 justify-content-center w-100"
+                    }
+                  >
+                    <div className="container mt-2">
+                      {category.map((categoryitem, index) => (
+                        <Form.Check
+                          key={index}
+                          type="checkbox"
+                          id={`category-checkbox-${index}`}
+                          label={categoryitem.name}
+                          className={`d-flex justify-content-center align-items-center ${
+                            index === category.length - 1 ? "" : "border-bottom"
+                          } mb-2`}
+                          checked={selectedCategories.includes(
+                            categoryitem.id_category
+                          )}
+                          onChange={(e) =>
+                            handleCheckboxChange(e, categoryitem)
+                          }
+                        />
+                      ))}
+                    </div>
+                  </Dropdown.Menu>
+                </Dropdown>
                 <Button
                   variant="secondary"
                   type="submmit"
