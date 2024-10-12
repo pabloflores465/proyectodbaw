@@ -15,7 +15,6 @@ function EditCategories() {
   const [formData, setFormData] = useState({});
   const [name, setName]=useState("");
   const [showModal, setShowModal] = useState(false);
-  const localIp = process.env.REACT_APP_LOCAL_IP;
 
   // Funciones para abrir y cerrar el modal
   const handleOpenModal = () => setShowModal(true);
