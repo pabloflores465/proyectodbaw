@@ -15,6 +15,7 @@ function EditCategories() {
   const [formData, setFormData] = useState({});
   const [name, setName]=useState("");
   const [showModal, setShowModal] = useState(false);
+  const localIp = process.env.REACT_APP_LOCAL_IP;
 
   // Funciones para abrir y cerrar el modal
   const handleOpenModal = () => setShowModal(true);
@@ -92,7 +93,7 @@ function EditCategories() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try{
-      const response = await axios.post('http://localhost/proyectodbaw/phpsql/categories2.php',{
+      const response = await axios.post(`http://${localIp}/proyectodbaw/phpsql/categories2.php`,{
         name : name
       });
       if (response.data.status==="success") {

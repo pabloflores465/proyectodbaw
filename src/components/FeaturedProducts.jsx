@@ -10,10 +10,11 @@ function FeaturedProducts() {
   const params = useParams();
   console.log(params);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const localIp = process.env.REACT_APP_LOCAL_IP;
 
   const handleData = async (category1, category2) => {
     try {
-      let url = `http://localhost/proyectodbaw/phpsql/Fproducts.php`;
+      let url = `http://${localIp}/proyectodbaw/phpsql/Fproducts.php`;
       if (category1) {
         url += `?category=${category1}`;
         if (category2) {
