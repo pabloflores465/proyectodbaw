@@ -14,6 +14,8 @@ function Signup({ show, setShow }) {
   const [cardnumber, setCardnumber]=useState("");
   const [expdate, setExpdate]=useState("");
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -22,7 +24,7 @@ function Signup({ show, setShow }) {
       event.stopPropagation();
     }
     try{
-      const response = await axios.put('http://localhost/proyectodbaw/phpsql/signup.php',{
+      const response = await axios.put(`http://${localIp}/proyectodbaw/phpsql/signup.php`,{
         firstname : firstname,
         lastname : lastname,
         email : email,

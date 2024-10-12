@@ -15,6 +15,7 @@ function Profile({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   let temp = userProfile;
 
   const handleSubmit = async (event) => {
@@ -25,7 +26,7 @@ function Profile({ show, setShow }) {
     }
     try {
       const response = await axios.put(
-        "http://localhost/proyectodbaw/phpsql/profile.php",
+      `http://${localIp}/proyectodbaw/phpsql/profile.php`,
         {
           firstname: userProfile.firstName,
           lastname: userProfile.lastName,

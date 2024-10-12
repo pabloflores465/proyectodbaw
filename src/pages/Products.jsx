@@ -16,9 +16,10 @@ function Products() {
   console.log(params)
   
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   const handleData = async (category1, category2) => {
     try {
-      let url = `http://localhost/proyectodbaw/phpsql/products.php`;
+      let url = `http://${localIp}/proyectodbaw/phpsql/products.php`;
       if  (category1){
         url+=`?category=${category1}`;
         if (category2) {

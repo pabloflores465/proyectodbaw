@@ -13,10 +13,12 @@ function UsersList({ show, setShow }) {
     setEditRowId(null);
   };
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
   const handleData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/proyectodbaw/phpsql/userslist.php"
+        `http://${localIp}/proyectodbaw/phpsql/userslist.php`
       );
       setData(response.data);
     } catch (error) {
@@ -26,7 +28,7 @@ function UsersList({ show, setShow }) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost/proyectodbaw/phpsql/userslist.php?id=${id}`
+        `http://${localIp}/proyectodbaw/phpsql/userslist.php?id=${id}`
       );
       handleData();
     } catch (error) {
@@ -48,7 +50,7 @@ function UsersList({ show, setShow }) {
   const handleSave = async (id) => {
     try {
       await axios.put(
-        `http://localhost/proyectodbaw/phpsql/userslist.php?id=${id}`,
+        `http://${localIp}/proyectodbaw/phpsql/userslist.php?id=${id}`,
         formData
       );
       handleData();

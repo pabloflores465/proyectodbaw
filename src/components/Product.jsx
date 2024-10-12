@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Button, Card, Dropdown, Form, FormControl } from "react-bootstrap";
 import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
-import { IoInformationCircleSharp } from "react-icons/io5";
 import { IoMdInformationCircle } from "react-icons/io";
 import { useNavigate, useParams } from "react-router";
 import { WindowWidthContext } from "../context/WindowWidthContext";
@@ -20,10 +19,12 @@ export default function Product({ product, index, handleData }) {
   const [formData, setFormData] = useState({});
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
   const handleCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/proyectodbaw/phpsql/categories2.php"
+        `http://${localIp}/proyectodbaw/phpsql/categories2.php`
       );
       console.log("Categories response:", response.data);
       setCategory(response.data);
@@ -51,7 +52,7 @@ export default function Product({ product, index, handleData }) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost/proyectodbaw/phpsql/products.php?id=${id}`
+        `http://${localIp}/proyectodbaw/phpsql/products.php?id=${id}`
       );
       handleData();
     } catch (error) {
@@ -63,7 +64,7 @@ export default function Product({ product, index, handleData }) {
     console.log(formData);
     try {
       await axios.put(
-        `http://localhost/proyectodbaw/phpsql/products.php?id=${id}`,
+        `http://${localIp}/proyectodbaw/phpsql/products.php?id=${id}`,
         formData
       );
       handleData();

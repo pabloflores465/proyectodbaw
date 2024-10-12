@@ -34,11 +34,14 @@ export default function NavigationDesktop({
   const [categories, setCategories] = useState([]);
 
   const navigate = useNavigate()
+  
+  
+  const localIp = process.env.REACT_APP_LOCAL_IP;
 
   const handleData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/proyectodbaw/phpsql/categories.php"
+        `http://${localIp}/proyectodbaw/phpsql/categories.php`
       );
       console.log(response.data);
       setCategories(response.data);

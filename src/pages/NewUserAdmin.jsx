@@ -11,6 +11,8 @@ function NewUserAdmin({ show, setShow }) {
   const [birthdate, setBirthdate]=useState("");
   const [rol, setRol]=useState(null);
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -19,7 +21,7 @@ function NewUserAdmin({ show, setShow }) {
       event.stopPropagation();
     }
     try{
-      const response = await axios.put('http://localhost/proyectodbaw/phpsql/signupadmn.php',{
+      const response = await axios.put(`http://${localIp}/proyectodbaw/phpsql/signupadmn.php`,{
         firstname : firstname,
         lastname : lastname,
         email : email,

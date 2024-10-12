@@ -11,17 +11,18 @@ function EditCategories() {
   const [data, setData] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
   const [formData, setFormData] = useState({});
-  const [name, setName] = useState("");
+  const [name, setName]=useState("");
   const [showModal, setShowModal] = useState(false);
 
   // Funciones para abrir y cerrar el modal
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
+  
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   const handleData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/proyectodbaw/phpsql/categories2.php"
+        `http://${localIp}/proyectodbaw/phpsql/categories2.php`
       );
       setData(response.data);
     } catch (error) {
@@ -32,7 +33,7 @@ function EditCategories() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost/proyectodbaw/phpsql/categories2.php?id=${id}`
+        `http://${localIp}/proyectodbaw/phpsql/categories2.php?id=${id}`
       );
       handleData();
     } catch (error) {
@@ -54,7 +55,7 @@ function EditCategories() {
   const handleSave = async (id) => {
     try {
       await axios.put(
-        `http://localhost/proyectodbaw/phpsql/categories2.php?id=${id}`,
+        `http://${localIp}/proyectodbaw/phpsql/categories2.php?id=${id}`,
         formData
       );
       handleData();

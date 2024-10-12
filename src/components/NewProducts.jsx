@@ -34,10 +34,12 @@ const handleCheckboxChange = (e, categoryitem) => {
   console.log(selectedCategories);
 };
   
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
   const handleCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost/proyectodbaw/phpsql/categories2.php"
+        `http://${localIp}/proyectodbaw/phpsql/categories2.php`
       );
       console.log("Categories response:", response.data); 
       setCategory(response.data);
@@ -62,7 +64,7 @@ const handleCheckboxChange = (e, categoryitem) => {
       category: selectedCategories, // Verificar si es un array con los IDs correctos
     });
     try{
-      const response = await axios.post('http://localhost/proyectodbaw/phpsql/products.php',{
+      const response = await axios.post(`http://${localIp}/proyectodbaw/phpsql/products.php`,{
         name : name,
         desc : desc,
         price : price,
