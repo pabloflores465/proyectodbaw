@@ -4,7 +4,7 @@ import { FaSave, FaListAlt } from "react-icons/fa";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import axios from "axios";
 
-export default function NewProducts({ handleData, product }) {
+export default function NewProducts({ handleData, product, elementName, filteredCategoryName }) {
   const {windowWidth} = useContext(WindowWidthContext)
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -75,7 +75,7 @@ const handleCheckboxChange = (e, categoryitem) => {
 
         console.log("no registrado");
       }
-      handleData();
+      handleData(elementName, filteredCategoryName);
     }catch(error){
       console.error('Error: ',error);
     }

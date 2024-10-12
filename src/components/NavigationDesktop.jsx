@@ -16,6 +16,7 @@ import { UserProfileContext } from "../context/UserProfileContext";
 import { EditProductContext } from "../context/EditProductContext";
 import { NotificationContext } from "../context/NotificationContext";
 import { BiSolidCategoryAlt } from "react-icons/bi";
+import Products from "../pages/Products";
 
 export default function NavigationDesktop({
   setShowSignup,
@@ -250,8 +251,10 @@ export default function NavigationDesktop({
                                 >
                                   {filteredCategory.name}
                                 </Link>
+                                <Link to={`/categories/${element.name}/${filteredCategory.name}`}></Link>
                               </div>
-                            ))}
+                            ))
+                            }
                         </div>
                       </Dropdown.Menu>
                     </Dropdown>
@@ -264,6 +267,7 @@ export default function NavigationDesktop({
                     >
                       <strong className="ms-1 me-1">{element.name}</strong>
                     </Link>
+
                   </div>
                 </div>
               ))}

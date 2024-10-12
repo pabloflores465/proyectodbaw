@@ -36,7 +36,12 @@ function Router() {
             {
               path: "/categories/edit",
               element: <EditCategories/>
+            },
+            {
+              path: "/subcategories/:elementName/:filteredCategoryName",
+              element: <Products/>
             }
+
           ],
         },
         {
