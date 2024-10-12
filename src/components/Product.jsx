@@ -165,7 +165,7 @@ export default function Product({ product, index, handleData }) {
                     ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
                     : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
-                onClick={() => navigate(`/products/:${product.title}`)}
+                onClick={() => navigate(`/products/${product.product_name}`)}
               >
                 <IoMdInformationCircle /> <strong>See Details</strong>
               </Button>
@@ -341,10 +341,10 @@ export default function Product({ product, index, handleData }) {
                   style={{ whiteSpace: "nowrap" }}
                   onClick={(e) => handleSave(product.id_products, e)}
                 >
-                  <strong>
-                    <FaSave /> Save Changes
-                  </strong>
+                  <FaSave /> Save Changes
                 </Button>
+              </div>
+              <div className="d-flex justify-content-center">
                 <Button
                   className={
                     windowWidth > 1000
@@ -354,9 +354,7 @@ export default function Product({ product, index, handleData }) {
                   style={{ whiteSpace: "nowrap" }}
                   onClick={() => handleDelete(product.id_products)}
                 >
-                  <strong>
-                    <MdDelete className="me-1" /> Delete
-                  </strong>
+                  <MdDelete className="me-1" /> Delete
                 </Button>
               </div>
             </Form>
