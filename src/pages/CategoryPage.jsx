@@ -8,7 +8,7 @@ function CategoryPage() {
   const { editProduct } = useContext(EditProductContext);
 
   return (
-    <div style={{ backgroundColor: "#fcf3f4", marginTop: "60px" }}>
+    <div style={{ marginTop: "60px" }}>
       {editProduct === false ? (
         <FeaturedProducts />
       ) : (

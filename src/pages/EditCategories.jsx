@@ -3,10 +3,12 @@ import { UserProfileContext } from "../context/UserProfileContext";
 import { useNavigate } from "react-router";
 import { Button, Table, Form, Container, Modal } from "react-bootstrap";
 import axios from "axios";
+import { NotificationContext } from "../context/NotificationContext";
 
 function EditCategories() {
   const { userProfile } = useContext(UserProfileContext);
   const navigate = useNavigate();
+  const {setNotifications} = useContext(NotificationContext)
 
   const [data, setData] = useState([]);
   const [editRowId, setEditRowId] = useState(null);
@@ -17,7 +19,7 @@ function EditCategories() {
   // Funciones para abrir y cerrar el modal
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  
+
   const localIp = process.env.REACT_APP_LOCAL_IP;
   const handleData = async () => {
     try {
@@ -30,12 +32,28 @@ function EditCategories() {
     }
   };
 
+  const nice = (result)=>{
+    setNotifications((prevNotifications) => [
+      ...prevNotifications.slice(0, -1),
+      {
+        showNotification: true,
+        type: "success",
+        headerMessage: "Success",
+        bodyMessage: "Category Deleted",
+      },
+    ]);
+  }
+
   const handleDelete = async (id) => {
     try {
-      await axios.delete(
+      const result = await axios.delete(
         `http://${localIp}/proyectodbaw/phpsql/categories2.php?id=${id}`
       );
       handleData();
+      window.location.reload()
+      nice(result)
+
+    
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -44,6 +62,7 @@ function EditCategories() {
   const handleEdit = (item) => {
     setEditRowId(item.id_category);
     setFormData({ ...item });
+    
   };
 
   const handleInput = (e) => {
@@ -60,6 +79,7 @@ function EditCategories() {
       );
       handleData();
       setEditRowId(null);
+      window.location.reload()
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -78,6 +98,7 @@ function EditCategories() {
       if (response.data.status==="success") {
         console.log("Registrado");
         handleData();
+        window.location.reload()
       }else{
         console.log("no registrado");
       }
@@ -100,11 +121,11 @@ function EditCategories() {
   return (
     <>
       {userProfile.rol === 2 || userProfile.rol === 3 ? (
-        <Container fluid className="p-3">
+        <Container fluid className="p-3" style={{marginTop:'40px'}}>
           <div className="table-responsive">
             <div className="d-flex justify-content-end">
               <Button
-                variant="secondary text-white rounded-pill"
+                variant="secondary text-white rounded-pill mb-2"
                 onClick={handleOpenModal}
                 style={{ width: "auto" }}
               >

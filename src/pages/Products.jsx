@@ -5,7 +5,7 @@ import Product from "../components/Product";
 import NewProducts from "../components/NewProducts";
 import { EditProductContext } from "../context/EditProductContext";
 import LoadingState from "../components/LoadingState";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 function Products() {
   const [data, setData] = useState([]);
@@ -45,8 +45,10 @@ function Products() {
     handleData(params.categoryId, params.subcategoryId);
   }, [params]);
 
+  const location = useLocation()
+
   return (
-    <Container>
+    <div className={`container ${location !== '/' ? '':'d-flex flex-column h-100'}`}>
       {" "}
       {console.log(data)}
       <div className="d-flex flex-row">
@@ -98,7 +100,7 @@ function Products() {
           </>
         )}
       </Row>
-    </Container>
+    </div>
   );
 }
 

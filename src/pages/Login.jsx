@@ -124,7 +124,7 @@ function Login({ show, setShow }) {
               <Form.Label className="text-success">E-mail</Form.Label>
               <Form.Control
                 required
-                placeholder="John Doe"
+                placeholder="example@gmail.com"
                 type="text"
                 onChange={(e) => {
                   let temp = userProfile;

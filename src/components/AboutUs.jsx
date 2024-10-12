@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { FaFacebook, FaInstagram, FaPhone, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { WindowWidthContext } from '../context/WindowWidthContext';
@@ -13,7 +13,7 @@ export default function AboutUS() {
   return (
     <>
     {windowWidth > 800 ? (
-        <Card className="bg-primary w-100 text-white text-center rounded-0 shadow">
+        <div className="bg-primary w-100 text-white text-center rounded-0 shadow mt-auto">
           <Row>
             <Col>
               <strong>About D&P Petshop</strong>
@@ -58,7 +58,7 @@ export default function AboutUS() {
             </Col>
             <Col>License: GPLV3</Col>
           </Row>
-        </Card>
+        </div>
       ) : (
         <Card className="bg-primary w-100 text-white text-center rounded-0 shadow">
           <Row>
