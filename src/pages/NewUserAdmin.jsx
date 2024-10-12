@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios"
+import { NotificationContext } from "../context/NotificationContext";
 
 function NewUserAdmin({ show, setShow }) {
   const [validated, setValidated] = useState(false);
@@ -12,6 +13,9 @@ function NewUserAdmin({ show, setShow }) {
   const [rol, setRol]=useState(null);
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
+  const [confirm, setConfirm] = useState("");
+
+  const { notifications, setNotifications } = useContext(NotificationContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,6 +24,7 @@ function NewUserAdmin({ show, setShow }) {
       event.preventDefault();
       event.stopPropagation();
     }
+    if (confirm === password){
     try{
       const response = await axios.put(`http://${localIp}/proyectodbaw/phpsql/signupadmn.php`,{
         firstname : firstname,
@@ -38,9 +43,29 @@ function NewUserAdmin({ show, setShow }) {
         console.log(email, password);
         console.log(response);
       }
+      setNotifications((prevNotifications) => [
+        ...prevNotifications.slice(0, -1),
+        {
+          showNotification: true,
+          type: "success",
+          headerMessage: "Success",
+          bodyMessage: "User Register successful",
+        },
+      ]);
     }catch(error){
       console.error('Error: ',error);
     }
+  }else{
+    setNotifications((prevNotifications) => [
+      ...prevNotifications.slice(0, -1),
+      {
+        showNotification: true,
+        type: "error",
+        headerMessage: "Error",
+        bodyMessage: "Passwords doesn't match",
+      },
+    ]);
+  }
   };
 
   //const [activeBilling, setActiveBilling] = useState(false);
@@ -96,9 +121,15 @@ function NewUserAdmin({ show, setShow }) {
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Password</Form.Label>
-            <Form.Control required placeholder="Password#123" type="text" onChange={(e)=>setPassword(e.target.value)}/>
+            <Form.Control required placeholder="Password#123" type="password" onChange={(e)=>setPassword(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Text>Forgot Password?</Form.Text>
+            <Form.Group className="mb-3" controlId="validatePassword">
+            <Form.Label className="text-success">Confirm Password</Form.Label>
+            <Form.Control required placeholder="Password#123" type="password" onChange={(e)=>setConfirm(e.target.value)}/>
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Form.Text>Unmatched Passwords</Form.Text>
+          </Form.Group>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateEmail">
             <Form.Label className="text-success">Rol</Form.Label>

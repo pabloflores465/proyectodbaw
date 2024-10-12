@@ -16,7 +16,6 @@ import { UserProfileContext } from "../context/UserProfileContext";
 import { EditProductContext } from "../context/EditProductContext";
 import { NotificationContext } from "../context/NotificationContext";
 import { BiSolidCategoryAlt } from "react-icons/bi";
-import Products from "../pages/Products";
 
 export default function NavigationDesktop({
   setShowSignup,
