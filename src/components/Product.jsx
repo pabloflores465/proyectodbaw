@@ -19,6 +19,8 @@ export default function Product({ product, index, handleData }) {
   const [formData, setFormData] = useState({});
   const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const [featuredItem, setFeaturedItem] = useState(false)
+
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
   const handleCategories = async () => {
@@ -279,6 +281,7 @@ export default function Product({ product, index, handleData }) {
                   onChange={handleInput}
                 />
               </Form.Group>
+              <Form.Check label='Featured Item'/>
               <div
                 className={
                   windowWidth > 1000
@@ -330,6 +333,7 @@ export default function Product({ product, index, handleData }) {
                     </div>
                   </Dropdown.Menu>
                 </Dropdown>
+                
                 <Button
                   variant="secondary"
                   type="submmit"
@@ -357,6 +361,7 @@ export default function Product({ product, index, handleData }) {
                   <MdDelete className="me-1" /> Delete
                 </Button>
               </div>
+              
             </Form>
           </Card>
         </>
