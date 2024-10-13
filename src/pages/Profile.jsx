@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { UserProfileContext } from "../App";
 import { useContext } from "react";
 import axios from "axios";
+import { UserProfileContext } from "../context/UserProfileContext";
 
 function Profile({ show, setShow }) {
   const [activeBilling, setActiveBilling] = useState(false);
@@ -14,6 +14,8 @@ function Profile({ show, setShow }) {
 
   const [validated, setValidated] = useState(false);
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
+
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   let temp = userProfile;
 
   const handleSubmit = async (event) => {
@@ -24,7 +26,7 @@ function Profile({ show, setShow }) {
     }
     try {
       const response = await axios.put(
-        "http://localhost/proyectodbaw/phpsql/profile.php",
+      `http://${localIp}/proyectodbaw/phpsql/profile.php`,
         {
           firstname: userProfile.firstName,
           lastname: userProfile.lastName,

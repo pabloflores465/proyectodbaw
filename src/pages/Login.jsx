@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { NotificationContext } from "../context/NotificationContext";
+import { UserProfileContext } from "../context/UserProfileContext";
 import axios from "axios";
-import { NotificationContext, UserProfileContext } from "../App";
 
 function Login({ show, setShow }) {
   const handleClose = () => setShow(false);
@@ -9,7 +10,10 @@ function Login({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [password, setPassword] = useState("");
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
-  const { notifications, setNotifications } = useContext(NotificationContext)
+  const { notifications, setNotifications } = useContext(NotificationContext);
+
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+  console.log(localIp)
 
   const handleSubmit = async (event) => {
     let temp = userProfile;
@@ -20,16 +24,16 @@ function Login({ show, setShow }) {
       event.stopPropagation();
     }
 
-    let temp2 = [... notifications]
+    let temp2 = [...notifications];
     temp2.push({
       showNotification: true,
-      type: "loading"
-    })
-    setNotifications(temp2)
+      type: "loading",
+    });
+    setNotifications(temp2);
 
     try {
-      const response = await axios.post(
-        "http://localhost/proyectodbaw/phpsql/login.php",
+      const response = await axios.post(   
+        `http://${localIp}/proyectodbaw/phpsql/login.php`,
         {
           email: temp.email.trim(),
           password: password,
@@ -55,23 +59,40 @@ function Login({ show, setShow }) {
           setUserProfile(temp);
 
           setNotifications((prevNotifications) => [
-            ... prevNotifications.slice(0, -1), 
+            ...prevNotifications.slice(0, -1),
             {
               showNotification: true,
               type: "success",
               headerMessage: "Success",
-              bodyMessage: "Login Successful"
-            }
-          ])
-
+              bodyMessage: "Login Successful",
+            },
+          ]);
         } else {
           console.log("Usuario inactivo o no confirmado");
           localStorage.clear();
+          setNotifications((prevNotifications) => [
+            ...prevNotifications.slice(0, -1),
+            {
+              showNotification: true,
+              type: "error",
+              headerMessage: "Error",
+              bodyMessage: "User inactive or not confirmed",
+            },
+          ]);
         }
       } else {
         console.log("no logueado");
         console.log(response);
         localStorage.clear();
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "Username or password are not correct",
+          },
+        ]);
       }
     } catch (error) {
       console.error("Error: ", error);
@@ -103,7 +124,7 @@ function Login({ show, setShow }) {
               <Form.Label className="text-success">E-mail</Form.Label>
               <Form.Control
                 required
-                placeholder="John Doe"
+                placeholder="example@gmail.com"
                 type="text"
                 onChange={(e) => {
                   let temp = userProfile;
@@ -133,7 +154,6 @@ function Login({ show, setShow }) {
           </Form>
         </Modal.Body>
       </Modal>
-
     </>
   );
 }

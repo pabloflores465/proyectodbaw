@@ -1,18 +1,25 @@
 import React from "react";
 import { Button, Dropdown, Form } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
+import { FaFilter, FaSearch } from "react-icons/fa";
 
 export default function Search() {
+  
+  const CustomToggle = React.forwardRef(({ onClick }, ref) => (
+    <Button
+      variant="secondary"
+      className="rounded-start-pill ms-0 text-white" style={{ whiteSpace: "nowrap" }}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+    ><FaFilter /></Button>
+  ));
+
   return (
     <>
       <Form className="d-flex w-100">
         <Dropdown autoClose={"outside"}>
-          <Dropdown.Toggle
-            variant="secondary"
-            className="rounded-start-pill ms-0 text-white"
-          >
-            Filter{" "}
-          </Dropdown.Toggle>
+          <Dropdown.Toggle as={CustomToggle}/>
           <Dropdown.Menu>
             <div className="container">
               <div className="d-flex flex-column">
@@ -36,14 +43,14 @@ export default function Search() {
           id="search-input"
           type="search"
           placeholder="Search Products"
-          className="d-flex rounded-end-pill me-2"
+          className="d-flex rounded-0"
         />
 
         <Button
-          className="bg-success text-white rounded-pill me-2 d-flex justify-content-center align-items-center"
+          className="bg-success text-white rounded-end-pill me-2 d-flex justify-content-center align-items-center"
           style={{ border: "none" }}
         >
-          <FaSearch className="me-1" /> Search
+          <FaSearch className="me-1" />
         </Button>
       </Form>
     </>

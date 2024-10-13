@@ -49,4 +49,30 @@ function deleteUser($connection){
         echo json_encode(["error"=> "No se pudo eliminar"]);
     }
 }
+
+
+function updateUser($connection){
+    $id = $_GET['id'];
+    $data = json_decode(file_get_contents("php://input"));
+    $firstname = $data->first_name;
+    $lastname = $data->last_name;
+    $email = $data->email;
+    $birthdate = $data->birth_date;
+    $address = $data ->address;
+    $phonenumber = $data->phone_number;
+    $rol = $data->rol;
+    $active = $data->active;
+    $cardnumber = $data->card_number;
+    $expiredate = $data->expire_date;
+    $lastconnection = $data->last_connection;
+
+    $sql="UPDATE users SET first_name = '$firstname', email = '$email', birth_date = '$birthdate', address = '$address', phone_number = $phonenumber, rol=$rol, active=$active, card_number = $cardnumber, expire_date = '$expiredate', last_connection = '$lastconnection' WHERE users.id_user = $id";
+    if (mysqli_query($connection, $sql)) {
+        echo json_encode(["message" => "succesful", "status"=>"success"]);
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($connection);
+    }
+
+}
+
 ?>

@@ -1,60 +1,69 @@
 import React, { useState } from "react";
 import { Button, Table, Modal, Form } from "react-bootstrap";
-import axios from "axios"
+import axios from "axios";
 import { useEffect } from "react";
 
 function UsersList({ show, setShow }) {
-const [data, setData]= useState([]);
-const [editRowId, setEditRowId]=useState(null);
-const [formData, setFormData]=useState({});
+  const [data, setData] = useState([]);
+  const [editRowId, setEditRowId] = useState(null);
+  const [formData, setFormData] = useState({});
 
   const handleClose = () => {
     setShow(false);
     setEditRowId(null);
   };
 
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
   const handleData = async () => {
     try {
-      const response = await axios.get ('http://localhost/proyectodbaw/phpsql/userslist.php');
+      const response = await axios.get(
+        `http://${localIp}/proyectodbaw/phpsql/userslist.php`
+      );
       setData(response.data);
-    }catch(error){
-      console.error('Error: ', error);
+    } catch (error) {
+      console.error("Error: ", error);
     }
-  }
+  };
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost/proyectodbaw/phpsql/userslist.php?id=${id}`);
+      await axios.delete(
+        `http://${localIp}/proyectodbaw/phpsql/userslist.php?id=${id}`
+      );
       handleData();
     } catch (error) {
-      console.error('Error: ',error);
+      console.error("Error: ", error);
     }
-  }
+  };
   const handleEdit = (item) => {
     setEditRowId(item.id_user);
-    setFormData({...item});
-    console.log(formData.rol)
-  }
+    setFormData({ ...item });
+    console.log(formData.rol);
+  };
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setFormData({... formData, [name]: value });
+    setFormData({...formData, [name]: value });
     console.log(formData.rol)
   };
 
   const handleSave = async (id) => {
     try {
-      await axios.put(`http://localhost/proyectodbaw/phpsql/userslist.php?id=${id}`, formData);
+      await axios.put(
+        `http://${localIp}/proyectodbaw/phpsql/userslist.php?id=${id}`,
+        formData
+      );
       handleData();
       setEditRowId(null);
     } catch (error) {
-      console.error('Error: ',error);
+      console.error("Error: ", error);
     }
-  }
+  };
 
-  const handleCancel = () =>{
+  const handleCancel = () => {
     setEditRowId(null);
-  }
-  
+  };
+
   useEffect(() => {
     handleData();
   }, []);
@@ -65,8 +74,8 @@ const [formData, setFormData]=useState({});
       className="text-white shadow"
       show={show}
       onHide={handleClose}
-      size = "lg"
-      dialogClassName="modal-dialog-scrollable" 
+      size="lg"
+      dialogClassName="modal-dialog-scrollable"
     >
       <Modal.Header
         className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
@@ -75,32 +84,30 @@ const [formData, setFormData]=useState({});
         <Modal.Title>Users List</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Table 
-      striped bordered hover responsive
-      >
-      <thead>
-        <tr>
-          <th>id_user</th>
-          <th>first_name</th>
-          <th>last_name</th>
-          <th>email</th>
-          <th>birth_date</th>
-          <th>address</th>
-          <th>phone_number</th>
-          <th>current_rol</th>
-          <th>active</th>
-          <th>card_number</th>
-          <th>expire_date</th>
-          <th>last_connection</th>
-          <th>action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={item.id_user}>
-          {editRowId===item.id_user ? (
-          <>
-          <td>{item.id_user}</td>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>id_user</th>
+              <th>first_name</th>
+              <th>last_name</th>
+              <th>email</th>
+              <th>birth_date</th>
+              <th>address</th>
+              <th>phone_number</th>
+              <th>current_rol</th>
+              <th>active</th>
+              <th>card_number</th>
+              <th>expire_date</th>
+              <th>last_connection</th>
+              <th>action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <tr key={item.id_user}>
+                {editRowId === item.id_user ? (
+                  <>
+                    <td>{item.id_user}</td>
                     <td>
                       <Form.Control
                         type="text"
@@ -155,18 +162,15 @@ const [formData, setFormData]=useState({});
                         name="rollling stones"
                         value={formData.rol}
                         onChange={handleInput}
-                        
                       />
-                      
                     </td>
                     <td>
                       <Form.Control
                         type="text"
                         name="active"
                         value={formData.active}
-                        onChange={()=>{
-                          handleInput()
-                          
+                        onChange={() => {
+                          handleInput();
                         }}
                       />
                     </td>
@@ -195,10 +199,10 @@ const [formData, setFormData]=useState({});
                       />
                     </td>
                     <td>
-                      <Button variant="success" onClick={() => handleSave(item.id_user)}>
+                      <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={() => handleSave(item.id_user)}>
                         Save
                       </Button>
-                      <Button variant="secondary" onClick={handleCancel}>
+                      <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={handleCancel}>
                         Cancel
                       </Button>
                     </td>
@@ -218,8 +222,8 @@ const [formData, setFormData]=useState({});
             <td>{item.expire_date}</td>
             <td>{item.last_connection}</td>
             <td>
-              <Button variant="danger" onClick={()=> handleDelete(item.id_user)}>Delete</Button>
-              <Button variant="danger" onClick={()=> handleEdit(item)}>Edit</Button>
+              <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(item.id_user)}>Delete</Button>
+              <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleEdit(item)}>Edit</Button>
             </td>
           </>
           )}

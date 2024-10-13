@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Spinner, Toast, ToastContainer } from "react-bootstrap";
 import { FaCheckCircle } from "react-icons/fa";
-import { WindowWidthContext } from "../App";
+import { WindowWidthContext } from "../context/WindowWidthContext";
 
 export default function Notifications({ notifications, setNotifications }) {
   const { windowWidth } = useContext(WindowWidthContext);
