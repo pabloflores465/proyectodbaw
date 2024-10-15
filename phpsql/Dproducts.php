@@ -23,7 +23,7 @@ $connection->close();
 function getProduct($connection) {
     $pname = isset($_GET['product']) ? $_GET['product'] : '';
 
-    $sql = "SELECT product_name, description, price FROM products WHERE product_name = '$pname'";
+    $sql = "SELECT id_products, product_name, description, price, stock FROM products WHERE product_name = '$pname'";
 
 
     $result = $connection->query($sql);

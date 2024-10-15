@@ -159,7 +159,7 @@ function updateProduct ($connection){
     $id = $_GET['id'];
     $data = json_decode(file_get_contents("php://input"));
     $productname = $data->product_name;
-    $description = $data ->description;
+    $description = $data->description;
     $price = $data->price;
     $stock = $data->stock;
     $id_categories = $data->category; 
