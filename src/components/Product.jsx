@@ -4,13 +4,14 @@ import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoMdInformationCircle } from "react-icons/io";
 import { useNavigate, useParams } from "react-router";
 import { WindowWidthContext } from "../context/WindowWidthContext";
-import { EditProductContext } from "../context/EditProductContext";
+import { EditModeContext } from "../context/EditModeContext";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { UserProfileContext } from "../context/UserProfileContext";
+import { Link } from "react-router-dom";
 
 export default function Product({ product, index, handleData }) {
-  const { editProduct } = useContext(EditProductContext);
+  const { editMode } = useContext(EditModeContext);
   const { userProfile } = useContext(UserProfileContext);
 
   const { windowWidth } = useContext(WindowWidthContext);
@@ -19,7 +20,7 @@ export default function Product({ product, index, handleData }) {
   const [formData, setFormData] = useState({});
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const [featuredItem, setFeaturedItem] = useState(false)
+  const [featuredItem, setFeaturedItem] = useState(false);
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
@@ -120,58 +121,27 @@ export default function Product({ product, index, handleData }) {
 
   return (
     <>
-      {editProduct === false ? (
-        <Card className="shadow">
+      {editMode === false ? (
+        <Card
+          className="shadow translate-up"
+          as={Link}
+          to={`/products/${product.product_name}`}
+          style={{ textDecoration: "none" }}
+        >
           <Card.Img
             variant="top"
             src={`${process.env.PUBLIC_URL}/hola.png`}
-            height={240}
-            width={320}
+            height={250}
+            width={250}
           />
-          <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1">
+          <Card.Body className="d-flex flex-column justify-content-between ps-1 pe-1 mb-4">
             <Card.Title className="d-flex justify-content-center">
               {product.product_name}
             </Card.Title>
-            <Card.Text className="ms-1 me-1">{product.description}</Card.Text>
+
             <Card.Text className="d-flex justify-content-center">
               Price: <strong> $.{product.price}</strong>
             </Card.Text>
-
-            <div
-              className={
-                windowWidth > 1300
-                  ? "d-flex flex-row justify-content-center"
-                  : "d-flex flex-column justify-content-center"
-              }
-            >
-              {userProfile.rol != 0 ? (
-                <Button
-                  variant="secondary"
-                  className={
-                    windowWidth > 1300
-                      ? "text-white rounded-pill me-1 d-flex align-items-center justify-content-center"
-                      : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
-                  }
-                >
-                  <strong>
-                    {" "}
-                    <FaShoppingCart /> Add to Card{" "}
-                    {console.log(product.categories)}
-                  </strong>
-                </Button>
-              ) : null}
-              <Button
-                variant="success"
-                className={
-                  windowWidth > 1300
-                    ? "rounded-pill text-white d-flex ms-2 d-flex align-items-center justify-content-center"
-                    : "text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
-                }
-                onClick={() => navigate(`/products/${product.product_name}`)}
-              >
-                <IoMdInformationCircle /> <strong>See Details</strong>
-              </Button>
-            </div>
             <div className="w-100">
               <Dropdown
                 className={
@@ -179,6 +149,10 @@ export default function Product({ product, index, handleData }) {
                     ? "d-flex justify-content-center align-items-center mt-2 "
                     : " d-flex text-white rounded-pill mx-4 mb-2 d-flex align-items-center justify-content-center"
                 }
+                onClick={(e) => {
+                  e.preventDefault(); // Evita la redirección
+                  e.stopPropagation(); // Detiene la propagación
+                }}
               >
                 <Dropdown.Toggle
                   className={
@@ -186,13 +160,14 @@ export default function Product({ product, index, handleData }) {
                       ? "text-white rounded-pill"
                       : "w-100 text-white rounded-pill"
                   }
+                  style={{ pointerEvents: "auto" }}
                 >
                   <FaListAlt /> Categories {console.log(product.categories)}
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   className={
                     windowWidth > 1300
-                      ? "pt-0 pb-0 justify-content-center"
+                      ? "pt-0 pb-0 justify-content-center translate-up"
                       : "pt-0 pb-0 justify-content-center w-100"
                   }
                 >
@@ -281,7 +256,7 @@ export default function Product({ product, index, handleData }) {
                   onChange={handleInput}
                 />
               </Form.Group>
-              <Form.Check label='Featured Item'/>
+              <Form.Check label="Featured Item" />
               <div
                 className={
                   windowWidth > 1000
@@ -333,7 +308,7 @@ export default function Product({ product, index, handleData }) {
                     </div>
                   </Dropdown.Menu>
                 </Dropdown>
-                
+
                 <Button
                   variant="secondary"
                   type="submmit"
@@ -361,7 +336,6 @@ export default function Product({ product, index, handleData }) {
                   <MdDelete className="me-1" /> Delete
                 </Button>
               </div>
-              
             </Form>
           </Card>
         </>

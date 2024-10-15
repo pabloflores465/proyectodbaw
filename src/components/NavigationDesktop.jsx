@@ -1,21 +1,28 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 
-import { Button, Collapse, Dropdown, FormCheck, Navbar } from "react-bootstrap";
+import {
+  Button,
+  Collapse,
+  Dropdown,
+  Form,
+  FormCheck,
+  Navbar,
+} from "react-bootstrap";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
 
-import { FaArrowsDownToPeople } from "react-icons/fa6";
+import { FaArrowsDownToPeople, FaFile } from "react-icons/fa6";
 import { IoMdPersonAdd } from "react-icons/io";
 import Search from "../components/Search";
 import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { UserProfileContext } from "../context/UserProfileContext";
-import { EditProductContext } from "../context/EditProductContext";
+import { EditModeContext } from "../context/EditModeContext";
 import { NotificationContext } from "../context/NotificationContext";
 import { BiSolidCategoryAlt } from "react-icons/bi";
+import getCategories from "../conections/getCategories";
 
 export default function NavigationDesktop({
   setShowSignup,
@@ -24,36 +31,52 @@ export default function NavigationDesktop({
   setShowUsersList,
   setShowNewUserAdmin,
 }) {
-  const { userProfile, setUserProfile, guestProfile } =
+  const { userProfile, setUserProfile, guestProfile} =
     useContext(UserProfileContext);
-  const { editProduct, setEditProduct } = useContext(EditProductContext);
+  const { editMode, setEditMode } = useContext(EditModeContext);
   const { setNotifications } = useContext(NotificationContext);
 
   const [showCategories, setShowCategories] = useState(true);
   const [categories, setCategories] = useState([]);
 
-  const navigate = useNavigate()
-  
-  
-  const localIp = process.env.REACT_APP_LOCAL_IP;
+  useEffect(() => {
+    getCategories(setCategories);
+  }, []);
 
-  const handleData = async () => {
-    try {
-      const response = await axios.get(
-        `http://${localIp}/proyectodbaw/phpsql/categories.php`
-      );
-      console.log(response.data);
-      setCategories(response.data);
-      if (response.data.status === "success") {
-        console.log(response.data.message);
-      }
-    } catch (error) {
-      console.error("Error: ", error);
+  function handleLogOut() {
+    setEditMode(false);
+    setUserProfile(guestProfile);
+
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      {
+        showNotification: true,
+        type: "success",
+        headerMessage: "Success",
+        bodyMessage: "LogOut Successful",
+      },
+    ]);
+  }
+
+  const fileInputRef = useRef(null);
+
+  const [fileName, setFileName] = useState("No file chosen");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileName(file.name);
     }
   };
-  useEffect(() => {
-    handleData();
-  }, []);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  let guest = userProfile.rol === 0 ? true:false
+  let client = userProfile.rol === 1 ? true:false
+  let employee = userProfile.rol === 2 ? true:false 
+  let admin = userProfile.rol === 3 ? true:false
 
   return (
     <>
@@ -63,16 +86,46 @@ export default function NavigationDesktop({
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
         style={{ position: "fixed", top: 0, zIndex: 1000 }}
       >
-        <Navbar.Brand as={Link} to="/" className="text-white me-0">
-          <img
-            alt="Logo"
-            src="/logo512.png"
-            width="50"
-            height="50"
-            className="d-inline-block align-center"
-          />{" "}
-          D&P Petshop
-        </Navbar.Brand>
+        {employee || (admin && editMode) ? (
+          <Form className="d-flex align-items-center text-white">
+            <div className="d-flex align-items-center"></div>
+            <Button
+              onClick={handleButtonClick}
+              style={{ whiteSpace: "nowrap" }}
+              variant="link"
+              className="text-white my-2 me-2"
+            >
+              <FaFile size={"1.7rem"} />
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <Form.Group className="d-flex align-items-center text-white">
+              <Form.Control
+                required
+                type="text"
+                placeholder="D&P Petshop"
+                defaultValue="Mark"
+                className="my-2"
+                style={{ width: "150px" }}
+              />
+            </Form.Group>
+          </Form>
+        ) : (
+          <Navbar.Brand as={Link} to="/" className="text-white me-0">
+            <img
+              alt="Logo"
+              src={fileName}
+              width="50"
+              height="50"
+              className="d-inline-block align-center"
+            />{" "}
+            D&P Petshop
+          </Navbar.Brand>
+        )}
         <Button
           className="text-white rounded-pill d-flex justify-content-center align-items-center"
           onClick={() => setShowCategories(!showCategories)}
@@ -83,13 +136,13 @@ export default function NavigationDesktop({
           <Search />
         </div>
 
-        {editProduct === false && userProfile.rol !== 0 ? (
+        {!editMode || guest ? (
           <div className="d-flex flex-row justify-content-center align-items-center text-white">
             <Cart />
           </div>
         ) : null}
 
-        {userProfile.rol === 3 || userProfile.rol === 2 ? (
+        {employee || admin ? (
           <>
             <div className="text-white" style={{ whiteSpace: "nowrap" }}>
               Edit Mode
@@ -97,8 +150,8 @@ export default function NavigationDesktop({
             <FormCheck
               type="switch"
               style={{ whiteSpace: "nowrap" }}
-              checked={editProduct}
-              onChange={() => setEditProduct(!editProduct)}
+              checked={editMode}
+              onChange={() => setEditMode(!editMode)}
               isValid
               reverse
               className="me-1"
@@ -106,7 +159,7 @@ export default function NavigationDesktop({
           </>
         ) : null}
 
-        {userProfile.rol === 0 ? (
+        {guest ? (
           <>
             <Button
               onClick={() => setShowSignup(true)}
@@ -142,7 +195,7 @@ export default function NavigationDesktop({
                       </Button>
                     </Dropdown.Item>
                   ) : null}
-                  {userProfile.rol === 3 ? (
+                  {admin ? (
                     <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
                       <Button
                         onClick={() => setShowNewUserAdmin(true)}
@@ -153,7 +206,7 @@ export default function NavigationDesktop({
                       </Button>
                     </Dropdown.Item>
                   ) : null}
-                  {userProfile.rol === 2 || userProfile.rol === 3 ? (
+                  {admin || employee ? (
                     <Dropdown.Item className="d-flex align-items-center mb-2 text-success border-bottom">
                       <Button
                         variant="link"
@@ -175,22 +228,9 @@ export default function NavigationDesktop({
                     </Button>
                   </Dropdown.Item>
                   <Dropdown.Item className="d-flex align-items-center mb-2 text-success">
+                    {console.log(userProfile)}
                     <Button
-                      onClick={() => {
-                        //localStorage.clear();
-                        setUserProfile(guestProfile);
-                        setEditProduct(false);
-                        setNotifications((prevNotifications) => [
-                          ...prevNotifications,
-                          {
-                            showNotification: true,
-                            type: "success",
-                            headerMessage: "Success",
-                            bodyMessage: "Logout Successful",
-                          },
-                        ]);
-                        navigate('/')
-                      }}
+                      onClick={handleLogOut}
                       variant="link"
                       className="m-0 p-0 text-success"
                     >
@@ -253,10 +293,11 @@ export default function NavigationDesktop({
                                 >
                                   {filteredCategory.name}
                                 </Link>
-                                <Link to={`/categories/${element.name}/${filteredCategory.name}`}></Link>
+                                <Link
+                                  to={`/categories/${element.name}/${filteredCategory.name}`}
+                                ></Link>
                               </div>
-                            ))
-                            }
+                            ))}
                         </div>
                       </Dropdown.Menu>
                     </Dropdown>
@@ -269,7 +310,6 @@ export default function NavigationDesktop({
                     >
                       <strong className="ms-1 me-1">{element.name}</strong>
                     </Link>
-
                   </div>
                 </div>
               ))}

@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Image } from "react-bootstrap";
-import { IoCloseSharp } from "react-icons/io5";
+import { Image } from "react-bootstrap";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import {useParams} from "react-router";
-import LoadingState from "../components/LoadingState";
 import axios from "axios";
 
 function ProductDetail() {
   const { windowWidth } = useContext(WindowWidthContext);
   const params = useParams(); //id
   const [data, setData]=useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [ loadingProducts, setLoadingProducts] = useState(true);
   const localIp = process.env.REACT_APP_LOCAL_IP;
   
   const handleData = async (id) => {

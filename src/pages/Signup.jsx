@@ -8,15 +8,15 @@ function Signup({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLatsname] = useState("");
-  const [email,setEmail]=useState("");
-  const [password,setPassword]=useState("");
-  const [phonenumber, setPhonenumber]=useState("");
-  const [birthdate, setBirthdate]=useState("");
-  const [address, setAddress]=useState("");
-  const [cardnumber, setCardnumber]=useState("");
-  const [expdate, setExpdate]=useState("");
-  const [confirm, setConfirm]=useState("");
-  const { notifications, setNotifications } = useContext(NotificationContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [address, setAddress] = useState("");
+  const [cardnumber, setCardnumber] = useState("");
+  const [expdate, setExpdate] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const { setNotifications } = useContext(NotificationContext);
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
@@ -27,54 +27,72 @@ function Signup({ show, setShow }) {
       event.preventDefault();
       event.stopPropagation();
     }
-    if (password === confirm){
-    try{
-      const response = await axios.put(`http://${localIp}/proyectodbaw/phpsql/signup.php`,{
-        firstname : firstname,
-        lastname : lastname,
-        email : email,
-        password : password,
-        phonenumber : phonenumber,
-        birthdate : birthdate,
-        address : address,
-        cardnumber : cardnumber,
-        expdate : expdate
-      });
-      if (response.data.status==="success") {
-        console.log("Registrado");
-        setValidated(true);
-        setShow(false)
-      }else{
-
-        console.log("no registrado");
-        console.log(email, password);
-        console.log(response);
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      {
+        showNotification: true,
+        type: "loading",
+      },
+    ]);
+    if (password === confirm) {
+      try {
+        const response = await axios.put(
+          `http://${localIp}/proyectodbaw/phpsql/signup.php`,
+          {
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            password: password,
+            phonenumber: phonenumber,
+            birthdate: birthdate,
+            address: address,
+            cardnumber: cardnumber,
+            expdate: expdate,
+          }
+        );
+        if (response.data.status === "success") {
+          console.log("Registrado");
+          setValidated(true);
+          setShow(false);
+        } else {
+          console.log("no registrado");
+          console.log(email, password);
+          console.log(response);
+        }
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "success",
+            headerMessage: "Success",
+            bodyMessage: "User Register successful",
+          },
+        ]);
+      } catch (error) {
+        console.error("Error: ", error);
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "Error While Register",
+          },
+        ]);
       }
+    } else {
+      console.log("no logueado");
+      localStorage.clear();
       setNotifications((prevNotifications) => [
         ...prevNotifications.slice(0, -1),
         {
           showNotification: true,
-          type: "success",
-          headerMessage: "Success",
-          bodyMessage: "User Register successful",
+          type: "error",
+          headerMessage: "Error",
+          bodyMessage: "Passwords doesn't match",
         },
       ]);
-    }catch(error){
-      console.error('Error: ',error);
     }
-  }else {
-    console.log("no logueado");
-    localStorage.clear();
-    setNotifications((prevNotifications) => [
-      ...prevNotifications.slice(0, -1),
-      {
-        showNotification: true,
-        type: "error",
-        headerMessage: "Error",
-        bodyMessage: "Passwords doesn't match",
-      },
-    ]);
-  }
   };
 
   const [activeBilling, setActiveBilling] = useState(false);
@@ -106,16 +124,26 @@ function Signup({ show, setShow }) {
         >
           <Form.Group className="mb-3" controlId="validateUserName">
             <Form.Label className="text-success">Profile Picture</Form.Label>
-            <Form.Control type="file"/>
+            <Form.Control type="file" />
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateName">
             <Form.Label className="text-success">First Name</Form.Label>
-            <Form.Control required placeholder="John" type="text" onChange={(e)=>setFirstname(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="John"
+              type="text"
+              onChange={(e) => setFirstname(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateLastName">
             <Form.Label className="text-success">Last Name</Form.Label>
-            <Form.Control required placeholder="Doe" type="text" onChange={(e)=>setLatsname(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="Doe"
+              type="text"
+              onChange={(e) => setLatsname(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validateEmail">
@@ -124,34 +152,59 @@ function Signup({ show, setShow }) {
               required
               placeholder="example@gmail.com"
               type="email"
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Password</Form.Label>
-            <Form.Control required placeholder="Password#123" type="password" onChange={(e)=>setPassword(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="Password#123"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Confirm Password</Form.Label>
-            <Form.Control required placeholder="Password#123" type="password" onChange={(e)=>setConfirm(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="Password#123"
+              type="password"
+              onChange={(e) => setConfirm(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             <Form.Text>Unmatched Passwords</Form.Text>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Birth Date </Form.Label>
-            <Form.Control required placeholder="01/01/2024" type="date" onChange={(e)=>setBirthdate(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="01/01/2024"
+              type="date"
+              onChange={(e) => setBirthdate(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Address </Form.Label>
-            <Form.Control required placeholder="Fraijanes, Guatemala" type="text" onChange={(e)=>setAddress(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="Fraijanes, Guatemala"
+              type="text"
+              onChange={(e) => setAddress(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePhone">
             <Form.Label className="text-success">Phone number </Form.Label>
-            <Form.Control required placeholder="12344321" type="number" onChange={(e)=>setPhonenumber(e.target.value)}/>
+            <Form.Control
+              required
+              placeholder="12344321"
+              type="number"
+              onChange={(e) => setPhonenumber(e.target.value)}
+            />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
@@ -170,10 +223,15 @@ function Signup({ show, setShow }) {
                 className="mb-3"
                 placeholder="12344321"
                 type="number"
-                onChange={(e)=>setCardnumber(e.target.value)}
+                onChange={(e) => setCardnumber(e.target.value)}
               />
               <Form.Label className="text-success">Expire Date </Form.Label>
-              <Form.Control required placeholder="01/01/2024" type="date" onChange={(e)=>setExpdate(e.target.value)}/>
+              <Form.Control
+                required
+                placeholder="01/01/2024"
+                type="date"
+                onChange={(e) => setExpdate(e.target.value)}
+              />
             </Form.Group>
           ) : null}
           <Button

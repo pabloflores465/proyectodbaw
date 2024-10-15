@@ -31,7 +31,6 @@ const handleCheckboxChange = (e, categoryitem) => {
       selectedCategories.filter((categoryId) => categoryId !== categoryitem.id_category)
     );
   }
-  console.log(selectedCategories);
 };
   
   const localIp = process.env.REACT_APP_LOCAL_IP;
@@ -41,11 +40,9 @@ const handleCheckboxChange = (e, categoryitem) => {
       const response = await axios.get(
         `http://${localIp}/proyectodbaw/phpsql/categories2.php`
       );
-      console.log("Categories response:", response.data); 
       setCategory(response.data);
       
     } catch (error) {
-      console.error("Error: ", error);
     }
   };
 
@@ -55,14 +52,6 @@ const handleCheckboxChange = (e, categoryitem) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(selectedCategories)
-    console.log({
-      name: name,
-      desc: desc,
-      price: price,
-      stock: stock,
-      category: selectedCategories, // Verificar si es un array con los IDs correctos
-    });
     try{
       const response = await axios.post(`http://${localIp}/proyectodbaw/phpsql/products.php`,{
         name : name,

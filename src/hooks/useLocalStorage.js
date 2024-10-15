@@ -14,6 +14,7 @@ function useLocalStorage(key, initialValue) {
     const setValue = (value) => {
         try {
             setStoredValue(value);
+            console.log("Stored value updated put:", value);
             window.localStorage.setItem(key, JSON.stringify(value));
         } catch (error) {
             console.error(error);

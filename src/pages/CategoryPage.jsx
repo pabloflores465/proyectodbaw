@@ -2,14 +2,14 @@ import { useContext } from "react";
 
 import FeaturedProducts from "../components/FeaturedProducts";
 import Products from "./Products";
-import { EditProductContext } from "../context/EditProductContext";
+import { EditModeContext } from "../context/EditModeContext";
 
 function CategoryPage() {
-  const { editProduct } = useContext(EditProductContext);
+  const { editMode } = useContext(EditModeContext);
 
   return (
     <div style={{ marginTop: "60px" }}>
-      {editProduct === false ? (
+      {editMode === false ? (
         <FeaturedProducts />
       ) : (
         <div style={{ marginTop: "60px" }} />

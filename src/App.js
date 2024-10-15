@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Router from "./routes/Router.jsx";
 import UserProfileContextProvider from "./context/UserProfileContext.jsx";
 import WindowWidthContextProvider from "./context/WindowWidthContext.jsx";
-import EditProductContextProvider from "./context/EditProductContext.jsx";
+import EditModeContextProvider from "./context/EditModeContext.jsx";
 import NotificationContextProvider from "./context/NotificationContext.jsx";
 
 function App() {
@@ -13,11 +13,11 @@ function App() {
     <React.StrictMode>
       <UserProfileContextProvider>
         <WindowWidthContextProvider>
-          <EditProductContextProvider>
+          <EditModeContextProvider>
             <NotificationContextProvider>
               <Router/>
             </NotificationContextProvider>
-          </EditProductContextProvider>
+          </EditModeContextProvider>
         </WindowWidthContextProvider>
       </UserProfileContextProvider>
     </React.StrictMode>

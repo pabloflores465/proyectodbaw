@@ -20,7 +20,7 @@ import { IoLogIn } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { UserProfileContext } from "../context/UserProfileContext";
-import { EditProductContext } from "../context/EditProductContext";
+import { EditModeContext } from "../context/EditModeContext";
 import { NotificationContext } from "../context/NotificationContext";
 import axios from "axios";
 
@@ -33,7 +33,7 @@ export default function NavigationMobile({
 }) {
   const { userProfile, setUserProfile, guestProfile } =
     useContext(UserProfileContext);
-  const { editProduct, setEditProduct } = useContext(EditProductContext);
+  const { editMode, setEditMode } = useContext(EditModeContext);
   const { setNotifications } = useContext(NotificationContext);
 
   const [showOffcanvas, setShowOffcanvas] = useState(false);
@@ -45,9 +45,8 @@ export default function NavigationMobile({
   const handleData = async () => {
     try {
       const response = await axios.get(
-      `http://${localIp}/proyectodbaw/phpsql/categories.php`
+        `http://${localIp}/proyectodbaw/phpsql/categories.php`
       );
-      console.log(response.data);
       setCategories(response.data);
       if (response.data.status === "success") {
         console.log(response.data.message);
@@ -78,17 +77,19 @@ export default function NavigationMobile({
         D&P Petshop
       </Navbar.Brand>
       <div className="d-flex flex-row text-white">
-        Edit Mode
         {userProfile.rol === 3 || userProfile.rol === 2 ? (
-          <FormCheck
-            type="switch"
-            style={{ whiteSpace: "nowrap" }}
-            checked={editProduct}
-            onChange={() => setEditProduct(!editProduct)}
-            isValid
-            reverse
-            className="me-1 ms-auto"
-          />
+          <>
+            <p>Edit Mode</p>
+            <FormCheck
+              type="switch"
+              style={{ whiteSpace: "nowrap" }}
+              checked={editMode}
+              onChange={() => setEditMode(!editMode)}
+              isValid
+              reverse
+              className="me-1 ms-auto"
+            />
+          </>
         ) : null}
       </div>
       <Navbar.Toggle
@@ -100,7 +101,7 @@ export default function NavigationMobile({
         <GiHamburgerMenu />
       </Navbar.Toggle>
       <div className="w-100 mb-2 d-flex fle-row align-items-center">
-        {editProduct === false && userProfile.rol !== 0 ? <Cart /> : null}
+        {editMode === false && userProfile.rol !== 0 ? <Cart /> : null}
         <Search />
       </div>
       <Offcanvas show={showOffcanvas} onHide={handleToggle} placement="end">
@@ -206,7 +207,7 @@ export default function NavigationMobile({
                           onClick={() => {
                             localStorage.clear();
                             setUserProfile(guestProfile);
-                            setEditProduct(false);
+                            setEditMode(false);
                             setNotifications((prevNotifications) => [
                               ...prevNotifications,
                               {
@@ -248,33 +249,32 @@ export default function NavigationMobile({
                     <strong className="ms-1 me-1">{element.name}</strong>
                   </Link>
                   <Dropdown.Menu className="mb-2">
-                  <div className="container">
-                          {categories
-                            .filter(
-                              (category) => category.name !== element.name
-                            )
-                            .map((filteredCategory, index2) => (
-                              <div
-                                key={index2}
-                                className={`d-flex justify-content-center align-items-center ${
-                                  index2 === categories.length - 1
-                                    ? ""
-                                    : "border-bottom"
-                                } mb-2`}
-                              >
-                                <Link
-                                  key={filteredCategory.name}
-                                  to={`/categories/${element.name}/${filteredCategory.name}`}
-                                  className="text-black"
-                                  style={{ textDecoration: "none" }}
-                                >
-                                  {filteredCategory.name}
-                                </Link>
-                                <Link to={`/categories/${element.name}/${filteredCategory.name}`}></Link>
-                              </div>
-                            ))
-                            }
-                        </div>
+                    <div className="container">
+                      {categories
+                        .filter((category) => category.name !== element.name)
+                        .map((filteredCategory, index2) => (
+                          <div
+                            key={index2}
+                            className={`d-flex justify-content-center align-items-center ${
+                              index2 === categories.length - 1
+                                ? ""
+                                : "border-bottom"
+                            } mb-2`}
+                          >
+                            <Link
+                              key={filteredCategory.name}
+                              to={`/categories/${element.name}/${filteredCategory.name}`}
+                              className="text-black"
+                              style={{ textDecoration: "none" }}
+                            >
+                              {filteredCategory.name}
+                            </Link>
+                            <Link
+                              to={`/categories/${element.name}/${filteredCategory.name}`}
+                            ></Link>
+                          </div>
+                        ))}
+                    </div>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>

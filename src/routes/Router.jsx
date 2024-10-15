@@ -40,14 +40,15 @@ function Router() {
             {
               path: "/subcategories/:elementName/:filteredCategoryName",
               element: <Products/>
-            }
+            },
+            {
+              path: "/error",
+              element: <ErrorPage />,
+            },
 
           ],
         },
-        {
-          path: "/error",
-          element: <ErrorPage />,
-        },
+
         {
           path: "/about/who",
           element: <Information/>,

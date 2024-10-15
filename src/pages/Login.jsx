@@ -13,10 +13,9 @@ function Login({ show, setShow }) {
   const { notifications, setNotifications } = useContext(NotificationContext);
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
-  console.log(localIp)
 
+  let temp = userProfile;
   const handleSubmit = async (event) => {
-    let temp = userProfile;
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -24,15 +23,16 @@ function Login({ show, setShow }) {
       event.stopPropagation();
     }
 
-    let temp2 = [...notifications];
-    temp2.push({
-      showNotification: true,
-      type: "loading",
-    });
-    setNotifications(temp2);
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      {
+        showNotification: true,
+        type: "loading",
+      },
+    ]);
 
     try {
-      const response = await axios.post(   
+      const response = await axios.post(
         `http://${localIp}/proyectodbaw/phpsql/login.php`,
         {
           email: temp.email.trim(),
@@ -57,9 +57,9 @@ function Login({ show, setShow }) {
           setValidated(true);
           setShow(false);
           setUserProfile(temp);
-
+      
           setNotifications((prevNotifications) => [
-            ...prevNotifications.slice(0, -1),
+            ...prevNotifications.slice(0,-1),
             {
               showNotification: true,
               type: "success",

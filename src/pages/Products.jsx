@@ -3,14 +3,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Pagination, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import NewProducts from "../components/NewProducts";
-import { EditProductContext } from "../context/EditProductContext";
+import { EditModeContext } from "../context/EditModeContext";
 import LoadingState from "../components/LoadingState";
 import { useLocation, useParams } from "react-router";
 
 function Products() {
   const [data, setData] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
-  const { editProduct } = useContext(EditProductContext);
+  const { editMode } = useContext(EditModeContext);
 
   const params = useParams();
   console.log(params)
@@ -66,7 +66,7 @@ function Products() {
           <LoadingState />
         ) : (
           <>
-            {editProduct === true ? (<>
+            {editMode === true ? (<>
             <Col xs={12} sm={6} md={4} lg={3} className="mt-2 mb-2">
                 <NewProducts
                   handleData={handleData}
