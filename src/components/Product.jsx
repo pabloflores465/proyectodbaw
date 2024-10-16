@@ -130,7 +130,7 @@ export default function Product({ product, index, handleData }) {
         >
           <Card.Img
             variant="top"
-            src={`${process.env.PUBLIC_URL}/hola.png`}
+            src={`data:image/jpeg;base64,${product.image}`}
             height={250}
             width={250}
           />

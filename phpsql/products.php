@@ -33,13 +33,13 @@ function getProduct($connection) {
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $category2 = isset($_GET['subCategory']) ? $_GET['subCategory'] : '';
     // Consultar los productos
-    $sql = "SELECT id_products, product_name, description, price, stock FROM products";
+    $sql = "SELECT id_products, product_name, description, price, stock, image FROM products";
     
     // Consultar los IDs de las categorías asociadas al producto desde la tabla de relación
     $sql2 = "SELECT id_products, id_category 
              FROM product_category";
 
-    $sql3 = "SELECT p.id_products, p.product_name, p.description, p.price, p.stock FROM products p JOIN product_category pc ON p.id_products = pc.id_products JOIN category c ON pc.id_category = c.id_category WHERE c.name IN ('$category', '$category2') GROUP BY p.id_products HAVING COUNT(DISTINCT c.id_category) = ";
+    $sql3 = "SELECT p.id_products, p.product_name, p.description, p.price, p.stock, p.image FROM products p JOIN product_category pc ON p.id_products = pc.id_products JOIN category c ON pc.id_category = c.id_category WHERE c.name IN ('$category', '$category2') GROUP BY p.id_products HAVING COUNT(DISTINCT c.id_category) = ";
 
     $view = "SELECT p.id_products FROM products p 
             JOIN product_category pc ON p.id_products = pc.id_products 
@@ -62,6 +62,7 @@ function getProduct($connection) {
     // Obtener los productos
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
+            $row['image'] = base64_encode($row['image']);
             // Iniciar el array de categorías vacío para cada producto
             $products[$row['id_products']] = $row;
             $products[$row['id_products']]['categories'] = [];
@@ -83,6 +84,7 @@ function getProduct($connection) {
     $result3 = $connection->query($sql3);
     if ($result3->num_rows > 0) {
         while($row = $result3->fetch_assoc()) {
+            $row['image'] = base64_encode($row['image']);
             // Iniciar el array de categorías vacío para cada producto
             $fproducts[$row['id_products']] = $row;
             $fproducts[$row['id_products']]['categories'] = [];
@@ -103,6 +105,7 @@ function getProduct($connection) {
     $result3 = $connection->query($sql3);
     if ($result3->num_rows > 0) {
         while($row = $result3->fetch_assoc()) {
+            $row['image'] = base64_encode($row['image']);
             // Iniciar el array de categorías vacío para cada producto
             $fproducts[$row['id_products']] = $row;
             $fproducts[$row['id_products']]['categories'] = [];

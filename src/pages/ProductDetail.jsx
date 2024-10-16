@@ -60,7 +60,7 @@ function ProductDetail() {
           <div className="d-flex flex-column">
             <div className="d-flex align-items-center border-bottom mb-2">
               <Image
-                src="/hola.png"
+                src={`data:image/jpeg;base64,${data.image}`}
                 rounded
                 height={480}
                 width={640}

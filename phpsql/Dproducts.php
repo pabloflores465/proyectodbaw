@@ -23,7 +23,7 @@ $connection->close();
 function getProduct($connection) {
     $pname = isset($_GET['product']) ? $_GET['product'] : '';
 
-    $sql = "SELECT id_products, product_name, description, price, stock FROM products WHERE product_name = '$pname'";
+    $sql = "SELECT id_products, product_name, description, price, stock, image FROM products WHERE product_name = '$pname'";
 
 
     $result = $connection->query($sql);
@@ -31,6 +31,7 @@ function getProduct($connection) {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
+        $row['image'] = base64_encode($row['image']);
     }
     echo json_encode($row);
     }

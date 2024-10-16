@@ -50,7 +50,7 @@ function FeaturedProducts() {
           .map((product, index) => (
             <Carousel.Item key={index}>
               <img
-                src={`${process.env.PUBLIC_URL}/hola.png`} // Imagen fija
+                src={`data:image/jpeg;base64,${product.image}`} // Imagen fija
                 className="d-block w-100"
                 alt={`Product ${index}`}
                 style={{ objectFit: "cover", width: "480px", height: "270px" }}

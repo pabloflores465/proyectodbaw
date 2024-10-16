@@ -26,6 +26,35 @@ switch ($method) {
 
 $connection->close();
 
+function getOrder($connection){
+    $id_user = isset($_GET['id_user']) ? $_GET['id_user'] : '';
+
+    if ($id_user) {
+        $sql = "
+            SELECT p.image, p.product_name, p.description, od.amount, od.total_product_price 
+            FROM order_detail od
+            INNER JOIN products p ON od.id_product = p.id_products
+            INNER JOIN order_dp o ON od.id_order = o.id_order
+            WHERE o.id_user = $id_user AND o.state = 1
+        ";
+
+        $result = $connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            $cart = [];
+            while ($row = $result->fetch_assoc()) {
+                $row['image'] = base64_encode($row['image']);
+                $cart[] = $row;
+            }
+            echo json_encode($cart);
+        } else {
+            echo json_encode(["message" => "No hay productos en el carrito"]);
+        }
+    } else {
+        echo json_encode(["error" => "El id del usuario no fue proporcionado"]);
+    }
+}
+
 function createOrder($connection) {
     $data = json_decode(file_get_contents("php://input"));
     $id_user = $data->id_user;
