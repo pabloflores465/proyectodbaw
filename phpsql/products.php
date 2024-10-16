@@ -62,7 +62,7 @@ function getProduct($connection) {
     // Obtener los productos
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            $row['image'] = base64_encode($row['image']);
+            $row['image'] = base64_encode($row['image'] ?? '');
             // Iniciar el array de categorías vacío para cada producto
             $products[$row['id_products']] = $row;
             $products[$row['id_products']]['categories'] = [];
@@ -84,7 +84,7 @@ function getProduct($connection) {
     $result3 = $connection->query($sql3);
     if ($result3->num_rows > 0) {
         while($row = $result3->fetch_assoc()) {
-            $row['image'] = base64_encode($row['image']);
+            $row['image'] = base64_encode($row['image'] ?? '');
             // Iniciar el array de categorías vacío para cada producto
             $fproducts[$row['id_products']] = $row;
             $fproducts[$row['id_products']]['categories'] = [];
@@ -105,7 +105,7 @@ function getProduct($connection) {
     $result3 = $connection->query($sql3);
     if ($result3->num_rows > 0) {
         while($row = $result3->fetch_assoc()) {
-            $row['image'] = base64_encode($row['image']);
+            $row['image'] = base64_encode($row['image'] ?? '');
             // Iniciar el array de categorías vacío para cada producto
             $fproducts[$row['id_products']] = $row;
             $fproducts[$row['id_products']]['categories'] = [];
