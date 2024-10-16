@@ -1,239 +1,256 @@
-import React, { useState } from "react";
-import { Button, Table, Modal, Form } from "react-bootstrap";
+import React, { useContext, useState } from "react";
+import {
+  Button,
+  Table,
+  Form,
+  Dropdown,
+  DropdownButton,
+  DropdownToggle,
+  DropdownMenu,
+} from "react-bootstrap";
 import axios from "axios";
 import { useEffect } from "react";
+import getUsers from "../conections/getUsers";
+import deleteUser from "../conections/deleteUser";
+import { NotificationContext } from "../context/NotificationContext";
+import LoadingState from "../components/LoadingState";
+import { EditModeContext } from "../context/EditModeContext";
+import editUser from "../conections/editUser";
 
-function UsersList({ show, setShow }) {
-  const [data, setData] = useState([]);
-  const [editRowId, setEditRowId] = useState(null);
-  const [formData, setFormData] = useState({});
+function UsersList() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { setNotifications } = useContext(NotificationContext);
+  const { editMode } = useContext(EditModeContext);
 
-  const handleClose = () => {
-    setShow(false);
-    setEditRowId(null);
+  const handleInput = (event, userIndex) => {
+    const { name, value } = event.target;
+    let temp = [...users];
+    temp[userIndex] = { ...users[userIndex], [name]: value };
+
+    setUsers(temp);
   };
 
-  const localIp = process.env.REACT_APP_LOCAL_IP;
-
-  const handleData = async () => {
-    try {
-      const response = await axios.get(
-        `http://${localIp}/proyectodbaw/phpsql/userslist.php`
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(
-        `http://${localIp}/proyectodbaw/phpsql/userslist.php?id=${id}`
-      );
-      handleData();
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
-  const handleEdit = (item) => {
-    setEditRowId(item.id_user);
-    setFormData({ ...item });
-    console.log(formData.rol);
-  };
-
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setFormData({...formData, [name]: value });
-    console.log(formData.rol)
-  };
-
-  const handleSave = async (id) => {
-    try {
-      await axios.put(
-        `http://${localIp}/proyectodbaw/phpsql/userslist.php?id=${id}`,
-        formData
-      );
-      handleData();
-      setEditRowId(null);
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
-
-  const handleCancel = () => {
-    setEditRowId(null);
+  const handleValue = (name, value, userIndex) => {
+    let temp = [...users];
+    temp[userIndex] = { ...users[userIndex], [name]: value };
+    console.log(value);
+    setUsers(temp);
   };
 
   useEffect(() => {
-    handleData();
+    getUsers(setUsers, setLoading, setNotifications);
   }, []);
 
   return (
-    <Modal
-      centered
-      className="text-white shadow"
-      show={show}
-      onHide={handleClose}
-      size="lg"
-      dialogClassName="modal-dialog-scrollable"
-    >
-      <Modal.Header
-        className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
-        closeButton
-      >
-        <Modal.Title>Users List</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <>
+      {loading ? (
+        <LoadingState />
+      ) : (
         <Table striped bordered hover responsive>
           <thead>
             <tr>
-              <th>id_user</th>
-              <th>first_name</th>
-              <th>last_name</th>
-              <th>email</th>
-              <th>birth_date</th>
-              <th>address</th>
-              <th>phone_number</th>
-              <th>current_rol</th>
-              <th>active</th>
-              <th>card_number</th>
-              <th>expire_date</th>
-              <th>last_connection</th>
-              <th>action</th>
+              <th>Id User</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Birth Date</th>
+              <th>Address</th>
+              <th>Phone Number</th>
+              <th>Current Rol</th>
+              <th>Active</th>
+              <th>Card Number</th>
+              <th>Expire Date</th>
+              <th>Last Connection</th>
+              {editMode ? <th>Action</th> : null}
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <tr key={item.id_user}>
-                {editRowId === item.id_user ? (
+            {users.map((user, userIndex) => (
+              <tr key={user.id_user}>
+                {editMode ? (
                   <>
-                    <td>{item.id_user}</td>
+                    <td>{user.id_user}</td>
                     <td>
                       <Form.Control
                         type="text"
                         name="first_name"
-                        value={formData.first_name}
-                        onChange={handleInput}
+                        defaultValue={user.first_name}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="text"
                         name="last_name"
-                        value={formData.last_name}
-                        onChange={handleInput}
+                        defaultValue={user.last_name}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleInput}
+                        defaultValue={user.email}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="date"
                         name="birth_date"
-                        value={formData.birth_date}
-                        onChange={handleInput}
+                        defaultValue={user.birth_date}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="text"
                         name="address"
-                        value={formData.address}
-                        onChange={handleInput}
+                        defaultValue={user.address}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="text"
                         name="phone_number"
-                        value={formData.phone_number}
-                        onChange={handleInput}
+                        defaultValue={user.phone_number}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
-                      <Form.Control
-                        type="text"
-                        name="rollling stones"
-                        value={formData.rol}
-                        onChange={handleInput}
-                      />
+                      <Dropdown>
+                        <DropdownToggle
+                          variant="secondary"
+                          style={{ color: "white" }}
+                        >
+                          {users[userIndex].rol === "1"
+                            ? "Client"
+                            : users[userIndex].rol === "2"
+                            ? "Employee"
+                            : users[userIndex].rol === "3"
+                            ? "Admin"
+                            : "Select Role"}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <Dropdown.Item
+                            eventKey="1"
+                            onClick={() => handleValue("rol", "1", userIndex)}
+                          >
+                            Client
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            eventKey="2"
+                            onClick={() => handleValue("rol", "2", userIndex)}
+                          >
+                            Employee
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            eventKey="3"
+                            onClick={() => handleValue("rol", "3", userIndex)}
+                          >
+                            Admin
+                          </Dropdown.Item>
+                        </DropdownMenu>
+                      </Dropdown>
                     </td>
                     <td>
-                      <Form.Control
-                        type="text"
-                        name="active"
-                        value={formData.active}
-                        onChange={() => {
-                          handleInput();
-                        }}
+                      <Form.Check
+                        defaultChecked={parseInt(user.active) ? true : false}
+                        onChange={(e) =>
+                          handleValue(
+                            "active",
+                            String(e.target.checked ? 1 : 0),
+                            userIndex
+                          )
+                        }
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="text"
                         name="card_number"
-                        value={formData.card_number}
-                        onChange={handleInput}
+                        defaultValue={user.card_number}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="date"
                         name="expire_date"
-                        value={formData.expire_date}
-                        onChange={handleInput}
+                        defaultValue={user.expire_date}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
                       <Form.Control
                         type="date"
                         name="last_connection"
-                        value={formData.last_connection}
-                        onChange={handleInput}
+                        defaultValue={user.last_connection}
+                        onChange={(event) => handleInput(event, userIndex)}
                       />
                     </td>
                     <td>
-                      <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={() => handleSave(item.id_user)}>
+                      <Button
+                        variant="secondary text-white rounded-pill w-100 m-1"
+                        onClick={() =>
+                          editUser(
+                            user.id_user,
+                            users[userIndex],
+                            setNotifications
+                          )
+                        }
+                      >
                         Save
                       </Button>
-                      <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={handleCancel}>
-                        Cancel
+                      <Button
+                        variant="secondary text-white rounded-pill w-100 m-1"
+                        onClick={() =>
+                          deleteUser(user.id_user, setNotifications, () =>
+                            getUsers(setUsers, setLoading, setNotifications)
+                          )
+                        }
+                      >
+                        Delete
                       </Button>
                     </td>
-          </>
-          ): (
-          <>
-            <td>{item.id_user}</td>
-            <td>{item.first_name}</td>
-            <td>{item.last_name}</td>
-            <td>{item.email}</td>
-            <td>{item.birth_date}</td>
-            <td>{item.address}</td>
-            <td>{item.phone_number}</td>
-            <td>{item.rol}</td>
-            <td>{item.active}</td>
-            <td>{item.card_number}</td>
-            <td>{item.expire_date}</td>
-            <td>{item.last_connection}</td>
-            <td>
-              <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleDelete(item.id_user)}>Delete</Button>
-              <Button variant="secondary text-white rounded-pill w-100 m-1" onClick={()=> handleEdit(item)}>Edit</Button>
-            </td>
-          </>
-          )}
-          
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-      </Modal.Body>
-    </Modal>
+                  </>
+                ) : (
+                  <>
+                    <td>{user.id_user}</td>
+                    <td>{user.first_name}</td>
+                    <td>{user.last_name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.birth_date}</td>
+                    <td>{user.address}</td>
+                    <td>{user.phone_number}</td>
+                    {console.log(user.rol)}
+                    {parseInt(user.rol) === 1 ? (
+                      <td>Client</td>
+                    ) : parseInt(user.rol) === 2 ? (
+                      <td>Employee</td>
+                    ) : parseInt(user.rol) === 3 ? (
+                      <td>Admin</td>
+                    ) : (
+                      <td></td>
+                    )}
+                    {parseInt(user.active) === 1 ? (
+                      <td>Active</td>
+                    ) : (
+                      <td>Inactive</td>
+                    )}
+                    <td>{user.card_number}</td>
+                    <td>{user.expire_date}</td>
+                    <td>{user.last_connection}</td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </>
   );
 }
 

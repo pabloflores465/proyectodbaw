@@ -8,14 +8,14 @@ function CategoryPage() {
   const { editMode } = useContext(EditModeContext);
 
   return (
-    <div style={{ marginTop: "60px" }}>
+    <>
       {editMode === false ? (
         <FeaturedProducts />
       ) : (
         <div style={{ marginTop: "60px" }} />
       )}
-      <Products/>
-    </div>
+      <Products />
+    </>
   );
 }
 

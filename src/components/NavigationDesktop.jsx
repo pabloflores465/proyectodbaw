@@ -28,10 +28,9 @@ export default function NavigationDesktop({
   setShowSignup,
   setShowLogin,
   setShowProfile,
-  setShowUsersList,
   setShowNewUserAdmin,
 }) {
-  const { userProfile, setUserProfile, guestProfile} =
+  const { userProfile, setUserProfile, guestProfile } =
     useContext(UserProfileContext);
   const { editMode, setEditMode } = useContext(EditModeContext);
   const { setNotifications } = useContext(NotificationContext);
@@ -73,18 +72,31 @@ export default function NavigationDesktop({
     fileInputRef.current.click();
   };
 
-  let guest = userProfile.rol === 0 ? true:false
-  let client = userProfile.rol === 1 ? true:false
-  let employee = userProfile.rol === 2 ? true:false 
-  let admin = userProfile.rol === 3 ? true:false
+  let guest = userProfile.rol === 0 ? true : false;
+  let client = userProfile.rol === 1 ? true : false;
+  let employee = userProfile.rol === 2 ? true : false;
+  let admin = userProfile.rol === 3 ? true : false;
+
+  useEffect(() => {
+    const nav = document.getElementById('navbar');
+
+    if (nav) {
+      const rect = nav.getBoundingClientRect();
+
+      if (rect.left === 0 && rect.top === 0) {
+        
+        nav.style.height = '100px';
+      }
+    }
+  }, []);
 
   return (
-    <>
+    <div id="navbar">
       <Navbar
         bg="primary"
         expand="lg"
         className="m-0 ps-2 pe-2 pt-0 pb-0 shadow w-100"
-        style={{ position: "fixed", top: 0, zIndex: 1000 }}
+        style={{ position: "fixed", top: 0, zIndex: 1000, height:'60px' }}
       >
         {employee || (admin && editMode) ? (
           <Form className="d-flex align-items-center text-white">
@@ -187,7 +199,8 @@ export default function NavigationDesktop({
                   {userProfile.rol === 3 ? (
                     <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
                       <Button
-                        onClick={() => setShowUsersList(true)}
+                        as={Link}
+                        to='/UserList'
                         variant="link"
                         className="m-0 p-0 text-success"
                       >
@@ -257,7 +270,7 @@ export default function NavigationDesktop({
             bg="white"
             expand="lg"
             className="m-0 px-2 py-0 shadow w-100"
-            style={{ position: "fixed", top: 60, zIndex: 999 }}
+            style={{ position: "fixed", top: 60, zIndex: 999, height:'40px' }}
           >
             <div className="d-flex flew-row w-100">
               {categories.map((element, index) => (
@@ -317,6 +330,6 @@ export default function NavigationDesktop({
           </Navbar>
         </div>
       </Collapse>
-    </>
+    </div>
   );
 }

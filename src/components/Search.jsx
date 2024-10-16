@@ -18,7 +18,7 @@ export default function Search() {
   return (
     <>
       <Form className="d-flex w-100">
-        <Dropdown autoClose={"outside"}>
+        <Dropdown autoClose={"outside"} className="ms-2">
           <Dropdown.Toggle as={CustomToggle}/>
           <Dropdown.Menu>
             <div className="container">

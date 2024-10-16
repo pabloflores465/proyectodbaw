@@ -8,6 +8,7 @@ import ProductDetail from '../pages/ProductDetail'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EditCategories from '../pages/EditCategories'
 import Information from '../pages/Information'
+import UsersList from '../pages/UsersList'
 
 
 function Router() {
@@ -38,29 +39,27 @@ function Router() {
               element: <EditCategories/>
             },
             {
-              path: "/subcategories/:elementName/:filteredCategoryName",
-              element: <Products/>
-            },
-            {
               path: "/error",
               element: <ErrorPage />,
             },
-
+            {
+              path: "/about/who",
+              element: <Information/>,
+            },
+            {
+              path: "/about/mission",
+              element: <Information/>,
+            },
+            {
+              path: "/about/vision",
+              element: <Information/>,
+            },
+            {
+              path: "/userList",
+              element: <UsersList/>,
+            },
           ],
         },
-
-        {
-          path: "/about/who",
-          element: <Information/>,
-        },
-        {
-          path: "/about/mission",
-          element: <Information/>,
-        },
-        {
-          path: "/about/vision",
-          element: <Information/>,
-        }
       ]);
 
   return (

@@ -4,7 +4,6 @@ import Login from "./Login";
 import Profile from "./Profile";
 import Signup from "./Signup";
 import NewUserAdmin from "./NewUserAdmin";
-import UsersList from "./UsersList";
 import NavigationDesktop from "../components/NavigationDesktop";
 import NavigationMobile from "../components/NavigationMobile";
 import { WindowWidthContext } from "../context/WindowWidthContext";
@@ -17,7 +16,6 @@ export default function Navigation() {
   const [showSignup, setShowSignup] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showNewUserAdmin, setShowNewUserAdmin] = useState(false);
-  const [showUsersList, setShowUsersList] = useState(false);
 
   
 
@@ -28,7 +26,6 @@ export default function Navigation() {
             setShowSignup={setShowSignup}
             setShowLogin={setShowLogin}
             setShowProfile={setShowProfile}
-            setShowUsersList={setShowUsersList}
             setShowNewUserAdmin={setShowNewUserAdmin}
           />
         ) : (
@@ -36,7 +33,6 @@ export default function Navigation() {
             setShowSignup={setShowSignup}
             setShowLogin={setShowLogin}
             setShowProfile={setShowProfile}
-            setShowUsersList={setShowUsersList}
             setShowNewUserAdmin={setShowNewUserAdmin}
           />
         )}
@@ -45,7 +41,6 @@ export default function Navigation() {
       <NewUserAdmin show={showNewUserAdmin} setShow={setShowNewUserAdmin} />
       <Signup show={showSignup} setShow={setShowSignup} />
       <Profile show={showProfile} setShow={setShowProfile} />
-      <UsersList show={showUsersList} setShow={setShowUsersList} />
     </>
   );
 }

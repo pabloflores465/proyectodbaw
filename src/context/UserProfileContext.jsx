@@ -1,7 +1,6 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 import useLocalStorage from "../hooks/useLocalStorage.js";
-import UsersList from '../pages/UsersList.jsx';
 
 export const UserProfileContext = createContext();
 

@@ -41,7 +41,7 @@ function FeaturedProducts() {
   }, [params]);
 
   return (
-    <Carousel style={{ marginTop: "60px" }}>
+    <Carousel>
       {loadingProducts ? (
         <LoadingState />
       ) : (

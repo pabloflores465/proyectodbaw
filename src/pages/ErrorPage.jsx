@@ -23,7 +23,6 @@ function ErrorPage() {
   return (
     <>
       <Navigation />
-      <div style={{ height: "80px" }} />
       <div className="ms-auto me-auto">
         <Image
           src={`${process.env.PUBLIC_URL}/confusedDog.webp`}

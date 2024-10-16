@@ -15,8 +15,6 @@ export default function Layout() {
       <Notifications notifications={notifications} setNotifications={setNotifications} />
 
       <Navigation/>
-      {/*this for navigation styling*/}
-      <div style={{ height:'70px' }}/>
       
       <Outlet />
       
