@@ -87,6 +87,7 @@ export default function Product({ product, index, handleData }) {
   }, [selectedCategories]);
 
   useEffect(() => {
+    console.log(product.important);
     setFormData({
       id_products: product.id_products,
       product_name: product.product_name,
@@ -94,12 +95,22 @@ export default function Product({ product, index, handleData }) {
       price: product.price,
       stock: product.stock,
       category: selectedCategories,
+      featuredItem: parseInt(product.important) === 1, // Usar parseInt para convertir a entero
     });
+    setFeaturedItem(parseInt(product.important) === 1); 
     console.log(product.categories);
     if (product && product.categories) {
       setSelectedCategories(product.categories);
     }
   }, [product]);
+
+  const handleCheckboxChangeFeatured = (e) => {
+    setFeaturedItem(e.target.checked);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      featuredItem: e.target.checked ? 1 : 0,
+    }));
+  };
 
   const handleCheckboxChange = (e, categoryitem) => {
     if (e.target.checked) {
@@ -256,7 +267,11 @@ export default function Product({ product, index, handleData }) {
                   onChange={handleInput}
                 />
               </Form.Group>
-              <Form.Check label="Featured Item" />
+              <Form.Check
+                label="Featured Item"
+                checked={featuredItem}
+                onChange={handleCheckboxChangeFeatured}
+              />
               <div
                 className={
                   windowWidth > 1000

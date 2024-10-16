@@ -8,7 +8,6 @@ export default function BestSellers() {
       {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
         <Card className='translate-up' style={{minWidth:200, flex: '0 0 auto',}} key={index}>
           <Card.Img variant="top" src={`hola.png`} style={{ width: '300px', height: '300px' }} />
-          {/* Puedes agregar más detalles si lo necesitas */}
         </Card>
       ))}
     </div>

@@ -33,7 +33,7 @@ function getProduct($connection) {
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $category2 = isset($_GET['subCategory']) ? $_GET['subCategory'] : '';
     // Consultar los productos
-    $sql = "SELECT id_products, product_name, description, price, stock, image FROM products";
+    $sql = "SELECT id_products, product_name, description, price, stock, important, image FROM products";
     
     // Consultar los IDs de las categorías asociadas al producto desde la tabla de relación
     $sql2 = "SELECT id_products, id_category 
@@ -165,9 +165,10 @@ function updateProduct ($connection){
     $description = $data->description;
     $price = $data->price;
     $stock = $data->stock;
-    $id_categories = $data->category; 
+    $id_categories = $data->category;
+    $featuredItem = isset($data->featuredItem) ? $data->featuredItem : 0; 
 
-    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock WHERE id_products = $id";
+    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock, important = $featuredItem WHERE id_products = $id";
     
     if (mysqli_query($connection, $sql)) {
         $sql_delete = "DELETE FROM product_category WHERE id_products = $id";
