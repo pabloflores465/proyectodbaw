@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Container, Pagination, Row } from "react-bootstrap";
+import { Col, Pagination, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import NewProduct from "../components/NewProduct";
 import { EditModeContext } from "../context/EditModeContext";
 import LoadingState from "../components/LoadingState";
 import { useLocation, useParams } from "react-router";
 
-function Products() {
+function LowStockProducts() {
   const [data, setData] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const { editMode } = useContext(EditModeContext);
@@ -101,7 +101,7 @@ function Products() {
         )}
       </Row>
     </div>
-  );
+  )
 }
 
-export default Products;
+export default LowStockProducts

@@ -1,101 +1,33 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import axios from "axios";
 import { NotificationContext } from "../context/NotificationContext";
 import { useContext } from "react";
+import signUp from "../conections/signUp";
 
 function Signup({ show, setShow }) {
-  const [validated, setValidated] = useState(false);
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLatsname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phonenumber, setPhonenumber] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [address, setAddress] = useState("");
-  const [cardnumber, setCardnumber] = useState("");
-  const [expdate, setExpdate] = useState("");
-  const [confirm, setConfirm] = useState("");
+  let validated = false;
+  const [user, setUser] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    phonenumber: "",
+    birthdate: "",
+    address: "",
+    cardnumber: "",
+    expdate: "",
+  });
+
+  const [activeBilling, setActiveBilling] = useState(true);
+  const [confirm, setConfirm] = useState(false);
   const { setNotifications } = useContext(NotificationContext);
 
-  const localIp = process.env.REACT_APP_LOCAL_IP;
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setNotifications((prevNotifications) => [
-      ...prevNotifications,
-      {
-        showNotification: true,
-        type: "loading",
-      },
-    ]);
-    if (password === confirm) {
-      try {
-        const response = await axios.put(
-          `http://${localIp}/proyectodbaw/phpsql/signup.php`,
-          {
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            password: password,
-            phonenumber: phonenumber,
-            birthdate: birthdate,
-            address: address,
-            cardnumber: cardnumber,
-            expdate: expdate,
-          }
-        );
-        if (response.data.status === "success") {
-          console.log("Registrado");
-          setValidated(true);
-          setShow(false);
-        } else {
-          console.log("no registrado");
-          console.log(email, password);
-          console.log(response);
-        }
-        setNotifications((prevNotifications) => [
-          ...prevNotifications.slice(0, -1),
-          {
-            showNotification: true,
-            type: "success",
-            headerMessage: "Success",
-            bodyMessage: "User Register successful",
-          },
-        ]);
-      } catch (error) {
-        console.error("Error: ", error);
-        setNotifications((prevNotifications) => [
-          ...prevNotifications.slice(0, -1),
-          {
-            showNotification: true,
-            type: "error",
-            headerMessage: "Error",
-            bodyMessage: "Error While Register",
-          },
-        ]);
-      }
-    } else {
-      console.log("no logueado");
-      localStorage.clear();
-      setNotifications((prevNotifications) => [
-        ...prevNotifications.slice(0, -1),
-        {
-          showNotification: true,
-          type: "error",
-          headerMessage: "Error",
-          bodyMessage: "Passwords doesn't match",
-        },
-      ]);
-    }
+  const handleInput = (value, name) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
   };
-
-  const [activeBilling, setActiveBilling] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -119,7 +51,7 @@ function Signup({ show, setShow }) {
         <Form
           noValidate
           validated={validated}
-          onSubmit={handleSubmit}
+          onSubmit={(event) => signUp(user, event, confirm, setNotifications)}
           className="ps-1 pe-1 overflow-auto"
         >
           <Form.Group className="mb-3" controlId="validateUserName">
@@ -132,7 +64,8 @@ function Signup({ show, setShow }) {
               required
               placeholder="John"
               type="text"
-              onChange={(e) => setFirstname(e.target.value)}
+              name="firstname"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -142,7 +75,8 @@ function Signup({ show, setShow }) {
               required
               placeholder="Doe"
               type="text"
-              onChange={(e) => setLatsname(e.target.value)}
+              name="lastname"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -152,7 +86,8 @@ function Signup({ show, setShow }) {
               required
               placeholder="example@gmail.com"
               type="email"
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -162,9 +97,15 @@ function Signup({ show, setShow }) {
               required
               placeholder="Password#123"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Form.Control.Feedback type="valid">
+              Looks good!
+            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Unmached Passwords
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Confirm Password</Form.Label>
@@ -172,10 +113,18 @@ function Signup({ show, setShow }) {
               required
               placeholder="Password#123"
               type="password"
-              onChange={(e) => setConfirm(e.target.value)}
+              onChange={(e) => {
+                e.target.value === user.password
+                  ? setConfirm(true)
+                  : setConfirm(false);
+              }}
             />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            <Form.Text>Unmatched Passwords</Form.Text>
+            <Form.Control.Feedback type="valid">
+              Looks good!
+            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Unmached Passwords
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePassword">
             <Form.Label className="text-success">Birth Date </Form.Label>
@@ -183,7 +132,8 @@ function Signup({ show, setShow }) {
               required
               placeholder="01/01/2024"
               type="date"
-              onChange={(e) => setBirthdate(e.target.value)}
+              name="birthdate"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -193,7 +143,8 @@ function Signup({ show, setShow }) {
               required
               placeholder="Fraijanes, Guatemala"
               type="text"
-              onChange={(e) => setAddress(e.target.value)}
+              name="address"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -203,7 +154,8 @@ function Signup({ show, setShow }) {
               required
               placeholder="12344321"
               type="number"
-              onChange={(e) => setPhonenumber(e.target.value)}
+              name="phonenumber"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -213,24 +165,27 @@ function Signup({ show, setShow }) {
               type="switch"
               id="custom-switch"
               className=" mb-3"
-              onChange={() => setActiveBilling(!activeBilling)}
+              defaultChecked={activeBilling}
+              onChange={(e) => setActiveBilling(e.target.checked)}
             />
           </Form.Group>
-          {activeBilling === true ? (
+          {activeBilling ? (
             <Form.Group className="mb-3">
               <Form.Label className="text-success">Card Number </Form.Label>
               <Form.Control
                 className="mb-3"
                 placeholder="12344321"
                 type="number"
-                onChange={(e) => setCardnumber(e.target.value)}
+                name="cardnumber"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
               <Form.Label className="text-success">Expire Date </Form.Label>
               <Form.Control
                 required
                 placeholder="01/01/2024"
                 type="date"
-                onChange={(e) => setExpdate(e.target.value)}
+                name="expdate"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             </Form.Group>
           ) : null}

@@ -55,7 +55,7 @@ function getProduct($connection) {
         
         while($row = $result->fetch_assoc()) {
             // Iniciar el array de categorías vacío para cada producto
-            $row['image'] = base64_encode($row['image']);
+            $row['image'] = base64_encode($row['image'] ?? '');
             $products[$row['id_products']] = $row;
             $products[$row['id_products']]['categories'] = [];
         }

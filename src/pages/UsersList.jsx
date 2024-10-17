@@ -4,11 +4,9 @@ import {
   Table,
   Form,
   Dropdown,
-  DropdownButton,
   DropdownToggle,
   DropdownMenu,
 } from "react-bootstrap";
-import axios from "axios";
 import { useEffect } from "react";
 import getUsers from "../conections/getUsers";
 import deleteUser from "../conections/deleteUser";
@@ -16,12 +14,15 @@ import { NotificationContext } from "../context/NotificationContext";
 import LoadingState from "../components/LoadingState";
 import { EditModeContext } from "../context/EditModeContext";
 import editUser from "../conections/editUser";
+import { FaUserPlus } from "react-icons/fa6";
+import NewUserAdmin from "./NewUserAdmin";
 
 function UsersList() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { setNotifications } = useContext(NotificationContext);
   const { editMode } = useContext(EditModeContext);
+  const [showNewUserAdmin, setShowNewUserAdmin] = useState(false)
 
   const handleInput = (event, userIndex) => {
     const { name, value } = event.target;
@@ -47,6 +48,10 @@ function UsersList() {
       {loading ? (
         <LoadingState />
       ) : (
+        <>
+        <div style={{height:'30px'}}></div>
+        <Button onClick={()=>setShowNewUserAdmin(true)} className="mb-2 rounded-pill btn-secondary text-white ms-auto me-2"><FaUserPlus/>{" "}Add New User</Button>
+        <NewUserAdmin setShow={setShowNewUserAdmin} show={showNewUserAdmin} />
         <Table striped bordered hover responsive>
           <thead>
             <tr>
@@ -249,6 +254,7 @@ function UsersList() {
             ))}
           </tbody>
         </Table>
+        </>
       )}
     </>
   );

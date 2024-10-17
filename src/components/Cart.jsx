@@ -1,40 +1,18 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext} from "react";
 import { Button,  Dropdown, Image,  } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
-import axios from "axios";
 import { UserProfileContext } from "../context/UserProfileContext";
+import { NotificationContext } from "../context/NotificationContext";
 import LoadingState from "../components/LoadingState";
 import { LiaWalletSolid } from "react-icons/lia";
+import getCartItems from "../conections/getCartItems";
 
 export default function Cart() {
-  const [data, setData] = useState([]);
-  const { userProfile, setUserProfile } = useContext(UserProfileContext);
-  const localIp = process.env.REACT_APP_LOCAL_IP;
-  let temp = userProfile;
+  const [cartItems, setCartItems] = useState([]);
+  const { userProfile } = useContext(UserProfileContext);
+  const { setNotifications } = useContext(NotificationContext)
   const [loadingProducts, setLoadingProducts] = useState(true);
-
-  const handleData = async (id) => {
-    try {
-      let url = `http://${localIp}/proyectodbaw/phpsql/Orders.php?id_user=${id}`;
-      setLoadingProducts(true);
-      const response = await axios.get(url);
-      console.log(response.data);
-      setData(response.data);
-    } catch (error) {
-      console.error("Error: ", error);
-    } finally {
-      setLoadingProducts(false);
-    }
-  };
-
-  useEffect(() => {
-    handleData(temp.userId);
-  }, []);
-
-
-
-
 
   const CustomToggle = React.forwardRef(({ onClick },ref) => (
     <Button
@@ -43,6 +21,7 @@ export default function Cart() {
       onClick={(e) => {
         e.preventDefault();
         onClick(e);
+        getCartItems(userProfile.userId, setCartItems, setLoadingProducts, setNotifications)
       }}
     ><FaShoppingCart size={"2rem"} /></Button>
   ));
@@ -60,8 +39,8 @@ export default function Cart() {
           {loadingProducts ? (
             <LoadingState />
           ) : (
-            data.length > 0 ? (
-              data.map((item, index) => (
+            (Array.isArray(cartItems) && cartItems.length > 0) ? (
+              cartItems.map((item, index) => (
                 <div key={index} className="d-flex flex-column">
                   <div className="d-flex align-items-center border-bottom mb-2">
                     <Image

@@ -1,14 +1,6 @@
 import React, { useContext } from "react";
 
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaPhone,
-  FaTiktok,
-  FaWhatsapp,
-} from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import { Button, Form} from "react-bootstrap";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import { EditModeContext } from "../context/EditModeContext";
 import { Link } from "react-router-dom";

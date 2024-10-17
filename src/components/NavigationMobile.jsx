@@ -13,17 +13,14 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
 
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FaArrowsDownToPeople } from "react-icons/fa6";
 import { IoMdPersonAdd } from "react-icons/io";
 import Search from "../components/Search";
 import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
-import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { UserProfileContext } from "../context/UserProfileContext";
 import { EditModeContext } from "../context/EditModeContext";
 import { NotificationContext } from "../context/NotificationContext";
-import axios from "axios";
 import { FaFile } from "react-icons/fa";
 import getCategories from "../conections/getCategories";
 
@@ -31,7 +28,6 @@ export default function NavigationMobile({
   setShowSignup,
   setShowLogin,
   setShowProfile,
-  setShowNewUserAdmin,
 }) {
   const { userProfile, setUserProfile, guestProfile } =
     useContext(UserProfileContext);
@@ -42,8 +38,6 @@ export default function NavigationMobile({
 
   const handleToggle = () => setShowOffcanvas(!showOffcanvas);
   const [categories, setCategories] = useState([]);
-  const localIp = process.env.REACT_APP_LOCAL_IP;
-
 
   useEffect(() => {
     getCategories(setCategories);
@@ -76,7 +70,6 @@ export default function NavigationMobile({
   };
 
   let guest = userProfile.rol === 0 ? true : false;
-  let client = userProfile.rol === 1 ? true : false;
   let employee = userProfile.rol === 2 ? true : false;
   let admin = userProfile.rol === 3 ? true : false;
 
@@ -129,7 +122,7 @@ export default function NavigationMobile({
           </Navbar.Brand>
         )}
         <div className="d-flex flex-row text-white">
-          {userProfile.rol === 3 || userProfile.rol === 2 ? (
+          {admin || employee ? (
             <div className="d-flex ms-2 align-items-center">
               <div>Edit Mode</div>
               <FormCheck
@@ -153,7 +146,7 @@ export default function NavigationMobile({
           <GiHamburgerMenu />
         </Navbar.Toggle>
         <div className="w-100 mb-2 d-flex fle-row align-items-center">
-          {editMode === false && userProfile.rol !== 0 ? <Cart /> : null}
+          {editMode === false && guest ? <Cart /> : null}
           <Search />
         </div>
         <Offcanvas show={showOffcanvas} onHide={handleToggle} placement="end">
@@ -174,7 +167,7 @@ export default function NavigationMobile({
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              {userProfile.rol === 0 ? (
+              {guest ? (
                 <>
                   <Button
                     onClick={() => setShowSignup(true)}
@@ -219,24 +212,10 @@ export default function NavigationMobile({
                             <Button
                               variant="link"
                               as={Link}
-                              to='/UserList'
+                              to="/UserList"
                               className="m-0 p-0 text-success"
                             >
                               <CgUserList /> Users List
-                            </Button>
-                          </Dropdown.Item>
-                        ) : null}
-                        {userProfile.rol === 3 ? (
-                          <Dropdown.Item
-                            className="text-success border-top"
-                            style={{ textAlign: "center" }}
-                          >
-                            <Button
-                              onClick={() => setShowNewUserAdmin(true)}
-                              variant="link"
-                              className="m-0 p-0 text-success"
-                            >
-                              <FaArrowsDownToPeople /> Add User
                             </Button>
                           </Dropdown.Item>
                         ) : null}

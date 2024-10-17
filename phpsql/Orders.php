@@ -43,7 +43,7 @@ function getOrder($connection){
         if ($result->num_rows > 0) {
             $cart = [];
             while ($row = $result->fetch_assoc()) {
-                $row['image'] = base64_encode($row['image']);
+                $row['image'] = base64_encode($row['image'] ?? '');
                 $cart[] = $row;
             }
             echo json_encode($cart);

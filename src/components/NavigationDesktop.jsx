@@ -11,13 +11,13 @@ import {
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
 
-import { FaArrowsDownToPeople, FaFile } from "react-icons/fa6";
+import { FaFile } from "react-icons/fa6";
 import { IoMdPersonAdd } from "react-icons/io";
 import Search from "../components/Search";
 import Cart from "../components/Cart";
 import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserProfileContext } from "../context/UserProfileContext";
 import { EditModeContext } from "../context/EditModeContext";
 import { NotificationContext } from "../context/NotificationContext";
@@ -28,7 +28,6 @@ export default function NavigationDesktop({
   setShowSignup,
   setShowLogin,
   setShowProfile,
-  setShowNewUserAdmin,
 }) {
   const { userProfile, setUserProfile, guestProfile } =
     useContext(UserProfileContext);
@@ -73,7 +72,6 @@ export default function NavigationDesktop({
   };
 
   let guest = userProfile.rol === 0 ? true : false;
-  let client = userProfile.rol === 1 ? true : false;
   let employee = userProfile.rol === 2 ? true : false;
   let admin = userProfile.rol === 3 ? true : false;
 
@@ -205,17 +203,6 @@ export default function NavigationDesktop({
                         className="m-0 p-0 text-success"
                       >
                         <CgUserList /> Users List
-                      </Button>
-                    </Dropdown.Item>
-                  ) : null}
-                  {admin ? (
-                    <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
-                      <Button
-                        onClick={() => setShowNewUserAdmin(true)}
-                        variant="link"
-                        className="m-0 p-0 text-success"
-                      >
-                        <FaArrowsDownToPeople /> Add User
                       </Button>
                     </Dropdown.Item>
                   ) : null}

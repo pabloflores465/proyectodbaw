@@ -31,7 +31,7 @@ function getProduct($connection) {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $row['image'] = base64_encode($row['image']);
+        $row['image'] = base64_encode($row['image'] ?? '');
     }
     echo json_encode($row);
     }
