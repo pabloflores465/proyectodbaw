@@ -60,7 +60,7 @@ function Router() {
               element: <UsersList/>,
             },
             {
-              path: "/orderlist:userId",
+              path: "/orderlist/:userId",
               element: <OrderList/>
             }
           ],

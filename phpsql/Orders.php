@@ -31,7 +31,7 @@ function getOrder($connection){
 
     if ($id_user) {
         $sql = "
-            SELECT p.image, p.product_name, p.description, od.amount, od.total_product_price 
+            SELECT p.id_products, p.image, p.product_name, p.description, od.amount, od.total_product_price 
             FROM order_detail od
             INNER JOIN products p ON od.id_product = p.id_products
             INNER JOIN order_dp o ON od.id_order = o.id_order
@@ -77,13 +77,32 @@ function createOrder($connection) {
         }
     }
     
-    $sql2 = "INSERT INTO order_detail (id_order, id_product, amount, total_product_price) VALUES ($id_order, $id_products, $amount, NULL)";
-    $result = $connection->query($sql2);
+    $sql_check_product = "SELECT amount FROM order_detail WHERE id_order = $id_order AND id_product = $id_products";
+    $result_check_product = $connection->query($sql_check_product);
 
-    if($result === TRUE ){
-        echo json_encode(["message" => "Pedido creado con éxito"]);
+    if ($result_check_product->num_rows > 0) {
+        // Si el producto ya está en la orden, se actualiza el amount
+        $row = $result_check_product->fetch_assoc();
+        $sql_update = "UPDATE order_detail SET amount = $amount WHERE id_order = $id_order AND id_product = $id_products";
+        if ($connection->query($sql_update) === TRUE) {
+            echo json_encode(["message" => "Cantidad actualizada con éxito"]);
+        } else {
+            echo json_encode(["message" => "Error al actualizar la cantidad", "error" => $connection->error]);
+        }
     } else {
-        echo json_encode(["message" => "Error al agregar detalles del pedido"]);
+        // Si el producto no está en la orden, se inserta como un nuevo detalle
+        $sql2= "INSERT INTO order_detail (id_order, id_product, amount, total_product_price) VALUES ($id_order, $id_products, $amount, NULL)";
+        if ($connection->query($sql2) === TRUE) {
+            echo json_encode(["message" => "Producto añadido a la orden con éxito"]);
+        } else {
+            echo json_encode(["message" => "Error al agregar el producto a la orden", "error" => $connection->error]);
+        }
+    }
+    $sql_update_total = "UPDATE order_dp SET total= order_total($id_order) WHERE id_order = $id_order";
+    if ($connection->query($sql_update_total) === TRUE) {
+        echo json_encode(["message" => "Total de la orden actualizado correctamente"]);
+    } else {
+        echo json_encode(["error" => "Error al actualizar el total de la orden", "details" => $connection->error]);
     }
 
 

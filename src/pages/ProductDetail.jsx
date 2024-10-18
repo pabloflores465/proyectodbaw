@@ -105,10 +105,11 @@ function ProductDetail() {
                           }
                         }}
                         onChange={(e) => {
-                          const value = parseInt(e.target.value);
+                          let value = parseInt(e.target.value);
                           if (value > 0) {
                             if (value > data.stock) {
                               e.target.value = data.stock;
+                              value = data.stock
                             }
                           } else {
                             e.target.value = "";
