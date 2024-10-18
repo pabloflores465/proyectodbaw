@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EditCategories from '../pages/EditCategories'
 import Information from '../pages/Information'
 import UsersList from '../pages/UsersList'
+import OrderList from '../context/OrderList'
 
 
 function Router() {
@@ -58,6 +59,10 @@ function Router() {
               path: "/userList",
               element: <UsersList/>,
             },
+            {
+              path: "/orderlist:userId",
+              element: <OrderList/>
+            }
           ],
         },
       ]);

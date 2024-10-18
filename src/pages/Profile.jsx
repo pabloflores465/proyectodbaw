@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useContext } from "react";
-import axios from "axios";
 import { UserProfileContext } from "../context/UserProfileContext";
+import { NotificationContext } from "../context/NotificationContext";
+import updateProfile from "../conections/updateProfile";
 
 function Profile({ show, setShow }) {
   const [activeBilling, setActiveBilling] = useState(false);
@@ -14,46 +15,14 @@ function Profile({ show, setShow }) {
 
   const [validated, setValidated] = useState(false);
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
+  const { setNotifications } = useContext(NotificationContext)
 
-  const localIp = process.env.REACT_APP_LOCAL_IP;
-  let temp = userProfile;
-
-  const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    try {
-      const response = await axios.put(
-      `http://${localIp}/proyectodbaw/phpsql/profile.php`,
-        {
-          firstname: userProfile.firstName,
-          lastname: userProfile.lastName,
-          email: userProfile.email,
-          birthdate: userProfile.birthDate,
-          address: userProfile.address,
-          phonenumber: parseInt(userProfile.phoneNumber),
-          cardnumber: parseInt(userProfile.cardNumber),
-          expiredate: userProfile.expireDate,
-          iduser: parseInt(userProfile.userId),
-        }
-      );
-      if (response.data.status === "success") {
-        setUserProfile(temp);
-        console.log("Actualizado");
-        handleClose();
-      } else {
-        console.log("no actualizado");
-        console.log(response);
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-    setValidated(true);
+  const handleInput = (value, name) => {
+    setUserProfile((prevUserProfile) => ({
+      ...prevUserProfile,
+      [name]: value,
+    }));
   };
-
-  //setActiveBilling(profile.activeBilling)
 
   return (
     <Modal
@@ -72,7 +41,9 @@ function Profile({ show, setShow }) {
         <Form
           noValidate
           validated={validated}
-          onSubmit={handleSubmit}
+          onSubmit={(event)=>{
+            event.preventDefault();
+            updateProfile(userProfile, setUserProfile, event, setNotifications, setShow, setValidated)}}
           className="ps-1 pe-1 overflow-auto"
         >
           <Form.Group className="mb-3" controlId="validateUserName">
@@ -84,9 +55,8 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.firstName}
-              onChange={(e) => {
-                temp.firstName = e.target.value;
-              }}
+              name = "firstName"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="text"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -96,9 +66,8 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.lastName}
-              onChange={(e) => {
-                temp.lastName = e.target.value;
-              }}
+              name = "lastName"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="text"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -108,9 +77,8 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.email}
-              onChange={(e) => {
-                temp.email = e.target.value;
-              }}
+              name = "email"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="email"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -120,9 +88,8 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.address}
-              onChange={(e) => {
-                temp.address = e.target.value;
-              }}
+              name = "address"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="text"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -134,9 +101,8 @@ function Profile({ show, setShow }) {
               required
               placeholder={userProfile.birthDate}
               type="date"
-              onChange={(e) => {
-                console.log(e.target.value);
-              }}
+              name="birthDate"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
@@ -145,9 +111,8 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               placeholder={userProfile.phoneNumber}
-              onChange={(e) => {
-                temp.phoneNumber = e.target.value;
-              }}
+              name="phoneNumber"
+              onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="tel"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -167,17 +132,15 @@ function Profile({ show, setShow }) {
               <Form.Label className="text-success">Card Number </Form.Label>
               <Form.Control
                 className="mb-3"
-                onChange={(e) => {
-                  temp.cardNumber = e.target.value;
-                }}
+                name = "cardNumber"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
                 defaultValue={userProfile.cardNumber}
                 type="number"
               />
               <Form.Label className="text-success">Expire Date </Form.Label>
               <Form.Control
-                onChange={(e) => {
-                  temp.expireDate = e.target.value;
-                }}
+                name="expireDate"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
                 placeholder={userProfile.expireDate}
                 type="date"
               />
