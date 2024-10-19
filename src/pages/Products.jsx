@@ -6,16 +6,27 @@ import NewProduct from "../components/NewProduct";
 import { EditModeContext } from "../context/EditModeContext";
 import LoadingState from "../components/LoadingState";
 import { useLocation, useParams } from "react-router";
+import Qr from "../components/Qr";
 
 function Products() {
   const [data, setData] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const { editMode } = useContext(EditModeContext);
 
-  const params = useParams();
-  console.log(params)
-  
+  const location = useLocation()
+  const params = useParams()
 
+  const [showQr, setShowQr] = useState(false)
+
+  useEffect(()=>{
+    if((location.pathname === `/categories/${params.categoryId}/${params.subcategoryId}`)||(location.pathname === `/categories/${params.categoryId}`)){
+      setShowQr(true)
+    }
+    else {
+      setShowQr(false)
+    }
+  },[location,params])
+  
   const localIp = process.env.REACT_APP_LOCAL_IP;
   const handleData = async (category1, category2) => {
     try {
@@ -45,10 +56,11 @@ function Products() {
     handleData(params.categoryId, params.subcategoryId);
   }, [params]);
 
-  const location = useLocation()
+  
 
   return (
     <div className={`container ${location !== '/' ? '':'d-flex flex-column h-100'}`}>
+      <Qr show={showQr}/>
       {" "}
       {console.log(data)}
       <div className="d-flex flex-row">
@@ -100,6 +112,7 @@ function Products() {
           </>
         )}
       </Row>
+      
     </div>
   );
 }

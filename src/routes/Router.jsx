@@ -9,7 +9,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EditCategories from '../pages/EditCategories'
 import Information from '../pages/Information'
 import UsersList from '../pages/UsersList'
-import OrderList from '../context/OrderList'
+import OrderList from '../components/OrderList'
+import AllCategories from '../pages/AllCategories'
 
 
 function Router() {
@@ -62,6 +63,10 @@ function Router() {
             {
               path: "/orderlist/:userId",
               element: <OrderList/>
+            },
+            {
+              path: "/allcategories",
+              element: <AllCategories/>
             }
           ],
         },

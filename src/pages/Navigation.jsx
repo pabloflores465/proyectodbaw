@@ -8,7 +8,6 @@ import NavigationMobile from "../components/NavigationMobile";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 
 export default function Navigation() {
-  
   const { windowWidth } = useContext(WindowWidthContext);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
@@ -16,23 +15,9 @@ export default function Navigation() {
 
   return (
     <>
-        {windowWidth > 1000 ? (
-          <NavigationDesktop
-            setShowSignup={setShowSignup}
-            setShowLogin={setShowLogin}
-            setShowProfile={setShowProfile}
-          />
-        ) : (
-          <NavigationMobile
-            setShowSignup={setShowSignup}
-            setShowLogin={setShowLogin}
-            setShowProfile={setShowProfile}
-          />
-        )}
+      {windowWidth > 1000 ? <NavigationDesktop /> : <NavigationMobile />}
 
-      <Login show={showLogin} setShow={setShowLogin} />
-      <Signup show={showSignup} setShow={setShowSignup} />
-      <Profile show={showProfile} setShow={setShowProfile} />
+      
     </>
   );
 }

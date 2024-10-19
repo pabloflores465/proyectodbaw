@@ -25,8 +25,12 @@ const UserProfileProvider = ({ children }) => {
     guestProfile
   );
 
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
   return (
-    <UserProfileContext.Provider value={{ userProfile, setUserProfile, guestProfile }}>
+    <UserProfileContext.Provider value={{ userProfile, setUserProfile, guestProfile, showLogin, setShowLogin, showSignup, setShowSignup, showProfile, setShowProfile }}>
       {children}
     </UserProfileContext.Provider>
   );

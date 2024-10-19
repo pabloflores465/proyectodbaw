@@ -6,16 +6,18 @@ import UserProfileContextProvider from "./context/UserProfileContext.jsx";
 import WindowWidthContextProvider from "./context/WindowWidthContext.jsx";
 import EditModeContextProvider from "./context/EditModeContext.jsx";
 import NotificationContextProvider from "./context/NotificationContext.jsx";
+import ClicksNumberProvider from "./context/ClicksNumberContext.jsx";
 
 function App() {
-
   return (
     <React.StrictMode>
       <UserProfileContextProvider>
         <WindowWidthContextProvider>
           <EditModeContextProvider>
             <NotificationContextProvider>
-              <Router/>
+              <ClicksNumberProvider>
+                <Router />
+              </ClicksNumberProvider>
             </NotificationContextProvider>
           </EditModeContextProvider>
         </WindowWidthContextProvider>
