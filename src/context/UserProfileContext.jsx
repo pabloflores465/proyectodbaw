@@ -18,6 +18,7 @@ const UserProfileProvider = ({ children }) => {
     expireDate: null,
     userId: null,
     lastConection: null,
+    password:null,
   };
    
   const [userProfile, setUserProfile] = useLocalStorage (

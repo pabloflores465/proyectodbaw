@@ -18,6 +18,7 @@ export default async function updateProfile(
     setValidated(true); // Actualizamos el estado para mostrar la validación
   }
 
+  console.log(userProfile)
   setNotifications((prevNotifications) => [
     ...prevNotifications,
     {
@@ -37,6 +38,7 @@ export default async function updateProfile(
       cardnumber: parseInt(userProfile.cardNumber),
       expiredate: userProfile.expireDate,
       iduser: parseInt(userProfile.userId),
+      password : userProfile.password,
     })
     .then((response) => {
       if (response.data.status === "success") {

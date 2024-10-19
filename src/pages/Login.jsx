@@ -53,6 +53,7 @@ function Login({ show, setShow }) {
           temp.phoneNumber = response.data.phonenumber;
           temp.lastConection = response.data.lastconnection;
           temp.userId = parseInt(response.data.userid);
+          temp.password = response.data.password;
           console.log("Logueado", response.data.rol);
           setValidated(true);
           setShow(false);

@@ -7,15 +7,20 @@ import updateProfile from "../conections/updateProfile";
 
 function Profile({ show, setShow }) {
   const [activeBilling, setActiveBilling] = useState(false);
+  const [activePassword, setActivePassword] = useState(false);
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState(""); // Estado para confirmar contraseña
+  const [validated, setValidated] = useState(false);
+  const [oldPassword, setOldPassword] = useState();
 
   const handleClose = () => {
     setShow(false);
     setActiveBilling(false);
+    console.log(userProfile);
   };
 
-  const [validated, setValidated] = useState(false);
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
-  const { setNotifications } = useContext(NotificationContext)
+  const { setNotifications } = useContext(NotificationContext);
 
   const handleInput = (value, name) => {
     setUserProfile((prevUserProfile) => ({
@@ -24,28 +29,48 @@ function Profile({ show, setShow }) {
     }));
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  
+    if (activePassword && newPass !== confirmPass) {
+      setNotifications((prevNotifications) => [
+        ...prevNotifications,
+        {
+          showNotification: true,
+          type: "error",
+          headerMessage: "Error",
+          bodyMessage: "Passwords do not match!",
+        },
+      ]);
+      return;
+    }
+    if (oldPassword==userProfile.password){
+    // Clonar userProfile y actualizar la contraseña si es necesario
+    const updatedUserProfile = { ...userProfile };
+  
+    if (activePassword && newPass) {
+      updatedUserProfile.password = newPass;
+    }
+  
+    // Llamar a updateProfile con el perfil de usuario actualizado
+    updateProfile(
+      updatedUserProfile, 
+      setUserProfile, 
+      event, 
+      setNotifications, 
+      setShow, 
+      setValidated
+    );
+  }
+  };
+
   return (
-    <Modal
-      centered
-      className="text-white shadow"
-      show={show}
-      onHide={handleClose}
-    >
-      <Modal.Header
-        className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
-        closeButton
-      >
+    <Modal centered className="text-white shadow" show={show} onHide={handleClose}>
+      <Modal.Header className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3" closeButton>
         <Modal.Title>Profile</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form
-          noValidate
-          validated={validated}
-          onSubmit={(event)=>{
-            event.preventDefault();
-            updateProfile(userProfile, setUserProfile, event, setNotifications, setShow, setValidated)}}
-          className="ps-1 pe-1 overflow-auto"
-        >
+        <Form noValidate validated={validated} onSubmit={handleSubmit} className="ps-1 pe-1 overflow-auto">
           <Form.Group className="mb-3" controlId="validateUserName">
             <Form.Label className="text-success">Profile Picture</Form.Label>
             <Form.Control type="file" />
@@ -55,7 +80,7 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.firstName}
-              name = "firstName"
+              name="firstName"
               onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="text"
             />
@@ -66,7 +91,7 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.lastName}
-              name = "lastName"
+              name="lastName"
               onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="text"
             />
@@ -77,26 +102,25 @@ function Profile({ show, setShow }) {
             <Form.Control
               required
               defaultValue={userProfile.email}
-              name = "email"
+              name="email"
               onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="email"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="validateLastName">
+          <Form.Group className="mb-3" controlId="validateAddress">
             <Form.Label className="text-success">Address</Form.Label>
             <Form.Control
               required
               defaultValue={userProfile.address}
-              name = "address"
+              name="address"
               onChange={(e) => handleInput(e.target.value, e.target.name)}
               type="text"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-
           <Form.Group className="mb-3" controlId="validateBirthdate">
-            <Form.Label className="text-success">BirthDate </Form.Label>
+            <Form.Label className="text-success">BirthDate</Form.Label>
             <Form.Control
               required
               placeholder={userProfile.birthDate}
@@ -107,7 +131,7 @@ function Profile({ show, setShow }) {
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3" controlId="validatePhone">
-            <Form.Label className="text-success">Phone Number </Form.Label>
+            <Form.Label className="text-success">Phone Number</Form.Label>
             <Form.Control
               required
               placeholder={userProfile.phoneNumber}
@@ -117,27 +141,69 @@ function Profile({ show, setShow }) {
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
+
           <Form.Group>
             <Form.Label className="text-success">Billing Profile</Form.Label>
             <Form.Check
               type="switch"
-              id="custom-switch"
-              className=" mb-3"
+              id="custom-switch-billing"
+              className="mb-3"
               defaultChecked={activeBilling}
               onChange={() => setActiveBilling(!activeBilling)}
             />
           </Form.Group>
+          <Form.Group>
+            <Form.Label className="text-success">Change Password</Form.Label>
+            <Form.Check
+              type="switch"
+              id="custom-switch-password"
+              className="mb-3"
+              defaultChecked={activePassword}
+              onChange={() => setActivePassword(!activePassword)}
+            />
+          </Form.Group>
+
+          {activePassword === true ? (
+            <>
+              <Form.Group className="mb-3">
+                <Form.Label className="text-success">Previous Password</Form.Label>
+                <Form.Control
+                  className="mb-3"
+                  name="password"
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  type="password"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label className="text-success">New Password</Form.Label>
+                <Form.Control
+                  name="newPass"
+                  onChange={(e) => setNewPass(e.target.value)}
+                  type="password"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label className="text-success">Confirm New Password</Form.Label>
+                <Form.Control
+                  name="confirmPass"
+                  onChange={(e) => setConfirmPass(e.target.value)}
+                  type="password"
+                />
+              </Form.Group>
+            </>
+          ) : null}
+
           {activeBilling === true ? (
             <Form.Group className="mb-3">
-              <Form.Label className="text-success">Card Number </Form.Label>
+              <Form.Label className="text-success">Card Number</Form.Label>
               <Form.Control
                 className="mb-3"
-                name = "cardNumber"
+                name="cardNumber"
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
                 defaultValue={userProfile.cardNumber}
                 type="number"
               />
-              <Form.Label className="text-success">Expire Date </Form.Label>
+              <Form.Label className="text-success">Expire Date</Form.Label>
               <Form.Control
                 name="expireDate"
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
@@ -146,11 +212,8 @@ function Profile({ show, setShow }) {
               />
             </Form.Group>
           ) : null}
-          <Button
-            variant="secondary text-white rounded-pill w-100"
-            onSubmit={handleClose}
-            type="submit"
-          >
+
+          <Button variant="secondary text-white rounded-pill w-100" type="submit">
             Submit
           </Button>
         </Form>

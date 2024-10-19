@@ -29,7 +29,7 @@ export default function Product({ product, index, handleData }) {
   
     const reader = new FileReader();
     reader.onloadend = () => {
-      const base64String = reader.result; // Obtener solo la cadena base64 sin el prefijo
+      const base64String = reader.result; 
       setFormData((prevFormData) => ({
         ...prevFormData,
         image: base64String,

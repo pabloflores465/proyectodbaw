@@ -16,7 +16,7 @@ $user = $result->fetch_assoc();
 
 if ($result->num_rows > 0){
 
-    echo json_encode(["message" => "succesful", "status"=>"success", "email"=>$user["email"],"rol"=>$user["rol"],"firstname"=>$user["first_name"],"lastname"=>$user["last_name"], "birthdate"=>$user["birth_date"], "address"=>$user["address"], "active"=>$user["active"], "cardnumber"=>$user["card_number"], "expiredate"=>$user["expire_date"], "lastconnection"=>$user["last_connection"], "phonenumber"=>$user["phone_number"], "userid"=>$user["id_user"]]);
+    echo json_encode(["message" => "succesful", "status"=>"success", "email"=>$user["email"],"rol"=>$user["rol"],"firstname"=>$user["first_name"],"lastname"=>$user["last_name"], "birthdate"=>$user["birth_date"], "address"=>$user["address"], "active"=>$user["active"], "cardnumber"=>$user["card_number"], "expiredate"=>$user["expire_date"], "lastconnection"=>$user["last_connection"], "phonenumber"=>$user["phone_number"], "userid"=>$user["id_user"], "password"=>$user["password"]]);
 
 }else{
     echo json_encode(["message" => "no matching data", "status"=>"error"]);
