@@ -154,27 +154,43 @@ function deleteProduct($connection){
     }
 }
 
-function updateProduct ($connection){
+function updateProduct($connection) {
     $id = $_GET['id'];
     $data = json_decode(file_get_contents("php://input"));
+
     $productname = $data->product_name;
     $description = $data->description;
     $price = $data->price;
     $stock = $data->stock;
     $id_categories = $data->category;
-    $featuredItem = isset($data->featuredItem) ? $data->featuredItem : 0; 
+    $featuredItem = isset($data->featuredItem) ? $data->featuredItem : 0;
+    $imageBase64 = $data->image; // Recibir imagen en base64
 
-    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock, important = $featuredItem WHERE id_products = $id";
-    
+    // Construir la consulta SQL
+    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock, important = $featuredItem";
+
+    // Si hay una imagen nueva, actualizarla
+    if (!empty($imageBase64)) {
+        $imageBase64 = preg_replace('/^data:image\/\w+;base64,/', '', $imageBase64);
+        $imageBase64 = base64_decode($imageBase64);
+        
+        $sql .= ", image = '" . mysqli_real_escape_string($connection, $imageBase64) . "'";
+    }
+
+    $sql .= " WHERE id_products = $id";
+
     if (mysqli_query($connection, $sql)) {
+        // Actualizar categorías
         $sql_delete = "DELETE FROM product_category WHERE id_products = $id";
         mysqli_query($connection, $sql_delete);
+
         foreach ($id_categories as $category_id) {
             $sql_category = "INSERT INTO product_category (id_products, id_category) VALUES ($id, $category_id)";
             if (!mysqli_query($connection, $sql_category)) {
                 echo "Error al insertar en product_categories: " . mysqli_error($connection);
             }
         }
+
         echo json_encode(["message" => "Product and categories updated successfully", "status" => "success"]);
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);

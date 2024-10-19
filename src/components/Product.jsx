@@ -24,6 +24,21 @@ export default function Product({ product, index, handleData }) {
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result; // Obtener solo la cadena base64 sin el prefijo
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        image: base64String,
+      }));
+    };
+    reader.readAsDataURL(file);  // Esto convierte la imagen en base64
+  };
+  
+
   const handleCategories = async () => {
     try {
       const response = await axios.get(
@@ -37,6 +52,9 @@ export default function Product({ product, index, handleData }) {
   };
 
   useEffect(() => {
+    {
+      console.log(product);
+    }
     handleCategories();
   }, []);
 
@@ -97,7 +115,7 @@ export default function Product({ product, index, handleData }) {
       category: selectedCategories,
       featuredItem: parseInt(product.important) === 1, // Usar parseInt para convertir a entero
     });
-    setFeaturedItem(parseInt(product.important) === 1); 
+    setFeaturedItem(parseInt(product.important) === 1);
     console.log(product.categories);
     if (product && product.categories) {
       setSelectedCategories(product.categories);
@@ -140,6 +158,7 @@ export default function Product({ product, index, handleData }) {
           style={{ textDecoration: "none" }}
         >
           <Card.Img
+          name="image"
             variant="top"
             src={`data:image/jpeg;base64,${product.image}`}
             height={250}
@@ -173,7 +192,7 @@ export default function Product({ product, index, handleData }) {
                   }
                   style={{ pointerEvents: "auto" }}
                 >
-                  <FaListAlt /> Categories {console.log(product.categories)}
+                  <FaListAlt /> Categories {console.log(product.image)}
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   className={
@@ -218,14 +237,11 @@ export default function Product({ product, index, handleData }) {
             <Form className="m-2">
               <Form.Group>
                 <Form.Label>Product Image</Form.Label>
-                <Form.Control type="file" className="mb-2" />
                 <Form.Control
-                  type="text"
-                  value={"Image: hola.png"}
-                  readOnly
-                  onClick={handleDownload}
+                  type="file"
                   className="mb-2"
-                  style={{ cursor: "pointer" }}
+                  accept="image/*" // Aceptar solo imágenes
+                  onChange={handleImageChange} // Llamar a handleImageChange cuando se seleccione una imagen
                 />
               </Form.Group>
               <Form.Group>
