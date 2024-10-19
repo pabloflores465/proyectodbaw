@@ -10,6 +10,7 @@ import { UserProfileContext } from "../context/UserProfileContext";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { EditModeContext } from "../context/EditModeContext";
 import { ClicksNumberContext } from "../context/ClicksNumberContext";
+import { click } from "@testing-library/user-event/dist/click";
 
 function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
   const {
@@ -224,7 +225,7 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
             </div>
             <div className="d-flex flex-column w-100 justify-content-center align-items-center mb-2">
               Most Visited
-              {Array.isArray(clickedCategories) && clickedCategories.length > 0
+              {clickedCategories?.name && clickedCategories.length > 0
                 ? clickedCategories.map((element, index) => (
                     <Link
                       key={element.name}
