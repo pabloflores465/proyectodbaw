@@ -11,6 +11,7 @@ import { RiLogoutBoxFill } from "react-icons/ri";
 import { EditModeContext } from "../context/EditModeContext";
 import { ClicksNumberContext } from "../context/ClicksNumberContext";
 import { click } from "@testing-library/user-event/dist/click";
+import axios from "axios";
 
 function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
   const {
@@ -27,7 +28,7 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
 
   const [clickedCategories, setClickedCategories] = useState([]);
 
-  const { setEditMode } = useContext(EditModeContext);
+  const { editMode, setEditMode } = useContext(EditModeContext);
   const { setNotifications } = useContext(NotificationContext);
   const [categories, setCategories] = useState([]);
   const [filteredCat, setFilteredCat] = useState([]);
@@ -56,6 +57,26 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
       setClickedCategories(temp);
     }
   }, [categoriesClicks]);
+
+  const [data, setData] = useState([]);
+  const [formData, setFormData] = useState({});
+
+  const localIp = process.env.REACT_APP_LOCAL_IP;
+
+  const handleSave = async (id, element) => {
+    try {
+      await axios.put(
+        `http://${localIp}/proyectodbaw/phpsql/categories2.php?id=${id}`,
+        element
+      ).then(response => console.log("Success:", response.data))
+      console.log(element)
+      getCategories(setCategories, setRecentCat, setNotifications);
+      //window.location.reload()
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
 
   let guest = userProfile.rol === 0 ? true : false;
 
@@ -210,7 +231,7 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
             ) : null}
             <div className="d-flex flex-column w-100 justify-content-center align-items-center mb-2">
               Recents
-              {recentCat.length > 0
+              {Array.isArray(recentCat) && recentCat.length > 0
                 ? recentCat.map((element, index) => (
                     <Link
                       key={element.name}
@@ -225,8 +246,8 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
             </div>
             <div className="d-flex flex-column w-100 justify-content-center align-items-center mb-2">
               Most Visited
-              {clickedCategories?.name && clickedCategories.length > 0
-                ? clickedCategories.map((element, index) => (
+              {clickedCategories?.name && clickedCategories.length > 0 
+                ?  clickedCategories.map((element, index) => (
                     <Link
                       key={element.name}
                       to={`/categories/${element.name}`}
@@ -258,7 +279,7 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
               />
             </Form>
             <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-              {filteredCat.length === 0
+              {filteredCat.length === 0 
                 ? categories.map((element, index) => (
                     <div className="d-flex flex-column justify-content-center mb-2">
                       <Link
@@ -273,6 +294,12 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
                       >
                         <strong className="ms-1 me-1">{element.name}</strong>
                       </Link>
+                      {editMode ? <Form.Check label="Is Featured" defaultChecked={parseInt(element.isfeatured)} onChange={(e)=>{
+                        let temp = [...categories]
+                        temp[index].isfeatured = e.target.checked ? "1":"0"
+                        console.log(element)
+                        handleSave(element.id_category, temp[index])
+                      }}></Form.Check>:null}
                       {mobile
                         ? categories
                             .filter(

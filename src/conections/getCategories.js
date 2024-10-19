@@ -30,6 +30,7 @@ export default async function getCategories(
         ]);
       }
       setCategories(response.data);
+  
       if(setRecentCat){
         setRecentCat(response.data)
       }

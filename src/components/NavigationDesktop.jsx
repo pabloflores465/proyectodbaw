@@ -28,7 +28,6 @@ import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import AllCategories from "../pages/AllCategories";
 import { ClicksNumberContext } from "../context/ClicksNumberContext";
 
-
 export default function NavigationDesktop() {
   const {
     userProfile,
@@ -51,6 +50,8 @@ export default function NavigationDesktop() {
   useEffect(() => {
     getCategories(setCategories);
   }, []);
+
+  console.log(categories);
 
   function handleLogOut() {
     setEditMode(false);
@@ -99,7 +100,7 @@ export default function NavigationDesktop() {
   }, []);
 
   useEffect(() => {}, [categoriesClicks]);
-  
+
   return (
     <>
       <div id="navbar">
@@ -289,60 +290,62 @@ export default function NavigationDesktop() {
                   />
                 </Button>
                 {categories.map((element, index) => (
-                  <div
-                    key={index}
-                    className={`d-flex flex-column ms-auto ${
-                      index === categories.length - 1 ? "me-auto" : ""
-                    }`}
-                  >
-                    <div className="d-flex flex-row align-items-center m-0 p-0">
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          variant="link"
-                          className="text-black"
-                        />
-                        <Dropdown.Menu>
-                          <div className="container">
-                            {categories
-                              .filter(
-                                (category) => category.name !== element.name
-                              )
-                              .map((filteredCategory, index2) => (
-                                <div
-                                  key={index2}
-                                  className={`d-flex justify-content-center align-items-center ${
-                                    index2 === categories.length - 1
-                                      ? ""
-                                      : "border-bottom"
-                                  } mb-2`}
-                                >
-                                  <Link
-                                    key={filteredCategory.name}
-                                    to={`/categories/${element.name}/${filteredCategory.name}`}
-                                    className="text-black"
-                                    style={{ textDecoration: "none" }}
+                  parseInt(element.isfeatured) ? (
+                    <div
+                      key={index}
+                      className={`d-flex flex-column ms-auto ${
+                        index === categories.length - 1 ? "me-auto" : ""
+                      }`}
+                    >
+                      <div className="d-flex flex-row align-items-center m-0 p-0">
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="link"
+                            className="text-black"
+                          />
+                          <Dropdown.Menu>
+                            <div className="container">
+                              {categories
+                                .filter(
+                                  (category) => category.name !== element.name
+                                )
+                                .map((filteredCategory, index2) => (
+                                  <div
+                                    key={index2}
+                                    className={`d-flex justify-content-center align-items-center ${
+                                      index2 === categories.length - 1
+                                        ? ""
+                                        : "border-bottom"
+                                    } mb-2`}
                                   >
-                                    {filteredCategory.name}
-                                  </Link>
-                                  <Link
-                                    to={`/categories/${element.name}/${filteredCategory.name}`}
-                                  ></Link>
-                                </div>
-                              ))}
-                          </div>
-                        </Dropdown.Menu>
-                      </Dropdown>
+                                    <Link
+                                      key={filteredCategory.name}
+                                      to={`/categories/${element.name}/${filteredCategory.name}`}
+                                      className="text-black"
+                                      style={{ textDecoration: "none" }}
+                                    >
+                                      {filteredCategory.name}
+                                    </Link>
+                                    <Link
+                                      to={`/categories/${element.name}/${filteredCategory.name}`}
+                                    ></Link>
+                                  </div>
+                                ))}
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
 
-                      <Link
-                        key={element.name}
-                        to={`/categories/${element.name}`}
-                        className="text-black"
-                        style={{ textDecoration: "none" }}
-                      >
-                        <strong className="ms-1 me-1">{element.name}</strong>
-                      </Link>
+                        <Link
+                          key={element.name}
+                          to={`/categories/${element.name}`}
+                          className="text-black"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <strong className="ms-1 me-1">{element.name}</strong>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  ) : null
                 ))}
               </div>
             </Navbar>
@@ -353,7 +356,8 @@ export default function NavigationDesktop() {
         showOffCanvas={showOffCanvas}
         setShowOffCanvas={setShowOffCanvas}
       />
-      <Qr/>
+      <Qr />
     </>
   );
 }
+
