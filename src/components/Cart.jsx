@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Button, Dropdown, Image } from "react-bootstrap";
+import { Button, Dropdown, Image} from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { UserProfileContext } from "../context/UserProfileContext";
@@ -8,6 +8,7 @@ import LoadingState from "../components/LoadingState";
 import { LiaWalletSolid } from "react-icons/lia";
 import getCartItems from "../conections/getCartItems";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -105,7 +106,12 @@ export default function Cart() {
             ) : (
               <p>No items in cart</p>
             )}
-            <Button variant="secondary text-white rounded-pill w-100">
+          
+            <Button
+              as={Link}
+              to={`/orderlist/${userProfile.userId}`}
+              variant="secondary text-white rounded-pill w-100"
+            >
               <LiaWalletSolid />
               Proceed to Checkout
             </Button>

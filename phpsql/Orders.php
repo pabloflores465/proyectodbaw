@@ -31,7 +31,7 @@ function getOrder($connection){
 
     if ($id_user) {
         $sql = "
-            SELECT p.id_products, p.image, p.product_name, p.description, od.amount, od.total_product_price 
+            SELECT p.stock, p.id_products, p.image, p.product_name, p.description, od.amount, od.total_product_price 
             FROM order_detail od
             INNER JOIN products p ON od.id_product = p.id_products
             INNER JOIN order_dp o ON od.id_order = o.id_order
