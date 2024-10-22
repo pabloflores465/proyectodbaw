@@ -50,8 +50,21 @@ function Profile({ show, setShow }) {
         ]);
         return;
       } else {
+        if(oldPassword===userProfile.password){
         // Si las contraseñas coinciden, actualizamos el campo de contraseña
         tempProfile.password = newPass;
+        }else{
+          setNotifications((prevNotifications) => [
+            ...prevNotifications,
+            {
+              showNotification: true,
+              type: "error",
+              headerMessage: "Error",
+              bodyMessage: "Password is not correct",
+            },
+          ]);
+          return;
+        }
       }
     }
 
