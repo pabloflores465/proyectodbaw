@@ -192,6 +192,7 @@ function Signup({ show, setShow }) {
           <Button
             variant="secondary text-white rounded-pill w-100"
             type="submit"
+            onClick={()=>{console.log(user)}}
           >
             Submit
           </Button>

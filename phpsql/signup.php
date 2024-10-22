@@ -20,6 +20,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+$method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === "PUT"){
+
+function generateToken($length = 32) {
+return bin2hex(random_bytes($length));
+}
+$token = generateToken();
+
 $data = json_decode(file_get_contents("php://input"));
 
 $firstname = $data->firstname;
@@ -62,11 +71,11 @@ $mail->send();
     echo "No se pudo enviar el correo";
 }
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28')";
+$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection, token) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28', '$token')";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($connection);
 }
-
+}
 ?>
