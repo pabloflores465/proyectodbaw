@@ -71,7 +71,7 @@ $mail->send();
     echo "No se pudo enviar el correo";
 }
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection, token) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 1, $cardnumber, '$expdate', '2024-09-28', '$token')";
+$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, address, phone_number, rol, active, card_number, expire_date, last_connection, token) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate', '$address', $phonenumber, 1, 0, $cardnumber, '$expdate', '2024-09-28', '$token')";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {

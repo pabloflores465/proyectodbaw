@@ -23,6 +23,10 @@ $email = $data->email;
 $password = $data->password;
 $birthdate = $data->birthdate;
 $rol = $data->rol;
+function generateToken($length = 32) {
+    return bin2hex(random_bytes($length));
+    }
+$token = generateToken();
 
 try{
     $mail->isSMTP();
@@ -56,7 +60,7 @@ try{
     }
 
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, rol, active, last_connection) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate',$rol, 1, '2024-09-28')";
+$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, rol, active, last_connection, token) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate',$rol, 0, '2024-09-28', '$token')";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {

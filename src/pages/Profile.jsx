@@ -13,56 +13,59 @@ function Profile({ show, setShow }) {
   const [validated, setValidated] = useState(false);
   const [oldPassword, setOldPassword] = useState();
 
+
   const handleClose = () => {
     setShow(false);
     setActiveBilling(false);
     console.log(userProfile);
+    setTempProfile({ ...userProfile });
   };
 
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
   const { setNotifications } = useContext(NotificationContext);
 
+  const [tempProfile, setTempProfile] = useState({ ...userProfile });
+
   const handleInput = (value, name) => {
-    setUserProfile((prevUserProfile) => ({
-      ...prevUserProfile,
+    setTempProfile((prevTempProfile) => ({
+      ...prevTempProfile,
       [name]: value,
     }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
-    if (activePassword && newPass !== confirmPass) {
-      setNotifications((prevNotifications) => [
-        ...prevNotifications,
-        {
-          showNotification: true,
-          type: "error",
-          headerMessage: "Error",
-          bodyMessage: "Passwords do not match!",
-        },
-      ]);
-      return;
+
+    // Si el usuario quiere cambiar la contraseña, validamos que coincidan
+    if (activePassword) {
+      if (newPass !== confirmPass) {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "Passwords do not match!",
+          },
+        ]);
+        return;
+      } else {
+        // Si las contraseñas coinciden, actualizamos el campo de contraseña
+        tempProfile.password = newPass;
+      }
     }
-    if (oldPassword==userProfile.password){
-    // Clonar userProfile y actualizar la contraseña si es necesario
-    const updatedUserProfile = { ...userProfile };
-  
-    if (activePassword && newPass) {
-      updatedUserProfile.password = newPass;
-    }
-  
-    // Llamar a updateProfile con el perfil de usuario actualizado
+
+    // Actualizar el perfil sin importar si se cambió la contraseña o no
     updateProfile(
-      updatedUserProfile, 
+      tempProfile, 
       setUserProfile, 
       event, 
       setNotifications, 
       setShow, 
       setValidated
     );
-  }
   };
+
 
   return (
     <Modal centered className="text-white shadow" show={show} onHide={handleClose}>

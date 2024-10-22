@@ -48,6 +48,12 @@ export default function NavigationDesktop() {
     useContext(ClicksNumberContext);
 
   useEffect(() => {
+    if (userProfile) {
+      localStorage.setItem("userProfile", JSON.stringify(userProfile));
+    }
+  }, [userProfile]);
+
+  useEffect(() => {
     getCategories(setCategories);
   }, []);
 
@@ -201,7 +207,7 @@ export default function NavigationDesktop() {
                 className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
                 style={{ whiteSpace: "nowrap" }}
               >
-                <IoLogIn className="me-1" /> Log In
+                <IoLogIn className="me-1" /> Log In {console.log(userProfile)}
               </Button>
             </>
           ) : (
@@ -289,7 +295,7 @@ export default function NavigationDesktop() {
                     onClick={() => setShowOffCanvas(true)}
                   />
                 </Button>
-                {categories.map((element, index) => (
+                {categories.map((element, index) =>
                   parseInt(element.isfeatured) ? (
                     <div
                       key={index}
@@ -346,7 +352,7 @@ export default function NavigationDesktop() {
                       </div>
                     </div>
                   ) : null
-                ))}
+                )}
               </div>
             </Navbar>
           </div>
@@ -360,4 +366,3 @@ export default function NavigationDesktop() {
     </>
   );
 }
-
