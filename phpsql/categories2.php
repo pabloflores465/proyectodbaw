@@ -27,9 +27,10 @@ switch ($method) {
 $connection->close();
 function createCategory($connection){
     $data = json_decode(file_get_contents("php://input"));
-    
+
     $name = $data->name;
-    
+
+
     $sql="INSERT INTO category (name) VALUES ('$name')";
     if (mysqli_query($connection, $sql)) {
         echo json_encode(["message" => "succesful", "status"=>"success"]);
@@ -60,9 +61,8 @@ function updateCategory ($connection){
     $id = $_GET['id'];
     $data = json_decode(file_get_contents("php://input"));
     $name = $data->name;
-    $isfeatured = $data->isfeatured;
 
-    $sql = "UPDATE category SET name = '$name', isfeatured= '$isfeatured' WHERE id_category = $id";
+    $sql = "UPDATE category SET name = '$name' WHERE id_category = $id";
     if (mysqli_query($connection, $sql)) {
         echo json_encode(["message" => "succesful", "status"=>"success"]);
     } else {
