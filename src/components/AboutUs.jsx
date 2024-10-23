@@ -13,14 +13,17 @@ let MobileUI;
 
 export default function AboutUS() {
   const [footer, setFooter] = useState({});
+  const [edited, setEdited] = useState(false);
   const { setNotifications } = useContext(NotificationContext);
   const { editMode } = useContext(EditModeContext);
   useEffect(() => {
+    setEdited(false);
     getFooter(setFooter, setNotifications);
   }, []);
   useEffect(() => {
-    if (Object.keys(footer).length > 0 && editMode===false) {
+    if (edited && Object.keys(footer).length > 0 && editMode === false) {
       putFooter(footer, setNotifications);
+      setEdited(false);
     }
   }, [editMode]);
   const handleInput = (value, name) => {
@@ -28,6 +31,7 @@ export default function AboutUS() {
       ...prevFooter,
       [name]: value,
     }));
+    setEdited(true);
   };
 
   const { windowWidth } = useContext(WindowWidthContext);
@@ -40,7 +44,11 @@ export default function AboutUS() {
           handleInput={handleInput}
         />
       ) : (
-        <MobileUI footer={footer} />
+        <MobileUI
+          footer={footer}
+          editMode={editMode}
+          handleInput={handleInput}
+        />
       )}
     </>
   );
@@ -58,6 +66,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="title1"
+                defaultValue={footer.title1}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -69,6 +78,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="title2"
+                defaultValue={footer.title2}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -80,6 +90,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="title3"
+                defaultValue={footer.title3}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -91,6 +102,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="title4"
+                defaultValue={footer.title4}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -105,6 +117,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line11"
+                defaultValue={footer.line11}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -116,6 +129,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line21"
+                defaultValue={footer.line21}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -127,6 +141,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="title31"
+                defaultValue={footer.line31}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -138,6 +153,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="title41"
+                defaultValue={footer.line41}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -152,6 +168,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line12"
+                defaultValue={footer.line12}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -163,6 +180,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line22"
+                defaultValue={footer.line22}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -174,6 +192,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line32"
+                defaultValue={footer.line32}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -185,6 +204,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line42"
+                defaultValue={footer.line42}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -201,6 +221,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line13"
+                defaultValue={footer.line13}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -212,6 +233,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line23"
+                defaultValue={footer.line23}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -223,6 +245,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line33"
+                defaultValue={footer.line33}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -234,6 +257,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
               <Form.Control
                 type="text"
                 name="line43"
+                defaultValue={footer.line43}
                 onChange={(e) => handleInput(e.target.value, e.target.name)}
               />
             )}
@@ -257,97 +281,192 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
   );
 };
 
-MobileUI = ({ footer }) => {
-  const { editMode } = useContext(EditModeContext);
+MobileUI = ({ footer, editMode, handleInput }) => {
   return (
     <div class="d-flex flex-column justify-content-center text-align-center align-items-center mt-auto py-2 px-4 bg-primary text-white">
       {!editMode ? (
         <div style={{ fontSize: "25px" }}>
-          <strong>About D&P Petshop</strong>
+          <strong>{footer.title1}</strong>
         </div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="title1"
+          defaultValue={footer.title1}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>¿Who are We?</div>
+        <div>{footer.line11}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line11"
+          defaultValue={footer.line11}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Mission</div>
+        <div>{footer.line12}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line12"
+          defaultValue={footer.line12}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Vision</div>
+        <div>{footer.line13}</div>
       ) : (
-        <Form.Control type="text" className="mb-2 " />
+        <Form.Control
+          type="text"
+          className="mb-2 "
+          name="line13"
+          defaultValue={footer.line13}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
         <div style={{ fontSize: "25px" }}>
-          <strong>Social Media</strong>
+          <strong>{footer.title2}</strong>
         </div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="title2"
+          defaultValue={footer.title2}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Facebook</div>
+        <div>{footer.line21}</div>
       ) : (
-        <Form.Control type="text" className="mb-2 " />
+        <Form.Control
+          type="text"
+          className="mb-2 "
+          name="line21"
+          defaultValue={footer.line21}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Instagram</div>
+        <div>{footer.line22}</div>
       ) : (
-        <Form.Control type="text" className="mb-2 " />
+        <Form.Control
+          type="text"
+          className="mb-2 "
+          name="line22"
+          defaultValue={footer.line22}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Tik Tok</div>
+        <div>{footer.line23}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line23"
+          defaultValue={footer.line23}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
         <div style={{ fontSize: "25px" }}>
-          <strong>Contact Us</strong>
+          <strong>{footer.title3}</strong>
         </div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="title3"
+          defaultValue={footer.title3}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Whatsapp</div>
+        <div>{footer.line31}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line31"
+          defaultValue={footer.line31}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>+502 1234-4321</div>
+        <div>{footer.line32}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line32"
+          defaultValue={footer.line32}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>examdivle@gmail.com</div>
+        <div>{footer.line33}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line33"
+          defaultValue={footer.line33}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
         <div style={{ fontSize: "25px" }}>
-          <strong>More Info</strong>
+          <strong>{footer.title4}</strong>
         </div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="title4"
+          defaultValue={footer.title4}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Privacy Policy</div>
+        <div>{footer.line41}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line41"
+          defaultValue={footer.line41}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>Devs: Pablo Flores & Nohel Estrada</div>
+        <div>{footer.line42}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="line42"
+          defaultValue={footer.line42}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
       {!editMode ? (
-        <div>License: GPLV3</div>
+        <div>{footer.line43}</div>
       ) : (
-        <Form.Control type="text" className="mb-2" />
+        <Form.Control
+          type="text"
+          className="mb-2"
+          name="footer43"
+          defaultValue={footer.line43}
+          onChange={(e) => handleInput(e.target.value, e.target.name)}
+        />
       )}
     </div>
   );
