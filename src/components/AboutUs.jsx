@@ -463,7 +463,7 @@ MobileUI = ({ footer, editMode, handleInput }) => {
         <Form.Control
           type="text"
           className="mb-2"
-          name="footer43"
+          name="line43"
           defaultValue={footer.line43}
           onChange={(e) => handleInput(e.target.value, e.target.name)}
         />
