@@ -39,7 +39,7 @@ function getProduct($connection) {
     $sql2 = "SELECT id_products, id_category 
              FROM product_category";
 
-    $sql3 = "SELECT p.id_products, p.product_name, p.description, p.price, p.stock, p.image FROM products p JOIN product_category pc ON p.id_products = pc.id_products JOIN category c ON pc.id_category = c.id_category WHERE c.name IN ('$category', '$category2') GROUP BY p.id_products HAVING COUNT(DISTINCT c.id_category) = ";
+    $sql3 = "SELECT p.id_products, p.product_name, p.description, p.price, p.stock, p.image, p.important FROM products p JOIN product_category pc ON p.id_products = pc.id_products JOIN category c ON pc.id_category = c.id_category WHERE c.name IN ('$category', '$category2') GROUP BY p.id_products HAVING COUNT(DISTINCT c.id_category) = ";
 
 
     $sql4 = "SELECT p.id_products, c.id_category 

@@ -88,7 +88,7 @@ export default function Product({ product, index, handleData }) {
         `http://${localIp}/proyectodbaw/phpsql/products.php?id=${id}`,
         formData
       );
-      handleData();
+      handleData(params.categoryId, params.subcategoryId);
     } catch (error) {
       console.error("Error: ", error);
     }
@@ -236,7 +236,7 @@ export default function Product({ product, index, handleData }) {
           <Card className="shadow w-100 h-100">
             <Form className="m-2">
               <Form.Group>
-                <Form.Label>Product Image</Form.Label>
+                <Form.Label>Product Image {console.log(params)}</Form.Label>
                 <Form.Control
                   type="file"
                   className="mb-2"
