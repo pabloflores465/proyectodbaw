@@ -1,88 +1,192 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { Button, Form} from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import { EditModeContext } from "../context/EditModeContext";
+import { NotificationContext } from "../context/NotificationContext";
 import { Link } from "react-router-dom";
+import getFooter from "../conections/getFooter";
+import putFooter from "../conections/putFooter";
 
 let DesktopUI;
 let MobileUI;
 
 export default function AboutUS() {
+  const [footer, setFooter] = useState({});
+  const { setNotifications } = useContext(NotificationContext);
+  const { editMode } = useContext(EditModeContext);
+  useEffect(() => {
+    getFooter(setFooter, setNotifications);
+  }, []);
+  useEffect(() => {
+    if (Object.keys(footer).length > 0 && editMode===false) {
+      putFooter(footer, setNotifications);
+    }
+  }, [editMode]);
+  const handleInput = (value, name) => {
+    setFooter((prevFooter) => ({
+      ...prevFooter,
+      [name]: value,
+    }));
+  };
+
   const { windowWidth } = useContext(WindowWidthContext);
-  return <>{windowWidth > 800 ? <DesktopUI /> : <MobileUI />}</>;
+  return (
+    <>
+      {windowWidth > 800 ? (
+        <DesktopUI
+          footer={footer}
+          editMode={editMode}
+          handleInput={handleInput}
+        />
+      ) : (
+        <MobileUI footer={footer} />
+      )}
+    </>
+  );
 }
 
-DesktopUI = () => {
-  const { editMode } = useContext(EditModeContext);
+DesktopUI = ({ footer, editMode, handleInput }) => {
   return (
     <>
       <div className="bg-primary w-100 text-white text-center rounded-0 shadow mt-auto">
         <div className="container-grid">
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <strong>About D&P Petshop</strong>
+              <strong>{footer.title1}</strong>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="title1"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <strong>Social Media</strong>
+              <strong>{footer.title2}</strong>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="title2"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <strong>Contact Us</strong>
+              <strong>{footer.title3}</strong>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="title3"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <strong>About</strong> : <Form.Control type="text" />}
+            {!editMode ? (
+              <strong>{footer.title4}</strong>
+            ) : (
+              <Form.Control
+                type="text"
+                name="title4"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
 
           <div className="d-flex justify-content-center">
             {!editMode ? (
               <Button as={Link} to="/about/who" className="text-white">
-                ¿Who are We?
+                {footer.line11}
               </Button>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="line11"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>Facebook</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <div>{footer.line21}</div>
+            ) : (
+              <Form.Control
+                type="text"
+                name="line21"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>Whatsapp</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <>{footer.line31}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="title31"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>Privacy Policy</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <>{footer.line41}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="title41"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
 
           <div className="d-flex justify-content-center">
             {!editMode ? (
               <Button as={Link} to="/about/mission" className="text-white">
-                Mission
+                {footer.line12}
               </Button>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="line12"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>Instagram</> : <Form.Control type="text" />}
-          </div>
-          <div className="d-flex justify-content-center">
-            {!editMode ? <>+502 1234-4321</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <>{footer.line22}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="line22"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <>Devs: Pablo Flores & Nohel Estrada</>
+              <>{footer.line32}</>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="line32"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
+          </div>
+          <div className="d-flex justify-content-center">
+            {!editMode ? (
+              <>{footer.line42}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="line42"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
 
@@ -90,21 +194,49 @@ DesktopUI = () => {
             {!editMode ? (
               <>
                 <Button as={Link} to="/about/vision" className="text-white">
-                  Vision
+                  {footer.line13}
                 </Button>
               </>
             ) : (
-              <Form.Control type="text" />
+              <Form.Control
+                type="text"
+                name="line13"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
             )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>Tik Tok</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <>{footer.line23}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="line23"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>example@gmail.com</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <>{footer.line33}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="line33"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
           <div className="d-flex justify-content-center">
-            {!editMode ? <>License: GPLV3</> : <Form.Control type="text" />}
+            {!editMode ? (
+              <>{footer.line43}</>
+            ) : (
+              <Form.Control
+                type="text"
+                name="line43"
+                onChange={(e) => handleInput(e.target.value, e.target.name)}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -125,7 +257,7 @@ DesktopUI = () => {
   );
 };
 
-MobileUI = () => {
+MobileUI = ({ footer }) => {
   const { editMode } = useContext(EditModeContext);
   return (
     <div class="d-flex flex-column justify-content-center text-align-center align-items-center mt-auto py-2 px-4 bg-primary text-white">
