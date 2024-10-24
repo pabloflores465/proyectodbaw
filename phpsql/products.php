@@ -175,6 +175,8 @@ function updateProduct($connection) {
         $imageBase64 = base64_decode($imageBase64);
         
         $sql .= ", image = '" . mysqli_real_escape_string($connection, $imageBase64) . "'";
+    }else{
+        $imageData = null;
     }
 
     $sql .= " WHERE id_products = $id";

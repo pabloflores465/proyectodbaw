@@ -8,6 +8,7 @@ import { EditModeContext } from "../context/EditModeContext";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { UserProfileContext } from "../context/UserProfileContext";
+import Resizer from "react-image-file-resizer";
 import { Link } from "react-router-dom";
 
 export default function Product({ product, index, handleData }) {
@@ -26,16 +27,23 @@ export default function Product({ product, index, handleData }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-  
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result; 
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        image: base64String,
-      }));
-    };
-    reader.readAsDataURL(file);  // Esto convierte la imagen en base64
+    if (file) {
+      Resizer.imageFileResizer(
+        file,
+        300, // max width
+        300, // max height
+        "JPEG", // format
+        80, // quality percentage
+        0, // rotation
+        (uri) => {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            image: uri,
+          }));
+        },
+        "base64"
+      );
+    }
   };
   
 
@@ -86,7 +94,11 @@ export default function Product({ product, index, handleData }) {
     try {
       await axios.put(
         `http://${localIp}/proyectodbaw/phpsql/products.php?id=${id}`,
-        formData
+        formData,{
+          headers: {
+            'Content-Type': 'application/json', 
+          },
+        }
       );
       handleData(params.categoryId, params.subcategoryId);
     } catch (error) {
