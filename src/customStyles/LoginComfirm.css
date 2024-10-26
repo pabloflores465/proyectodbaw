@@ -1,0 +1,11 @@
+.bg-image {
+    background-image: url('../../public/infoBg.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  @media (min-width: 1000px) {
+    .full-height {
+      height: 80vh;
+    }
+  }

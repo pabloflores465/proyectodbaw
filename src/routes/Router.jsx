@@ -11,6 +11,7 @@ import Information from '../pages/Information'
 import UsersList from '../pages/UsersList'
 import OrderList from '../components/OrderList'
 import AllCategories from '../pages/AllCategories'
+import LoginComfirm from '../pages/LoginComfirm'
 
 
 function Router() {
@@ -69,6 +70,10 @@ function Router() {
               element: <AllCategories/>
             }
           ],
+        },
+        {
+          path: "/loginComfirm/:token",
+          element:<LoginComfirm/>
         },
       ]);
 
