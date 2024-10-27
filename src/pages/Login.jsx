@@ -54,6 +54,7 @@ function Login({ show, setShow }) {
           temp.lastConection = response.data.lastconnection;
           temp.userId = parseInt(response.data.userid);
           temp.password = response.data.password;
+          temp.token = response.data.token;
           console.log("Logueado", response.data.rol);
           setValidated(true);
           setShow(false);

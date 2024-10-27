@@ -19,6 +19,7 @@ const UserProfileProvider = ({ children }) => {
     userId: null,
     lastConection: null,
     password:null,
+    token:null,
   };
    
   const [userProfile, setUserProfile] = useLocalStorage (
