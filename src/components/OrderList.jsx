@@ -4,7 +4,15 @@ import { UserProfileContext } from "../context/UserProfileContext";
 import { useContext, useState, useEffect } from "react";
 import getCartItems from "../conections/getCartItems";
 import { IoCloseSharp } from "react-icons/io5";
-import { Button, Image, Table, InputGroup, FormControl, Modal, Alert} from "react-bootstrap";
+import {
+  Button,
+  Image,
+  Table,
+  InputGroup,
+  FormControl,
+  Modal,
+  Alert,
+} from "react-bootstrap";
 import { NotificationContext } from "../context/NotificationContext";
 import LoadingState from "./LoadingState";
 import axios from "axios";
@@ -20,9 +28,9 @@ export default function OrderList() {
   const localIp = process.env.REACT_APP_LOCAL_IP;
   const [total, setTotal] = useState();
   const [shipping, setShipping] = useState();
-  const [minimum, setMinimum]=useState();
+  const [minimum, setMinimum] = useState();
   const [orderId, setOrderId] = useState();
-  const [paid, setPaid]=useState();
+  const [paid, setPaid] = useState();
   const [cardInput, setCardInput] = useState("");
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -34,9 +42,12 @@ export default function OrderList() {
     }
 
     try {
-      const result = await axios.post(`http://${localIp}/proyectodbaw/phpsql/Checkout.php`, {
-        id_order: parseInt(orderId),
-      });
+      const result = await axios.post(
+        `http://${localIp}/proyectodbaw/phpsql/Checkout.php`,
+        {
+          id_order: parseInt(orderId),
+        }
+      );
       console.log("Pago procesado:", result.data);
       setShowModal(false); // Cierra el modal tras el pago exitoso
     } catch (error) {
@@ -46,25 +57,24 @@ export default function OrderList() {
 
   const handlePaid = async (id) => {
     setLoadingProducts(true);
-  axios
-    .get(`http://${localIp}/proyectodbaw/phpsql/PaidOrders.php?id=${id}`)
-    .then((response) => {
-      setLoadingProducts(false);
-      setPaid(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      setNotifications((prevNotifications) => [
-        ...prevNotifications.slice(0, -1),
-        {
-          showNotification: true,
-          type: "error",
-          headerMessage: "Error",
-          bodyMessage: "There Was An Error Getting the Users",
-        },
-      ]);
-    });
-
+    axios
+      .get(`http://${localIp}/proyectodbaw/phpsql/PaidOrders.php?id=${id}`)
+      .then((response) => {
+        setLoadingProducts(false);
+        setPaid(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "There Was An Error Getting the Users",
+          },
+        ]);
+      });
   };
 
   const handleDelete = async (id, idproduct) => {
@@ -94,12 +104,12 @@ export default function OrderList() {
       let url = `http://${localIp}/proyectodbaw/phpsql/total.php?id=${id}`;
       setLoadingProducts(true);
       const response = await axios.get(url);
-      console.log(response.data)
+      console.log(response.data);
       setTotal(parseInt(response.data.total));
       setMinimum(parseInt(response.data.minimum));
       setShipping(parseInt(response.data.shipping));
       setOrderId(parseInt(response.data.id_order));
-      console.log(total, minimum, shipping)
+      console.log(total, minimum, shipping);
     } catch (error) {
       console.error("Error: ", error);
     } finally {
@@ -144,136 +154,168 @@ export default function OrderList() {
       {userProfile.userId === parseInt(params.userId) ? (
         loadingProducts ? (
           <LoadingState />
-        ) : cartItems.length > 0 ? (
+        ) : (
           <div>
-            <h2>Your Cart ({cartItems.length} items)</h2>
-            <Table striped bordered hover responsive>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cartItems.map((item, index) => (
-                  <tr key={index}>
-                    <td className="d-flex align-items-center">
-                      <Image
-                        src={`data:image/jpeg;base64,${item.image}`}
-                        rounded
-                        height={80}
-                        width={80}
-                        className="me-2"
-                      />
-                      <div>
-                        <strong>{item.product_name}</strong>
-                        <p>{item.description}</p>
-                        <p>Stock: {item.stock}</p>
-                      </div>
-                    </td>
-                    <td>
-                      <FormControl
-                        name="amount"
-                        type="number"
-                        defaultValue={item.amount}
-                        className="text-center"
-                        onKeyDown={(e) => {
-                          if (
-                            e.key === "-" ||
-                            e.key === "e" ||
-                            e.key === "+" ||
-                            e.key === "."
-                          ) {
-                            e.preventDefault();
-                          }
+            <div>
+              {cartItems.length > 0 ? (
+                <>
+                  <h2>Your Cart ({cartItems.length} items)</h2>
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item, index) => (
+                        <tr key={index}>
+                          <td className="d-flex align-items-center">
+                            <Image
+                              src={`data:image/jpeg;base64,${item.image}`}
+                              rounded
+                              height={80}
+                              width={80}
+                              className="me-2"
+                            />
+                            <div>
+                              <strong>{item.product_name}</strong>
+                              <p>{item.description}</p>
+                              <p>Stock: {item.stock}</p>
+                            </div>
+                          </td>
+                          <td>
+                            <FormControl
+                              name="amount"
+                              type="number"
+                              defaultValue={item.amount}
+                              className="text-center"
+                              onKeyDown={(e) => {
+                                if (
+                                  e.key === "-" ||
+                                  e.key === "e" ||
+                                  e.key === "+" ||
+                                  e.key === "."
+                                ) {
+                                  e.preventDefault();
+                                }
 
-                          if (e.key === "Enter") {
-                            let value = parseInt(e.target.value);
-                            if (value > 0) {
-                              if (value > item.stock) {
-                                value = item.stock;
+                                if (e.key === "Enter") {
+                                  let value = parseInt(e.target.value);
+                                  if (value > 0) {
+                                    if (value > item.stock) {
+                                      value = item.stock;
+                                    }
+                                    e.target.value = value;
+                                  } else {
+                                    e.target.value = "";
+                                  }
+                                  // Update quantity
+                                  handleUpdateAmount(
+                                    userProfile.userId,
+                                    item.id_products,
+                                    value
+                                  );
+                                }
+                              }}
+                              onChange={(e) => {
+                                let value = parseInt(e.target.value);
+                                if (value > item.stock) {
+                                  e.target.value = item.stock;
+                                } else if (value <= 0) {
+                                  e.target.value = "";
+                                }
+                              }}
+                            />
+                          </td>
+                          <td>${item.total_product_price}</td>
+                          <td>
+                            <Button
+                              variant="link"
+                              onClick={() =>
+                                handleDelete(
+                                  userProfile.userId,
+                                  parseInt(item.id_products)
+                                )
                               }
-                              e.target.value = value;
-                            } else {
-                              e.target.value = "";
-                            }
-                            // Update quantity
-                            handleUpdateAmount(userProfile.userId, item.id_products, value);
-                          }
-                        }}
-                        onChange={(e) => {
-                          let value = parseInt(e.target.value);
-                          if (value > item.stock) {
-                            e.target.value = item.stock;
-                          } else if (value <= 0) {
-                            e.target.value = "";
-                          }
-                        }}
+                            >
+                              <IoCloseSharp size={"1.5rem"} />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                  <div className="me-auto">
+                    <h4>
+                      Card number: {userProfile.cardNumber}
+                      <br />
+                      Expire-Date: {userProfile.expireDate}
+                      <br />
+                      Address: {userProfile.address}
+                    </h4>
+                    <Button
+                      as={Link}
+                      variant="secondary text-white rounded-pill w-25"
+                    >
+                      <LiaWalletSolid />
+                      Edit your profile!
+                    </Button>
+                  </div>
+                  <div className="text-end">
+                    <h4>
+                      Subtotal: {total}
+                      <br />
+                      Shipping: {total > minimum ? 0 : shipping}
+                    </h4>
+                    <h3>
+                      TOTAL: Q{total > minimum ? total : total + shipping}
+                    </h3>
+                    <Button
+                      variant="secondary text-white rounded-pill w-25"
+                      onClick={() => setShowModal(true)}
+                    >
+                      <LiaWalletSolid />
+                      Pay Now
+                    </Button>
+                  </div>
+
+                  {/* Modal for card input */}
+                  <Modal show={showModal} onHide={() => setShowModal(false)}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Enter Card Information</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      {error && <Alert variant="danger">{error}</Alert>}
+                      <FormControl
+                        placeholder="Enter your card number"
+                        value={cardInput}
+                        onChange={(e) => setCardInput(e.target.value)}
                       />
-                    </td>
-                    <td>${item.total_product_price}</td>
-                    <td>
+                    </Modal.Body>
+                    <Modal.Footer>
                       <Button
-                        variant="link"
-                        onClick={() => handleDelete(userProfile.userId, parseInt(item.id_products))}
+                        variant="secondary"
+                        onClick={() => setShowModal(false)}
                       >
-                        <IoCloseSharp size={"1.5rem"} />
+                        Close
                       </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-            <div className="me-auto">
-              <h4>
-                Card number: {userProfile.cardNumber}
-                <br />
-                Expire-Date: {userProfile.expireDate}
-                <br />
-                Address: {userProfile.address}
-              </h4>
-              <Button as={Link} variant="secondary text-white rounded-pill w-25">
-                <LiaWalletSolid />
-                Edit your profile!
-              </Button>
-            </div>
-            <div className="text-end">
-              <h4>Subtotal: {total}<br />Shipping: {total > minimum ? 0 : shipping}</h4>
-              <h3>TOTAL: Q{total > minimum ? total : (total + shipping)}</h3>
-              <Button variant="secondary text-white rounded-pill w-25" onClick={() => setShowModal(true)}>
-                <LiaWalletSolid />
-                Pay Now
-              </Button>
+                      <Button variant="primary" onClick={handlePayment}>
+                        Confirm Payment
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </>
+              ) : (
+                <p>No items in cart</p>
+              )}
             </div>
 
-            {/* Modal for card input */}
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-              <Modal.Header closeButton>
-                <Modal.Title>Enter Card Information</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                {error && <Alert variant="danger">{error}</Alert>}
-                <FormControl
-                  placeholder="Enter your card number"
-                  value={cardInput}
-                  onChange={(e) => setCardInput(e.target.value)}
-                />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShowModal(false)}>
-                  Close
-                </Button>
-                <Button variant="primary" onClick={handlePayment}>
-                  Confirm Payment
-                </Button>
-              </Modal.Footer>
-            </Modal>
-
-            {/* Paid Orders Table */}
+            {/* Paid Orders Table (siempre visible) */}
             <div className="mt-5">
-              <h3>Paid Orders{console.log(paid)}</h3>
+              <h3>Paid Orders {console.log(paid)}</h3>
               {Array.isArray(paid) && paid.length > 0 ? (
                 <Table striped bordered hover responsive>
                   <thead>
@@ -288,7 +330,17 @@ export default function OrderList() {
                       <tr key={index}>
                         <td>{order.id_order}</td>
                         <td>{order.date}</td>
-                        <td>{order.state==2 ? <a>Confirmed</a> : (order.state == 3 ? <a>Shipped</a> : (order.state == 4 ? <a>Completed</a> : <a>Canceled</a>))}</td>
+                        <td>
+                          {order.state == 2 ? (
+                            <a>Confirmed</a>
+                          ) : order.state == 3 ? (
+                            <a>Shipped</a>
+                          ) : order.state == 4 ? (
+                            <a>Completed</a>
+                          ) : (
+                            <a>Canceled</a>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -298,8 +350,6 @@ export default function OrderList() {
               )}
             </div>
           </div>
-        ) : (
-          <p>No items in cart</p>
         )
       ) : (
         <h1>User no admitido</h1>
