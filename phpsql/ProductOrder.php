@@ -41,8 +41,6 @@ function deletePOrder($connection){
             $row = $result->fetch_assoc();
             $id_order = $row['id_order'];
             
-            $sql_state = "INSERT INTO orders_states (id_order, state, date) VALUES ($id_order, 1, NOW())";
-            $result_state = $connection->query($sql_state);
             // Recalcular el total
             $sql_update_total = "UPDATE order_dp 
                                  SET total = order_total($id_order)

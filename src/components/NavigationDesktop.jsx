@@ -27,6 +27,7 @@ import getCategories from "../conections/getCategories";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import AllCategories from "../pages/AllCategories";
 import { ClicksNumberContext } from "../context/ClicksNumberContext";
+import { FaBoxOpen } from "react-icons/fa";
 
 export default function NavigationDesktop() {
   const {
@@ -219,6 +220,7 @@ export default function NavigationDesktop() {
                 <Dropdown.Menu style={{ minWidth: "auto" }}>
                   <div className="container">
                     {userProfile.rol === 3 ? (
+                      <>
                       <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
                         <Button
                           as={Link}
@@ -229,6 +231,17 @@ export default function NavigationDesktop() {
                           <CgUserList /> Users List
                         </Button>
                       </Dropdown.Item>
+                      <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
+                      <Button
+                        as={Link}
+                        to="/orders"
+                        variant="link"
+                        className="m-0 p-0 text-success"
+                      >
+                        <FaBoxOpen /> Orders
+                      </Button>
+                    </Dropdown.Item>
+                    </>
                     ) : null}
                     {admin || employee ? (
                       <Dropdown.Item className="d-flex align-items-center mb-2 text-success border-bottom">

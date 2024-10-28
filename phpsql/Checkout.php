@@ -19,15 +19,15 @@ if ($method == 'POST') {
     try {
         // Actualizar el estado de la orden
         $sql_update_state = "UPDATE order_dp 
-                             SET state = 2 
+                             SET state = 2
                              WHERE id_order = $id_order";
         if ($connection->query($sql_update_state) !== TRUE) {
             throw new Exception("Error al actualizar el estado en order_dp: " . $connection->error);
         }
 
         // Insertar nuevo estado en orders_states
-        $sql_insert_state = "INSERT INTO orders_states (id_order, state, date) 
-                             VALUES ($id_order, 2, NOW())";
+        $sql_insert_state = "INSERT INTO orders_states (id_order, state, date, comment) 
+                             VALUES ($id_order, 2, NOW(), 'Your order has been received and is being processed')";
         if ($connection->query($sql_insert_state) !== TRUE) {
             throw new Exception("Error al insertar en orders_states");
         }

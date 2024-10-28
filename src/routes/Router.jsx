@@ -12,6 +12,7 @@ import UsersList from '../pages/UsersList'
 import OrderList from '../components/OrderList'
 import AllCategories from '../pages/AllCategories'
 import LoginComfirm from '../pages/LoginComfirm'
+import Orders from '../pages/Orders'
 
 
 function Router() {
@@ -60,6 +61,10 @@ function Router() {
             {
               path: "/userList",
               element: <UsersList/>,
+            },
+            {
+              path: "/orders",
+              element: <Orders/>,
             },
             {
               path: "/orderlist/:userId",
