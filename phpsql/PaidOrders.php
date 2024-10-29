@@ -30,7 +30,7 @@ function getOrder($connection){
     $id_user = isset($_GET['id']) ? ($_GET['id']) : '';
 
     if ($id_user) {
-        $sql = "SELECT os.id_order, os.date, os.state 
+        $sql = "SELECT os.id_order, os.date, os.state, os.comment
                 FROM orders_states os
                 JOIN order_dp od ON od.id_order = os.id_order
                 WHERE od.id_user = $id_user AND od.state > 1

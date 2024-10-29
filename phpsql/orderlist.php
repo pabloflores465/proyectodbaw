@@ -29,7 +29,7 @@ switch ($method) {
 $connection->close();
 
 function getOrders($connection) {
-    $sql = "SELECT id_order, state FROM orders_states";
+    $sql = "SELECT id_order, state FROM order_dp";
     $result = $connection->query($sql);
     $orders = [];
 

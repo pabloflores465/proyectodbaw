@@ -323,6 +323,7 @@ export default function OrderList() {
                       <th>Order ID</th>
                       <th>Date</th>
                       <th>State</th>
+                      <th>Comment</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -334,13 +335,16 @@ export default function OrderList() {
                           {order.state == 2 ? (
                             <a>Confirmed</a>
                           ) : order.state == 3 ? (
-                            <a>Shipped</a>
+                            <a>Preparing</a>
                           ) : order.state == 4 ? (
+                            <a>In route</a>
+                          ): order.state == 5 ? (
                             <a>Completed</a>
                           ) : (
                             <a>Canceled</a>
                           )}
                         </td>
+                        <td>{order.comment}</td>
                       </tr>
                     ))}
                   </tbody>
