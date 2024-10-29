@@ -27,6 +27,7 @@ export default function Product({ product, index, handleData }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log(file)
     if (file) {
       Resizer.imageFileResizer(
         file,
@@ -36,14 +37,22 @@ export default function Product({ product, index, handleData }) {
         80, // quality percentage
         0, // rotation
         (uri) => {
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            image: uri,
-          }));
+          setFormData((prevFormData) => {
+            const updatedFormData = {
+              ...prevFormData,
+              image: uri,
+          }
+          console.log("Updated formData:", updatedFormData.image);
+
+          return updatedFormData;
+        });
+          
+          
         },
         "base64"
       );
     }
+    console.log(formData.image);
   };
   
 
@@ -89,8 +98,9 @@ export default function Product({ product, index, handleData }) {
     }
   };
   const handleSave = async (id, e) => {
+    console.log(id);
     e.preventDefault();
-    console.log(formData);
+    console.log("formData to send:", formData);
     try {
       await axios.put(
         `http://${localIp}/proyectodbaw/phpsql/products.php?id=${id}`,
@@ -253,7 +263,8 @@ export default function Product({ product, index, handleData }) {
                   type="file"
                   className="mb-2"
                   accept="image/*" // Aceptar solo imágenes
-                  onChange={handleImageChange} // Llamar a handleImageChange cuando se seleccione una imagen
+                  onChange={(e)=>{handleImageChange(e);
+                  }} // Llamar a handleImageChange cuando se seleccione una imagen
                 />
               </Form.Group>
               <Form.Group>

@@ -163,8 +163,9 @@ function updateProduct($connection) {
     $price = $data->price;
     $stock = $data->stock;
     $id_categories = $data->category;
-    $featuredItem = isset($data->featuredItem) ? $data->featuredItem : 0;
-    $imageBase64 = $data->image; // Recibir imagen en base64
+    $featuredItem = isset($data->featuredItem) ? ($data->featuredItem ? 1 : 0) : 0;
+    $imageBase64 = isset($data->image) ? $data->image : NULL; // Recibir imagen en base64
+    
 
     // Construir la consulta SQL
     $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock, important = $featuredItem";
@@ -175,8 +176,6 @@ function updateProduct($connection) {
         $imageBase64 = base64_decode($imageBase64);
         
         $sql .= ", image = '" . mysqli_real_escape_string($connection, $imageBase64) . "'";
-    }else{
-        $imageData = null;
     }
 
     $sql .= " WHERE id_products = $id";
