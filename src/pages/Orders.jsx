@@ -87,6 +87,8 @@ function Orders() {
             <tbody>
               {orders.map((order, orderIndex) => (
                 <tr key={order.id_order}>
+                {order.state > 1 ? (
+                  <>
                   <td>{order.id_order}</td>
                   <td>
                     {parseInt(order.state) === 2
@@ -99,8 +101,13 @@ function Orders() {
                       ? "Delivered"
                       : ""}
                   </td>
+                  </>
+                ) : <></>
+                  }
                   {editMode && (
                     <>
+                    {order.state > 1 ? (
+                      <>
                     <td>
                     <Form.Control
                       type="text"
@@ -119,6 +126,9 @@ function Orders() {
                         Next State
                       </Button>
                     </td>
+                    </>
+                ) : <></>
+                  }
                     </>
                   )}
                 </tr>
