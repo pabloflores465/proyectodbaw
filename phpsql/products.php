@@ -33,13 +33,13 @@ function getProduct($connection) {
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $category2 = isset($_GET['subCategory']) ? $_GET['subCategory'] : '';
     // Consultar los productos
-    $sql = "SELECT id_products, product_name, description, price, stock, important, image FROM products";
+    $sql = "SELECT id_products, product_name, description, price, stock, important, image, enabled FROM products";
     
     // Consultar los IDs de las categorías asociadas al producto desde la tabla de relación
     $sql2 = "SELECT id_products, id_category 
              FROM product_category";
 
-    $sql3 = "SELECT p.id_products, p.product_name, p.description, p.price, p.stock, p.image, p.important FROM products p JOIN product_category pc ON p.id_products = pc.id_products JOIN category c ON pc.id_category = c.id_category WHERE c.name IN ('$category', '$category2') GROUP BY p.id_products HAVING COUNT(DISTINCT c.id_category) = ";
+    $sql3 = "SELECT p.id_products, p.product_name, p.description, p.price, p.stock, p.image, p.important, p.enabled FROM products p JOIN product_category pc ON p.id_products = pc.id_products JOIN category c ON pc.id_category = c.id_category WHERE c.name IN ('$category', '$category2') GROUP BY p.id_products HAVING COUNT(DISTINCT c.id_category) = ";
 
 
     $sql4 = "SELECT p.id_products, c.id_category 
@@ -165,10 +165,11 @@ function updateProduct($connection) {
     $id_categories = $data->category;
     $featuredItem = isset($data->featuredItem) ? ($data->featuredItem ? 1 : 0) : 0;
     $imageBase64 = isset($data->image) ? $data->image : NULL; // Recibir imagen en base64
+    $enableItem = isset($data->enableItem) ? ($data->enableItem ? 1 : 0) : 0;
     
 
     // Construir la consulta SQL
-    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock, important = $featuredItem";
+    $sql = "UPDATE products SET product_name = '$productname', description = '$description', price = $price, stock = $stock, important = $featuredItem, enabled = $enableItem";
 
     // Si hay una imagen nueva, actualizarla
     if (!empty($imageBase64)) {
@@ -197,22 +198,22 @@ function updateProduct($connection) {
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }
 }
-function createProduct($connection){
+function createProduct($connection) {
     $data = json_decode(file_get_contents("php://input"));
 
     $product_name = $data->name;
     $description = $data->desc;
     $price = $data->price;
     $stock = $data->stock;
-    $id_categories = $data->category; 
+    $id_categories = $data->category;
+    $featuredItem = isset($data->featuredItem) ? ($data->featuredItem ? 1 : 0) : 0;
+    $enableItem = isset($data->enableItem) ? ($data->enableItem ? 1 : 0) : 0;
     
-    $sql = "INSERT INTO products (product_name, description, price, stock, image, important) 
-            VALUES ('$product_name', '$description', $price, $stock, NULL, 0)";
+    $sql = "INSERT INTO products (product_name, description, price, stock, image, important, enabled) 
+            VALUES ('$product_name', '$description', $price, $stock, NULL, $featuredItem, $enableItem)";
     
     if (mysqli_query($connection, $sql)) {
-
         $id_products = mysqli_insert_id($connection);
-
 
         foreach ($id_categories as $category_id) {
             $sql_category = "INSERT INTO product_category (id_products, id_category) 
@@ -222,10 +223,11 @@ function createProduct($connection){
             }
         }
 
-        echo json_encode(["message" => "Producto registrado exitosamente", "status"=>"success"]);
+        echo json_encode(["message" => "Producto registrado exitosamente", "status" => "success"]);
     } else {
         echo "Error: " . $sql . "<br>" . mysqli_error($connection);
     }
 }
+
 
 ?>

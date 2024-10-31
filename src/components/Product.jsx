@@ -22,6 +22,7 @@ export default function Product({ product, index, handleData }) {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const [featuredItem, setFeaturedItem] = useState(false);
+  const [enableItem, setEnableItem] = useState(false);
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
@@ -136,8 +137,10 @@ export default function Product({ product, index, handleData }) {
       stock: product.stock,
       category: selectedCategories,
       featuredItem: parseInt(product.important) === 1, // Usar parseInt para convertir a entero
+      enableItem: parseInt(product.enabled) === 1,
     });
     setFeaturedItem(parseInt(product.important) === 1);
+    setEnableItem(parseInt(product.enabled) === 1);
     console.log(product.categories);
     if (product && product.categories) {
       setSelectedCategories(product.categories);
@@ -149,6 +152,14 @@ export default function Product({ product, index, handleData }) {
     setFormData((prevFormData) => ({
       ...prevFormData,
       featuredItem: e.target.checked ? 1 : 0,
+    }));
+  };
+
+  const handleCheckboxChangeEnable = (e) => {
+    setEnableItem(e.target.checked);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      enableItem: e.target.checked ? 1 : 0,
     }));
   };
 
@@ -310,6 +321,11 @@ export default function Product({ product, index, handleData }) {
                 label="Featured Item"
                 checked={featuredItem}
                 onChange={handleCheckboxChangeFeatured}
+              />
+              <Form.Check
+                label="Enable Item"
+                checked={enableItem}
+                onChange={handleCheckboxChangeEnable}
               />
               <div
                 className={
