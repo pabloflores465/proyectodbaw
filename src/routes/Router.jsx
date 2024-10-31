@@ -13,6 +13,7 @@ import OrderList from '../components/OrderList'
 import AllCategories from '../pages/AllCategories'
 import LoginComfirm from '../pages/LoginComfirm'
 import Orders from '../pages/Orders'
+import Forgotten from '../pages/Forgotten'
 
 
 function Router() {
@@ -79,6 +80,10 @@ function Router() {
         {
           path: "/loginComfirm/:token",
           element:<LoginComfirm/>
+        },
+        {
+          path: "/passreset/:resettoken",
+          element:<Forgotten/>
         },
       ]);
 

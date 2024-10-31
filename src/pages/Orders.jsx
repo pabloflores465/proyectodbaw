@@ -10,6 +10,7 @@ import editOrders from "../conections/editOrders"; // Asegúrate de tener la fun
 import { NotificationContext } from "../context/NotificationContext";
 import LoadingState from "../components/LoadingState";
 import { EditModeContext } from "../context/EditModeContext";
+import { UserProfileContext } from "../context/UserProfileContext";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -17,6 +18,7 @@ function Orders() {
   const { setNotifications } = useContext(NotificationContext);
   const { editMode } = useContext(EditModeContext);
   const [comments, setComments] = useState({}); // Estado para almacenar comentarios
+  const { userProfile } = useContext(UserProfileContext);
 
   // Manejar cambios en los comentarios
   const handleCommentChange = (event, orderIndex) => {
@@ -74,6 +76,7 @@ function Orders() {
       {loading ? (
         <LoadingState />
       ) : (
+        
         <>
           <div style={{ height: "30px" }}></div>
           <Table striped bordered hover responsive>

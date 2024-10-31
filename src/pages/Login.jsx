@@ -2,19 +2,69 @@ import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { NotificationContext } from "../context/NotificationContext";
 import { UserProfileContext } from "../context/UserProfileContext";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 function Login({ show, setShow }) {
   const handleClose = () => setShow(false);
+  const handleCloseForgotten = () => setShowForgotten(false);
 
   const [validated, setValidated] = useState(false);
   const [password, setPassword] = useState("");
   const { userProfile, setUserProfile } = useContext(UserProfileContext);
   const { notifications, setNotifications } = useContext(NotificationContext);
+  const [showForgotten, setShowForgotten] = useState(false);
+  const [forgotemail, setForgotemail] = useState();
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
   let temp = userProfile;
+
+  const handleSubmitForgot = async (event) => {
+    event.preventDefault();
+    console.log(forgotemail);
+
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      {
+        showNotification: true,
+        type: "loading",
+      },
+    ]);
+
+    try {
+      const response = await axios.post(
+        `http://${localIp}/proyectodbaw/phpsql/forgot.php`,
+        {
+          email: forgotemail,
+        }
+      );
+      if(response.data.status === "success"){
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "success",
+            headerMessage: "Success",
+            bodyMessage: "Reset Password email has been sended",
+          },
+        ]);
+      }else{
+        setNotifications((prevNotifications) => [
+          ...prevNotifications.slice(0, -1),
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "Email has no account",
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -59,9 +109,9 @@ function Login({ show, setShow }) {
           setValidated(true);
           setShow(false);
           setUserProfile(temp);
-      
+
           setNotifications((prevNotifications) => [
-            ...prevNotifications.slice(0,-1),
+            ...prevNotifications.slice(0, -1),
             {
               showNotification: true,
               type: "success",
@@ -106,6 +156,43 @@ function Login({ show, setShow }) {
       <Modal
         centered
         className="text-white shadow"
+        show={showForgotten}
+        onHide={handleCloseForgotten}
+      >
+        <Modal.Header
+          className="bg-primary rounded-top pt-1 pb-2 pe-3 ps-3"
+          closeButton
+        >
+          <Modal.Title>Forgot Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form
+            onSubmit={handleSubmitForgot} // Manejador de envío en el Form, no en el botón
+            className="ps-1 pe-1 overflow-auto"
+          >
+            <Form.Group className="mb-3" controlId="validateUserName">
+              <Form.Label className="text-success">E-mail</Form.Label>
+              <Form.Control
+                required
+                placeholder="example@gmail.com"
+                type="text"
+                onChange={(e) => {
+                  setForgotemail(e.target.value); // Establece el estado de forgotemail
+                }}
+              />
+            </Form.Group>
+            <Button
+              variant="secondary text-white rounded-pill w-100"
+              type="submit" // Tipo submit aquí, sin onSubmit adicional
+            >
+              Submit
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        centered
+        className="text-white shadow"
         show={show}
         onHide={handleClose}
       >
@@ -144,7 +231,15 @@ function Login({ show, setShow }) {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <Form.Text>Forgot Password?</Form.Text>
+              <Form.Text>
+                <Link
+                  onClick={() => {
+                    setShowForgotten(true);
+                  }}
+                >
+                  Forgot Password?
+                </Link>
+              </Form.Text>
             </Form.Group>
             <Button
               variant="secondary text-white rounded-pill w-100"
