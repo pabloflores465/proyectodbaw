@@ -45,6 +45,8 @@ export default function NavigationDesktop() {
   const [categories, setCategories] = useState([]);
   const [showOffCanvas, setShowOffCanvas] = useState(false);
 
+  const [searching, setSearching] = useState(false)
+
   const { categoriesClicks, setCategoriesClicks } =
     useContext(ClicksNumberContext);
 
@@ -168,10 +170,10 @@ export default function NavigationDesktop() {
             )}
           </Button>
           <div className="d-flex justify-content-center align-items-center w-100 m-auto">
-            <Search />
+            <Search/>
           </div>
 
-          {!editMode || guest ? (
+          {!editMode && !guest ? (
             <div className="d-flex flex-row justify-content-center align-items-center text-white">
               <Cart />
             </div>

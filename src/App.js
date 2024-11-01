@@ -7,6 +7,7 @@ import WindowWidthContextProvider from "./context/WindowWidthContext.jsx";
 import EditModeContextProvider from "./context/EditModeContext.jsx";
 import NotificationContextProvider from "./context/NotificationContext.jsx";
 import ClicksNumberProvider from "./context/ClicksNumberContext.jsx";
+import SearchProductsProvider, { SearchProductsContext } from "./context/SearchProductsContext.jsx";
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
           <EditModeContextProvider>
             <NotificationContextProvider>
               <ClicksNumberProvider>
-                <Router />
+                <SearchProductsProvider>
+                  <Router />
+                </SearchProductsProvider>
               </ClicksNumberProvider>
             </NotificationContextProvider>
           </EditModeContextProvider>

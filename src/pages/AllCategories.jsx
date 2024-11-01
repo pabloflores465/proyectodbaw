@@ -40,6 +40,10 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
   }, []);
 
   useEffect(() => {
+    if (localStorage.getItem("numberClicks") === null){
+      return;
+    }
+    if (!Array.isArray(categoriesClicks)) return;
     let length = 3;
     let temp;
 
@@ -63,13 +67,18 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
+  const hasNoNull = clickedCategories.every(element=> element !== null) ? true:false;
+
+
   const handleSave = async (id, element) => {
     try {
-      await axios.put(
-        `http://${localIp}/proyectodbaw/phpsql/categories2.php?id=${id}`,
-        element
-      ).then(response => console.log("Success:", response.data))
-      console.log(element)
+      await axios
+        .put(
+          `http://${localIp}/proyectodbaw/phpsql/categories2.php?id=${id}`,
+          element
+        )
+        .then((response) => console.log("Success:", response.data));
+      console.log(element);
       getCategories(setCategories, setRecentCat, setNotifications);
       //window.location.reload()
     } catch (error) {
@@ -77,22 +86,24 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
     }
   };
 
-
   let guest = userProfile.rol === 0 ? true : false;
 
   const handleClicks = (element, index) => {
-    if (!element?.name) return;
+    if (!element || !element.name) {
+      return;
+    }
     let temp = [...categoriesClicks];
-    if (!Array.isArray(categoriesClicks)){
-      temp = []
-    } else if (temp[index] === undefined) {
+
+    if (!Array.isArray(clickedCategories)) {
+      temp = [];
+    } else if (element.name === undefined) {
       temp.push({
         name: element.name,
         clicks: 1,
       });
     } else {
       temp[index] = {
-        name: temp[index]?.name ? temp[index].name:element.name,
+        name: temp[index]?.name ? temp[index].name : element.name,
         clicks: temp[index]?.clicks ? temp[index].clicks + 1 : 1,
       };
     }
@@ -103,8 +114,8 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
     if (!element?.name) return;
     let temp = [...recentCat];
     if (temp[0] !== element) {
-      temp = temp.filter((item)=>item!==element)
-      temp.unshift(element)
+      temp = temp.filter((item) => item !== element);
+      temp.unshift(element);
     }
     setRecentCat(temp);
   };
@@ -246,8 +257,8 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
             </div>
             <div className="d-flex flex-column w-100 justify-content-center align-items-center mb-2">
               Most Visited
-              {clickedCategories?.name && clickedCategories.length > 0 
-                ?  clickedCategories.map((element, index) => (
+              {localStorage.getItem("numberClicks") !== null && hasNoNull && Array.isArray(clickedCategories) && clickedCategories.length > 0
+                ? clickedCategories.map((element, index) => (
                     <Link
                       key={element.name}
                       to={`/categories/${element.name}`}
@@ -279,7 +290,7 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
               />
             </Form>
             <div className="d-flex flex-column w-100 justify-content-center align-items-center">
-              {filteredCat.length === 0 
+              {filteredCat.length === 0
                 ? categories.map((element, index) => (
                     <div className="d-flex flex-column justify-content-center mb-2">
                       <Link
@@ -294,12 +305,20 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
                       >
                         <strong className="ms-1 me-1">{element.name}</strong>
                       </Link>
-                      {editMode ? <Form.Check label="Is Featured" defaultChecked={parseInt(element.isfeatured)} onChange={(e)=>{
-                        let temp = [...categories]
-                        temp[index].isfeatured = e.target.checked ? "1":"0"
-                        console.log(element)
-                        handleSave(element.id_category, temp[index])
-                      }}></Form.Check>:null}
+                      {editMode ? (
+                        <Form.Check
+                          label="Is Featured"
+                          defaultChecked={parseInt(element.isfeatured)}
+                          onChange={(e) => {
+                            let temp = [...categories];
+                            temp[index].isfeatured = e.target.checked
+                              ? "1"
+                              : "0";
+                            console.log(element);
+                            handleSave(element.id_category, temp[index]);
+                          }}
+                        ></Form.Check>
+                      ) : null}
                       {mobile
                         ? categories
                             .filter(

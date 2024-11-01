@@ -64,8 +64,6 @@ function UsersList() {
               <th>Phone Number</th>
               <th>Current Rol</th>
               <th>Active</th>
-              <th>Card Number</th>
-              <th>Expire Date</th>
               <th>Last Connection</th>
               {editMode ? <th>Action</th> : null}
             </tr>
@@ -174,22 +172,6 @@ function UsersList() {
                     </td>
                     <td>
                       <Form.Control
-                        type="text"
-                        name="card_number"
-                        defaultValue={user.card_number}
-                        onChange={(event) => handleInput(event, userIndex)}
-                      />
-                    </td>
-                    <td>
-                      <Form.Control
-                        type="date"
-                        name="expire_date"
-                        defaultValue={user.expire_date}
-                        onChange={(event) => handleInput(event, userIndex)}
-                      />
-                    </td>
-                    <td>
-                      <Form.Control
                         type="date"
                         name="last_connection"
                         defaultValue={user.last_connection}
@@ -245,8 +227,6 @@ function UsersList() {
                     ) : (
                       <td>Inactive</td>
                     )}
-                    <td>{user.card_number}</td>
-                    <td>{user.expire_date}</td>
                     <td>{user.last_connection}</td>
                   </>
                 )}

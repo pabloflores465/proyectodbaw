@@ -14,6 +14,7 @@ import AllCategories from '../pages/AllCategories'
 import LoginComfirm from '../pages/LoginComfirm'
 import Orders from '../pages/Orders'
 import Forgotten from '../pages/Forgotten'
+import SearchProducts from '../pages/SearchProducts'
 
 
 function Router() {
@@ -74,6 +75,10 @@ function Router() {
             {
               path: "/allcategories",
               element: <AllCategories/>
+            },
+            {
+              path:"/search/:searchTerm",
+              element: <SearchProducts/>
             }
           ],
         },
