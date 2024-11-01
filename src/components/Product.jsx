@@ -136,8 +136,9 @@ export default function Product({ product, index, handleData }) {
       price: product.price,
       stock: product.stock,
       category: selectedCategories,
-      featuredItem: parseInt(product.important) === 1, // Usar parseInt para convertir a entero
+      featuredItem: parseInt(product.important) === 1, 
       enableItem: parseInt(product.enabled) === 1,
+      date : product.date,
     });
     setFeaturedItem(parseInt(product.important) === 1);
     setEnableItem(parseInt(product.enabled) === 1);
@@ -308,12 +309,22 @@ export default function Product({ product, index, handleData }) {
                 />
               </Form.Group>
               <Form.Group>
-                <Form.Label>stock:</Form.Label>
+                <Form.Label>Stock:</Form.Label>
                 <Form.Control
                   name="stock"
                   type="number"
                   className="mb-2"
                   defaultValue={formData.stock}
+                  onChange={handleInput}
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Date:</Form.Label>
+                <Form.Control
+                  name="date"
+                  type="date"
+                  className="mb-2"
+                  defaultValue={formData.date}
                   onChange={handleInput}
                 />
               </Form.Group>
@@ -393,7 +404,7 @@ export default function Product({ product, index, handleData }) {
                   <FaSave /> Save Changes
                 </Button>
               </div>
-              <div className="d-flex justify-content-center">
+             {/* <div className="d-flex justify-content-center">
                 <Button
                   className={
                     windowWidth > 1000
@@ -405,7 +416,7 @@ export default function Product({ product, index, handleData }) {
                 >
                   <MdDelete className="me-1" /> Delete
                 </Button>
-              </div>
+              </div>*/}
             </Form>
           </Card>
         </>

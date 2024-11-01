@@ -12,6 +12,7 @@ function FeaturedProducts() {
   const {setNotifications} = useContext(NotificationContext)
 
   useEffect(() => {
+    {console.log(params)}
     getFeaturedProducts(params.categoryId, params.subcategoryId, setFeaturedProducts, setLoadingProducts, setNotifications)
   }, [params]);
 
@@ -24,6 +25,7 @@ function FeaturedProducts() {
           .filter((product) => product.product_name)
           .map((product, index) => (
             <Carousel.Item key={index}>
+              {console.log("Featured Products:", featuredProducts)}
               <img
                 src={`data:image/jpeg;base64,${product.image}`} // Imagen fija
                 className="d-block w-100"
@@ -35,7 +37,7 @@ function FeaturedProducts() {
                 <p>{product.description}</p>
               </Carousel.Caption>
             </Carousel.Item>
-          ))
+          )) 
       ):null}
     </Carousel>
   );

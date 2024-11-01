@@ -5,6 +5,7 @@ import LowStockProducts from '../components/LowStockProducts'
 import NewProducts from '../components/NewProducts'
 import Qr from '../components/Qr'
 import { useLocation, useParams } from 'react-router'
+import Products from './Products'
 
 function LandingPage() {
   const location = useLocation()
@@ -29,6 +30,7 @@ function LandingPage() {
         <FeaturedProducts/>
         <BestSellers/>
         <LowStockProducts/>
+        <Products/>
         <NewProducts/>
         <Qr show={showQr}/>
     </>

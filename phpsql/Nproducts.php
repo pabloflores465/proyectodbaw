@@ -4,14 +4,14 @@ include 'connection.php';
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, GET, DELETE, PUT");
+header("Access-Control-Allow-Methods: GET");
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
-        getProduct($connection);
+        getLowStockProducts($connection);
         break;
     default:
         echo json_encode(["error" => "Método no soportado"]);
@@ -20,14 +20,23 @@ switch ($method) {
 
 $connection->close();
 
-function getProduct($connection) {
+function getLowStockProducts($connection) {
+    $settingsQuery = "SELECT minimum_days FROM ordersettings LIMIT 1";
+    $settingsResult = $connection->query($settingsQuery);
+
+    $minimumDate = 0;
+    if ($settingsResult && $settingsResult->num_rows > 0) {
+        $settingsRow = $settingsResult->fetch_assoc();
+        $minimumDate = $settingsRow['minimum_days'];
+    }
+
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $category2 = isset($_GET['subCategory']) ? $_GET['subCategory'] : '';
 
     // Consulta principal para productos con stock menor o igual al mínimo
     $sql = "SELECT id_products, product_name, description, price, image, stock, important, enabled, date 
             FROM products 
-            WHERE important = 1 LIMIT 5";
+            WHERE date >= DATE_SUB(NOW(), INTERVAL $minimumDate DAY) LIMIT 5";
 
     // Consultar las categorías asociadas
     $sql2 = "SELECT id_products, id_category FROM product_category";
@@ -68,7 +77,7 @@ function getProduct($connection) {
                  FROM products p 
                  JOIN product_category pc ON p.id_products = pc.id_products 
                  JOIN category c ON pc.id_category = c.id_category 
-                 WHERE c.name = '$category' AND important = 1 
+                 WHERE c.name = '$category' AND date >= DATE_SUB(NOW(), INTERVAL $minimumDate DAY) 
                  GROUP BY p.id_products LIMIT 5";
 
         $result3 = $connection->query($sql3);
@@ -103,9 +112,9 @@ function getProduct($connection) {
                  FROM products p 
                  JOIN product_category pc ON p.id_products = pc.id_products 
                  JOIN category c ON pc.id_category = c.id_category 
-                 WHERE c.name IN ('$category', '$category2') AND important = 1 
+                 WHERE c.name IN ('$category', '$category2') AND date >= DATE_SUB(NOW(), INTERVAL $minimumDate DAY) 
                  GROUP BY p.id_products 
-                 HAVING COUNT(DISTINCT c.id_category) = 2 LIMIT 5 ";
+                 HAVING COUNT(DISTINCT c.id_category) = 2 LIMIT 5";
 
         $result3 = $connection->query($sql3);
         $fproducts = [];
@@ -133,7 +142,6 @@ function getProduct($connection) {
 
         echo json_encode(array_values($filteredProducts));
     }
-
 }
 
 ?>

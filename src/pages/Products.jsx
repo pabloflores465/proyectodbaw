@@ -7,6 +7,7 @@ import { EditModeContext } from "../context/EditModeContext";
 import LoadingState from "../components/LoadingState";
 import { useLocation, useParams } from "react-router";
 import Qr from "../components/Qr";
+import FeaturedProducts from "../components/FeaturedProducts";
 
 function Products() {
   const [data, setData] = useState([]);

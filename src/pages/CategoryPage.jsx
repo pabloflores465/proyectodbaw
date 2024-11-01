@@ -10,7 +10,7 @@ function CategoryPage() {
   return (
     <>
       {editMode === false ? (
-        <FeaturedProducts />
+        <FeaturedProducts/>
       ) : (
         <div style={{ marginTop: "60px" }} />
       )}
