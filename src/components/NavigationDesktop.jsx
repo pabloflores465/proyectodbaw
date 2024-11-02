@@ -122,21 +122,16 @@ export default function NavigationDesktop() {
           {employee || (admin && editMode) ? (
             <Form className="d-flex align-items-center text-white">
               <div className="d-flex align-items-center"></div>
-              <Button
-                onClick={handleButtonClick}
-                style={{ whiteSpace: "nowrap" }}
-                variant="link"
-                className="text-white my-2 me-2"
-              >
-                <FaFile size={"1.7rem"} />
-              </Button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
+
               <Form.Group className="d-flex align-items-center text-white">
+              <Form.Control
+                  required
+                  type="text"
+                  placeholder="D&P Petshop"
+                  defaultValue="https://i.pinimg.com/736x/79/2e/a4/792ea40494b7d47ab0a5692a67123ffc.jpg"
+                  className="my-2 me-2"
+                  style={{ width: "150px" }}
+                />
                 <Form.Control
                   required
                   type="text"

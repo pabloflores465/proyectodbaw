@@ -26,14 +26,16 @@ function Information() {
           style={{ width: windowWidth > 1000 ? "35rem" : "20rem" }}
           className="shadow mx-2 my-4 translate-up"
         >
-          <Card.Body>
-            <Card.Title>Mission</Card.Title>
-            <Card.Text>
+          <Card.Title className="bg-primary d-flex justify-content-center text-white rounded-top py-2 mb-0"><strong>Mission</strong></Card.Title>
+          <Card.Body className="bg-danger text-white rounded-bottom">
+            <Card.Text >
+              <strong>
               Our mission is to provide high-quality products and exceptional
               care for pets and their owners, ensuring that every animal lives a
               happy, healthy, and fulfilling life. We aim to be a trusted
               partner in pet care, offering a wide range of supplies and expert
               advice for all pets, from the tiniest fish to the largest dogs.
+              </strong>
             </Card.Text>
           </Card.Body>
         </Card>
@@ -44,14 +46,16 @@ function Information() {
           style={{ width: windowWidth > 1000 ? "35rem" : "20rem" }}
           className="shadow mx-2 mb-4 translate-up"
         >
-          <Card.Body>
-            <Card.Title>Vision</Card.Title>
+          <Card.Title className="bg-primary d-flex justify-content-center text-white rounded-top py-2 mb-0"><strong>Vision</strong></Card.Title>
+          <Card.Body className="bg-danger text-white rounded-bottom">
             <Card.Text>
+              <strong>
               To be the go-to pet shop for animal lovers, known for our
               commitment to innovation, sustainability, and the well-being of
               pets. We envision a future where every pet has access to the best
               possible care, products, and services, creating stronger bonds
               between pets and their families.
+              </strong>
             </Card.Text>
           </Card.Body>
         </Card>
@@ -62,15 +66,17 @@ function Information() {
           style={{ width: windowWidth > 1000 ? "35rem" : "20rem" }}
           className="shadow mx-2 mb-4 translate-up"
         >
-          <Card.Body>
-            <Card.Title>¿Who are We?</Card.Title>
+          <Card.Title className="bg-primary d-flex justify-content-center text-white rounded-top py-2 mb-0"><strong>¿Who are We?</strong></Card.Title>
+          <Card.Body className="bg-danger text-white rounded-bottom">
             <Card.Text>
+              <strong>
               We are a passionate team of pet lovers dedicated to enhancing the
               lives of animals and their owners. At DP Petshop, we believe that
               pets are more than just animals—they're family. With years of
               experience in the industry, we offer personalized service, expert
               advice, and a carefully curated selection of products to meet the
               unique needs of every pet.
+              </strong>
             </Card.Text>
           </Card.Body>
         </Card>

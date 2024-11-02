@@ -7,7 +7,7 @@ import "../customStyles/LoginComfirm.css"
 import { useContext, useState, useEffect } from "react";
 import { UserProfileContext } from "../context/UserProfileContext";
 import LoadingState from '../components/LoadingState'
-import ErrorPage from './ErrorPage'
+import Error from './Error'
 import { NotificationContext } from "../context/NotificationContext";
 import axios from 'axios'
 
@@ -155,7 +155,7 @@ function Forgotten() {
     </div>
     <AboutUS/>
     </>
-   ) : (<ErrorPage/>)}
+   ) : (<Error/>)}
     
     </>
   )

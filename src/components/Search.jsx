@@ -76,17 +76,6 @@ export default function Search() {
                     }}
                   />
                 </div>
-                <div className="d-flex align-items-center border-bottom mb-2">
-                  <Form.Check
-                    className="me-2"
-                    label="Price"
-                    onChange={(e) => {
-                      let temp = [...checkedFields];
-                      temp[2] = e.target.checked;
-                      setCheckedFields(temp);
-                    }}
-                  />
-                </div>
                 <div className={`d-flex align-items-center ${employee || admin ? 'border-bottom mb-2':''}`}>
                   <Form.Check
                     className="me-2"
@@ -105,7 +94,7 @@ export default function Search() {
                       label="Disabled"
                       onChange={(e) => {
                         let temp = [...checkedFields];
-                        temp[4] = e.target.checked;
+                        temp[4] = !e.target.checked;
                         setCheckedFields(temp);
                         }}
                     />):null

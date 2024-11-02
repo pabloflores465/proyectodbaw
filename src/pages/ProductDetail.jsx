@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Image, Card, Form } from "react-bootstrap"; // Agregar Card
+import { Button, Image, Card, Form, Container } from "react-bootstrap"; // Agregar Card
 import { FaShoppingCart } from "react-icons/fa";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import { useParams } from "react-router";
@@ -121,12 +121,11 @@ function ProductDetail() {
     handleGetComments(params.id); // Obtener comentarios cuando cargue el producto
   }, [params.id]);
 
-  return windowWidth > 1000 ? (
+  return (
     <>
-      <div className="d-flex flex-row" style={{ marginTop: "70px" }}>
-        <div className="container">
-          <div className="d-flex flex-column">
-            <div className="d-flex align-items-center border-bottom mb-2">
+      <div className={`d-flex justify-content-center mb-4`} style={{marginTop:"100px"}}>
+          <div>
+            <div className={`d'flex ${windowWidth < 1000 ? "flex-row":"flex-column"} justify-content-center align-items-center border-bottom mb-2`}>
               <Image
                 src={`data:image/jpeg;base64,${data.image}`}
                 rounded
@@ -155,7 +154,7 @@ function ProductDetail() {
               </div>
               {data.stock > 0 ? (
                 <div>
-                  <Card>
+                  <Card className="p-2 shadow">
                     <Form.Group>
                       <Form.Label>Quantity:</Form.Label>
                       <Form.Control
@@ -218,7 +217,6 @@ function ProductDetail() {
               )}
             </div>
 
-            {/* Formulario para agregar comentarios o respuestas */}
             {userProfile.rol !== 0 ? (
             <div style={{ marginTop: "20px" }}>
               <Form>
@@ -233,33 +231,28 @@ function ProductDetail() {
                   />
                 </Form.Group>
                 <Button 
-                  variant="primary" 
+                  variant="danger rounded-pill text-white" 
                   className="mt-2" 
                   onClick={handleSubmitComment}
                 >
-                  {replyTo ? "Responder" : "Comentar"}
+                  <strong>{replyTo ? "Responder" : "Comentar"}</strong>
                 </Button>
                 {replyTo && (
                   <Button 
-                    variant="secondary" 
+                    variant="secondary rounded-pill text-white" 
                     className="mt-2 ms-2" 
                     onClick={() => setReplyTo(null)}
                   >
-                    Cancelar respuesta
+                    <strong>Cancelar respuesta</strong>
                   </Button>
                 )}
               </Form>
             </div>
              ) : null }
           </div>
-        </div>
       </div>
     </>
-  ) : (
-    <>
-      {/* Componente para pantallas pequeñas */}
-    </>
-  );
+  )
 }
 
 export default ProductDetail;
