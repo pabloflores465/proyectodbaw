@@ -67,14 +67,12 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
   }, []);
 
   useEffect(() => {
+    let length = 3;
+    let temp;
     if (localStorage.getItem("numberClicks") === null) {
       return;
     }
-    if (!Array.isArray(categoriesClicks)) return;
-    let length = 3;
-    let temp;
-
-    if (categoriesClicks.length >= length) {
+    else if (!Array.isArray(categoriesClicks)) {return} else if (categoriesClicks.length >= length) {
       temp = categoriesClicks.slice(0, length);
       temp = temp.sort((a, b) => b.clicks - a.clicks);
       setClickedCategories(temp);

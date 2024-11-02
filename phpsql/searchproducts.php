@@ -28,8 +28,8 @@ $whereClauses = [];
 if (is_array($filters)) {
     $nameFilter = $filters[0];
     $descriptionFilter = $filters[1];
-    $categoryFilter = $filters[3];
-    $enabled = $filters[4] === true ? 1 : 0;
+    $categoryFilter = $filters[2];
+    $enabled = $filters[3] === true ? 1 : 0;
     $noFilter = ($nameFilter === false && $descriptionFilter === false && $categoryFilter === false);
 
     // Add enabled/disabled filter

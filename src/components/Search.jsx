@@ -29,7 +29,7 @@ export default function Search() {
   ));
 
   const {setSearchProducts} = useContext(SearchProductsContext)
-  const [checkedFields, setCheckedFields] = useLocalStorage("checkedFields", [false, false, false, false, false]);
+  const [checkedFields, setCheckedFields] = useLocalStorage("checkedF", [false, false, false, false]);
 
   let handleSearch = () => {
     if (searchTerm !== "") {
@@ -59,6 +59,7 @@ export default function Search() {
                   <Form.Check
                     className="me-2"
                     label="Name"
+                    defaultChecked={checkedFields[0]}
                     onChange={(e) => {
                       let temp = [...checkedFields];
                       temp[0] = e.target.checked;
@@ -70,6 +71,7 @@ export default function Search() {
                   <Form.Check
                     className="me-2"
                     label="Description"
+                    defaultChecked={checkedFields[1]}
                     onChange={(e) => {
                       let temp = [...checkedFields];
                       temp[1] = e.target.checked;
@@ -81,9 +83,10 @@ export default function Search() {
                   <Form.Check
                     className="me-2"
                     label="Categories"
+                    defaultChecked={checkedFields[2]}
                     onChange={(e) => {
                       let temp = [...checkedFields];
-                      temp[3] = e.target.checked;
+                      temp[2] = e.target.checked;
                       setCheckedFields(temp);
                     }}
                   />
@@ -93,9 +96,10 @@ export default function Search() {
                     <Form.Check
                       className="me-2"
                       label="Disabled"
+                      defaultChecked={checkedFields[3]}
                       onChange={(e) => {
                         let temp = [...checkedFields];
-                        temp[4] = !e.target.checked;
+                        temp[3] = e.target.checked;
                         setCheckedFields(temp);
                         }}
                     />):null

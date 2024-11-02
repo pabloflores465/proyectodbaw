@@ -112,6 +112,19 @@ export default function NavigationDesktop() {
   let employee = userProfile.rol === 2;
   let admin = userProfile.rol === 3;
 
+
+  useEffect(() => {
+    const nav = document.getElementById("navbar");
+
+    if (nav) {
+      const rect = nav.getBoundingClientRect();
+
+      if (rect.left === 0 && rect.top === 0) {
+        nav.style.height = "100px";
+      }
+    }
+  }, []);
+
   return (
     <>
       <div id="navbar">

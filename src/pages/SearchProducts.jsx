@@ -15,6 +15,7 @@ function SearchProducts() {
   const navigate = useNavigate()
   const location = useLocation()
   return (
+    <div style={{marginTop:'100px'}}>
     <Row className="mx-4 mt-2">
       {filteredProducts.map((element, index) => (
         <Col xs={12} sm={6} md={4} lg={3} key={index} className="mt-2 mb-2">
@@ -22,6 +23,7 @@ function SearchProducts() {
         </Col>
       ))}
     </Row>
+    </div>
   );
 }
 

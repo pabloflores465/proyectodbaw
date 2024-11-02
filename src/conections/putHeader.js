@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export default async function putHeader(header, setNotifications = null) {
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   if (setNotifications) {
     setNotifications((prevNotifications) => [
       ...prevNotifications,
@@ -12,7 +13,7 @@ export default async function putHeader(header, setNotifications = null) {
   }
   console.log(footer)
   axios
-    .put("http://localhost/proyectodbaw/phpsql/header.php", header)
+    .put(`http://${localIp}/proyectodbaw/phpsql/header.php`, header)
     .then(() => {
       if (setNotifications) {
         setNotifications((prevNotifications) => [

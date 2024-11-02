@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export default async function putFooter(footer, setNotifications = null) {
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   if (setNotifications) {
     setNotifications((prevNotifications) => [
       ...prevNotifications,
@@ -12,7 +13,7 @@ export default async function putFooter(footer, setNotifications = null) {
   }
   console.log(footer)
   axios
-    .put("http://localhost/proyectodbaw/phpsql/footer.php", footer)
+    .put(`http://${localIp}/proyectodbaw/phpsql/footer.php`, footer)
     .then(() => {
       if (setNotifications) {
         setNotifications((prevNotifications) => [

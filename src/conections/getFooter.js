@@ -1,8 +1,9 @@
 import axios from "axios";
 
 export default async function getFooter(setFooter,footer, setNotifications = null) {
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   axios
-    .get("http://localhost/proyectodbaw/phpsql/footer.php")
+    .get(`http://${localIp}/proyectodbaw/phpsql/footer.php`)
     .then((response) => {
         console.log(response.data)
       setFooter(response.data)
