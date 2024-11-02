@@ -17,9 +17,10 @@ $searchTerm = $data->searchTerm;
 $products = [];
 
 // Base query
-$query = "SELECT p.id_products, p.product_name, p.description, p.price, p.description, c.name FROM products p 
-              LEFT JOIN product_category pc ON p.id_products = pc.id_products
-              LEFT JOIN category c ON pc.id_category = c.id_category";
+$query = "SELECT p.id_products, p.product_name, p.description, p.price, p.image, p.important, p.date, p.enabled, c.name 
+          FROM products p 
+          LEFT JOIN product_category pc ON p.id_products = pc.id_products
+          LEFT JOIN category c ON pc.id_category = c.id_category";
 
 // Array to store WHERE clauses
 $whereClauses = [];
@@ -27,7 +28,6 @@ $whereClauses = [];
 if (is_array($filters)) {
     $nameFilter = $filters[0];
     $descriptionFilter = $filters[1];
-    //$priceFilter = $filters[2];
     $categoryFilter = $filters[3];
     $enabled = $filters[4] === true ? 1 : 0;
     $noFilter = ($nameFilter === false && $descriptionFilter === false && $categoryFilter === false);
@@ -36,15 +36,13 @@ if (is_array($filters)) {
     $whereClauses[] = "p.enabled = ?";
 
     // Add search term filters if applicable
+    $orClauses = [];
     if ($nameFilter || $noFilter) {
         $orClauses[] = "p.product_name LIKE ?";
     }
     if ($descriptionFilter || $noFilter) {
         $orClauses[] = "p.description LIKE ?";
     }
-    /*if ($priceFilter || $noFilter) {
-        $whereClauses[] = "p.price LIKE ?";
-    }*/
     if ($categoryFilter || $noFilter) {
         $orClauses[] = "c.name LIKE ?";
     }
@@ -62,21 +60,19 @@ if (is_array($filters)) {
         $paramTypes = "i"; // 'i' for the enabled field (integer)
         $params = [$enabled];
 
+        // Add wildcard search terms
+        $wildcardSearchTerm = "%" . $searchTerm . "%"; // Add % on both sides
         if ($nameFilter || $noFilter) {
             $paramTypes .= "s"; // 's' for string
-            $params[] = "%" . $searchTerm . "%";
+            $params[] = $wildcardSearchTerm;
         }
         if ($descriptionFilter || $noFilter) {
             $paramTypes .= "s";
-            $params[] = "%" . $searchTerm . "%";
+            $params[] = $wildcardSearchTerm;
         }
-        /*if ($priceFilter || $noFilter) {
-            $paramTypes .= "s";
-            $params[] = "%" . $searchTerm . "%";
-        }*/
         if ($categoryFilter || $noFilter) {
             $paramTypes .= "s";
-            $params[] = "%" . $searchTerm . "%";
+            $params[] = $wildcardSearchTerm;
         }
 
         // Bind the parameters
@@ -88,6 +84,7 @@ if (is_array($filters)) {
 
         // Fetch all results
         while ($row = $result->fetch_assoc()) {
+            $row['image'] = base64_encode($row['image'] ?? '');
             $products[] = $row;
         }
 

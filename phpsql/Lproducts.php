@@ -36,7 +36,7 @@ function getLowStockProducts($connection) {
     // Consulta principal para productos con stock menor o igual al mínimo
     $sql = "SELECT id_products, product_name, description, price, image, stock, important, enabled, date 
             FROM products 
-            WHERE stock <= $minimumStock";
+            WHERE stock <= $minimumStock AND enabled =1";
 
     // Consultar las categorías asociadas
     $sql2 = "SELECT id_products, id_category FROM product_category";
@@ -77,7 +77,7 @@ function getLowStockProducts($connection) {
                  FROM products p 
                  JOIN product_category pc ON p.id_products = pc.id_products 
                  JOIN category c ON pc.id_category = c.id_category 
-                 WHERE c.name = '$category' AND stock <= $minimumStock 
+                 WHERE c.name = '$category' AND stock <= $minimumStock AND enabled =1
                  GROUP BY p.id_products";
 
         $result3 = $connection->query($sql3);
@@ -112,7 +112,7 @@ function getLowStockProducts($connection) {
                  FROM products p 
                  JOIN product_category pc ON p.id_products = pc.id_products 
                  JOIN category c ON pc.id_category = c.id_category 
-                 WHERE c.name IN ('$category', '$category2') AND stock <= $minimumStock 
+                 WHERE c.name IN ('$category', '$category2') AND stock <= $minimumStock AND enabled =1
                  GROUP BY p.id_products 
                  HAVING COUNT(DISTINCT c.id_category) = 2";
 

@@ -35,7 +35,7 @@ function getBestProducts($connection) {
 
     // Consulta principal para productos con stock menor o igual al mínimo
     $sql = "SELECT id_products, product_name, description, price, image, stock, important, enabled, date 
-            FROM products 
+            FROM products WHERE enabled =1
             ORDER BY sales DESC LIMIT 5";
 
     // Consultar las categorías asociadas

@@ -28,7 +28,7 @@ export default function Search() {
   ));
 
   const {setSearchProducts} = useContext(SearchProductsContext)
-  const [checkedFields, setCheckedFields] = useState([false, false, false, false, true]);
+  const [checkedFields, setCheckedFields] = useState([false, false, false, false, false]);
 
   let handleSearch = () => {
     if (searchTerm !== "") {
@@ -105,7 +105,7 @@ export default function Search() {
                       label="Disabled"
                       onChange={(e) => {
                         let temp = [...checkedFields];
-                        temp[3] = e.target.checked;
+                        temp[4] = e.target.checked;
                         setCheckedFields(temp);
                         }}
                     />):null

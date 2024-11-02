@@ -31,7 +31,7 @@ function createCategory($connection){
     $name = $data->name;
 
 
-    $sql="INSERT INTO category (name) VALUES ('$name')";
+    $sql="INSERT INTO category (name, isfeatured) VALUES ('$name', 0)";
     if (mysqli_query($connection, $sql)) {
         echo json_encode(["message" => "succesful", "status"=>"success"]);
     } else {
@@ -61,8 +61,9 @@ function updateCategory ($connection){
     $id = $_GET['id'];
     $data = json_decode(file_get_contents("php://input"));
     $name = $data->name;
+    $isfeatured = $data->isfeatured;
 
-    $sql = "UPDATE category SET name = '$name' WHERE id_category = $id";
+    $sql = "UPDATE category SET name = '$name', isfeatured= $isfeatured WHERE name = '$id'";
     if (mysqli_query($connection, $sql)) {
         echo json_encode(["message" => "succesful", "status"=>"success"]);
     } else {

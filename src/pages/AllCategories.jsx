@@ -315,7 +315,7 @@ function AllCategories({ showOffCanvas, setShowOffCanvas, mobile = false }) {
                               ? "1"
                               : "0";
                             console.log(element);
-                            handleSave(element.id_category, temp[index]);
+                            handleSave(element.name, temp[index]);
                           }}
                         ></Form.Check>
                       ) : null}

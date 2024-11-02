@@ -30,7 +30,7 @@ switch ($method) {
 $connection->close();
 
 function getCategories($connection) {
-    $sql = "SELECT name FROM category";
+    $sql = "SELECT name, isfeatured FROM category";
     $result = $connection->query($sql);
 
     $category = [];

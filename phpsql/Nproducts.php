@@ -36,7 +36,7 @@ function getLowStockProducts($connection) {
     // Consulta principal para productos con stock menor o igual al mínimo
     $sql = "SELECT id_products, product_name, description, price, image, stock, important, enabled, date 
             FROM products 
-            WHERE date >= DATE_SUB(NOW(), INTERVAL $minimumDate DAY) LIMIT 5";
+            WHERE date >= DATE_SUB(NOW(), INTERVAL $minimumDate DAY) AND enabled =1 LIMIT 5 ";
 
     // Consultar las categorías asociadas
     $sql2 = "SELECT id_products, id_category FROM product_category";
