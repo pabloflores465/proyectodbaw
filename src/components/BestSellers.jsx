@@ -52,7 +52,7 @@ export default function BestSellers() {
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    color: "white",
+                    color: "black",
                     padding: "5px",
                     borderRadius: "5px",
                   }}
