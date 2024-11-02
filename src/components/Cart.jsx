@@ -49,7 +49,7 @@ export default function Cart() {
 
   return (
     <>
-      <Dropdown>
+      <Dropdown drop="start">
         <Dropdown.Toggle as={CustomToggle}></Dropdown.Toggle>
         <Dropdown.Menu>
           <div

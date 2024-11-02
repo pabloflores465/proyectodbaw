@@ -282,13 +282,7 @@ export default function OrderList() {
                       <br />
                       Address: {userProfile.address}
                     </h4>
-                    <Button
-                      as={Link}
-                      variant="secondary text-white rounded-pill w-25"
-                    >
-                      <LiaWalletSolid />
-                      Edit your profile!
-                    </Button>
+
                   </div>
                   <div className="text-end">
                     <h4>
