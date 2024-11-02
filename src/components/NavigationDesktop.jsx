@@ -224,7 +224,7 @@ export default function NavigationDesktop() {
           ) : (
             <>
               <Dropdown>
-                <Dropdown.Toggle className="text-white">
+                <Dropdown.Toggle className="text-white me-4">
                   {userProfile.firstName} {userProfile.lastName}
                 </Dropdown.Toggle>
                 <Dropdown.Menu style={{ minWidth: "auto" }}>
@@ -315,7 +315,7 @@ export default function NavigationDesktop() {
                       }`}
                     >
                       <div className="d-flex flex-row align-items-center m-0 p-0">
-                        <Dropdown>
+                        <Dropdown drop="start" className="mt-2">
                           <Dropdown.Toggle
                             variant="link"
                             className="text-black"
