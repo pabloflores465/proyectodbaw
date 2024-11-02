@@ -1,23 +1,20 @@
-import React, { useContext, useState } from "react";
-import {
-  Button,
-  Table,
-  Form
-} from "react-bootstrap";
-import { useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { Button, Table, Form } from "react-bootstrap";
 import getOrders from "../conections/getOrders";
-import editOrders from "../conections/editOrders"; // Asegúrate de tener la función para guardar los datos
+import editOrders from "../conections/editOrders"; // Asegúrate de tener la función para actualizar el estado y comentario
+import updateComment from "../conections/updateComment"; // Nueva función para actualizar solo el comentario
 import { NotificationContext } from "../context/NotificationContext";
 import LoadingState from "../components/LoadingState";
 import { EditModeContext } from "../context/EditModeContext";
 import { UserProfileContext } from "../context/UserProfileContext";
+import ErrorPage from "./ErrorPage";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const { setNotifications } = useContext(NotificationContext);
   const { editMode } = useContext(EditModeContext);
-  const [comments, setComments] = useState({}); // Estado para almacenar comentarios
+  const [comments, setComments] = useState({});
   const { userProfile } = useContext(UserProfileContext);
 
   // Manejar cambios en los comentarios
@@ -27,9 +24,41 @@ function Orders() {
       ...prevComments,
       [orderIndex]: value,
     }));
+    console.log("Updated comments:", comments);
   };
 
-  // Función para avanzar al siguiente estado y guardar el comentario
+  // Función para actualizar el comentario
+  const handleUpdateComment = (order, orderIndex) => {
+    const comment = comments[orderIndex] || ""; // Usa el comentario escrito o vacío
+    console.log(order.id_order, comment)
+
+    updateComment(order.id_order, comment)
+      .then(() => {
+        // Notificar al usuario
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          {
+            showNotification: true,
+            type: "success",
+            headerMessage: "Success",
+            bodyMessage: "Comment updated successfully!",
+          },
+        ]);
+      })
+      .catch((error) => {
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          {
+            showNotification: true,
+            type: "error",
+            headerMessage: "Error",
+            bodyMessage: "There was an error updating the comment.",
+          },
+        ]);
+      });
+  };
+
+  // Función para avanzar al siguiente estado
   const handleAdvanceOrder = (order, orderIndex) => {
     const newState = parseInt(order.state) + 1; // Avanza al siguiente estado
     const comment = comments[orderIndex] || ""; // Usa el comentario escrito o vacío
@@ -71,12 +100,15 @@ function Orders() {
     getOrders(setOrders, setLoading, setNotifications);
   }, []);
 
+  if (userProfile.rol !== 2 && userProfile.rol !== 3) {
+    return <ErrorPage />;
+  }
+
   return (
     <>
       {loading ? (
         <LoadingState />
       ) : (
-        
         <>
           <div style={{ height: "30px" }}></div>
           <Table striped bordered hover responsive>
@@ -84,14 +116,17 @@ function Orders() {
               <tr>
                 <th>Id Order</th>
                 <th>State</th>
-                {editMode ? <><th>Comment</th><th>Action</th></> : null}
+                {editMode ? (
+                  <>
+                    <th>Comment</th>
+                    <th>Action</th>
+                  </>
+                ) : null}
               </tr>
             </thead>
             <tbody>
               {orders.map((order, orderIndex) => (
                 <tr key={order.id_order}>
-                {order.state > 1 ? (
-                  <>
                   <td>{order.id_order}</td>
                   <td>
                     {parseInt(order.state) === 2
@@ -104,34 +139,33 @@ function Orders() {
                       ? "Delivered"
                       : ""}
                   </td>
-                  </>
-                ) : <></>
-                  }
                   {editMode && (
                     <>
-                    {order.state > 1 ? (
-                      <>
-                    <td>
-                    <Form.Control
-                      type="text"
-                      placeholder="Add a comment"
-                      value={comments[orderIndex] || ""}
-                      onChange={(event) => handleCommentChange(event, orderIndex)}
-                      disabled={parseInt(order.state) === 5} // Si el estado es 5 (Delivered), no se puede editar
-                    />
-                  </td>
-                    <td>
-                      <Button
-                        variant="primary"
-                        onClick={() => handleAdvanceOrder(order, orderIndex)}
-                        disabled={parseInt(order.state) === 5} // Deshabilitar si ya está en el estado 'Delivered'
-                      >
-                        Next State
-                      </Button>
-                    </td>
-                    </>
-                ) : <></>
-                  }
+                      <td>
+                        <Form.Control
+                          type="text"
+                          placeholder="Add a comment"
+                          value={comments[orderIndex] || ""}
+                          onChange={(event) => handleCommentChange(event, orderIndex)}
+                        />
+                      </td>
+                      <td>
+                        <Button
+                          variant="primary"
+                          onClick={() => handleAdvanceOrder(order, orderIndex)}
+                          disabled={parseInt(order.state) === 5}
+                        >
+                          Next State
+                        </Button>
+                        {parseInt(order.state) === 5 && (
+                          <Button
+                            variant="secondary"
+                            onClick={() => handleUpdateComment(order, orderIndex)}
+                          >
+                            Update Comment
+                          </Button>
+                        )}
+                      </td>
                     </>
                   )}
                 </tr>

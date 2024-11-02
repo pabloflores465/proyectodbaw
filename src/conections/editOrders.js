@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export default async function editOrders(id_order, newState, comment, setNotifications) {
+  console.log(id_order, newState, comment)
 
   setNotifications((prevNotifications) => [
     ...prevNotifications,
@@ -13,7 +14,7 @@ export default async function editOrders(id_order, newState, comment, setNotific
   const localIp = process.env.REACT_APP_LOCAL_IP; 
   axios
     .post(`http://${localIp}/proyectodbaw/phpsql/updateOrderState.php`, {
-      id_order: id_order,
+      id_order: parseInt(id_order),
       state: newState,
       comment: comment,
     })
@@ -29,6 +30,7 @@ export default async function editOrders(id_order, newState, comment, setNotific
       ]);
     })
     .catch((error) => {
+      console.log(error);
      setNotifications((prevNotifications) => [
         ...prevNotifications.slice(0, -1),         {
           showNotification: true,
