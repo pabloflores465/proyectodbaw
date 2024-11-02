@@ -67,13 +67,20 @@ function handleGetRequest() {
     global $connection;
 
     // Preparar la consulta para obtener las categorías marcadas
-    $query = "SELECT c1.name, c2.name AS sub FROM navigation n JOIN category c1 ON c1.id_category = n.id_category JOIN category c2 ON c2.id_category = n.id_sub ";
+    $query = "SELECT c1.id_category, c2.name AS sub FROM navigation n JOIN category c1 ON c1.id_category = n.id_category JOIN category c2 ON c2.id_category = n.id_sub";
     $result = $connection->query($query);
 
     $markedCategories = [];
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $markedCategories[] = $row;
+            $idCategory = $row['id_category'];
+            $sub = $row['sub'];
+
+            // Si la categoría ya existe en el arreglo, agregar el sub a su lista
+            if (!isset($markedCategories[$idCategory])) {
+                $markedCategories[$idCategory] = [];
+            }
+            $markedCategories[$idCategory][] = $sub;
         }
     }
 
@@ -84,3 +91,4 @@ function handleGetRequest() {
 // Cerrar la conexión
 $connection->close();
 ?>
+

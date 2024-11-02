@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-
 import {
   Button,
   Collapse,
@@ -10,15 +9,15 @@ import {
 } from "react-bootstrap";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
-
 import { FaFile } from "react-icons/fa6";
 import { IoMdPersonAdd } from "react-icons/io";
+import axios from "axios";
 import Search from "../components/Search";
 import Cart from "../components/Cart";
 import Qr from "../components/Qr";
 import { IoLogIn } from "react-icons/io5";
 import { MdMenu } from "react-icons/md";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserProfileContext } from "../context/UserProfileContext";
 import { EditModeContext } from "../context/EditModeContext";
 import { NotificationContext } from "../context/NotificationContext";
@@ -30,6 +29,7 @@ import { ClicksNumberContext } from "../context/ClicksNumberContext";
 import { FaBoxOpen } from "react-icons/fa";
 
 export default function NavigationDesktop() {
+  const localIp = process.env.REACT_APP_LOCAL_IP;
   const {
     userProfile,
     setUserProfile,
@@ -44,11 +44,9 @@ export default function NavigationDesktop() {
   const [showCategories, setShowCategories] = useState(true);
   const [categories, setCategories] = useState([]);
   const [showOffCanvas, setShowOffCanvas] = useState(false);
+  const [navigationData, setNavigationData] = useState([]);
 
-  const [searching, setSearching] = useState(false)
-
-  const { categoriesClicks, setCategoriesClicks } =
-    useContext(ClicksNumberContext);
+  const { categoriesClicks } = useContext(ClicksNumberContext);
 
   useEffect(() => {
     if (userProfile) {
@@ -60,7 +58,40 @@ export default function NavigationDesktop() {
     getCategories(setCategories);
   }, []);
 
-  console.log(categories);
+  useEffect(() => {
+    const fetchCategoriesWithNavigationData = async () => {
+      try {
+        const response = await axios.get(
+          `http://${localIp}/proyectodbaw/phpsql/navigation2.php`
+        );
+        setNavigationData(response.data);
+      } catch (error) {
+        console.error("Error al obtener los datos de navigation:", error);
+      }
+    };
+
+    fetchCategoriesWithNavigationData();
+  }, [localIp]);
+
+  const getSubcategories = (categoryId, categoryName) => {
+    return (
+      navigationData[categoryId] &&
+      navigationData[categoryId].map((subCategory, index) => (
+        <div
+          key={index}
+          className="d-flex justify-content-center align-items-center mb-2"
+        >
+          <Link
+            to={`/categories/${categoryName}/${subCategory}`}
+            className="text-black"
+            style={{ textDecoration: "none" }}
+          >
+            {subCategory}
+          </Link>
+        </div>
+      ))
+    );
+  };
 
   function handleLogOut() {
     setEditMode(false);
@@ -77,38 +108,9 @@ export default function NavigationDesktop() {
     ]);
   }
 
-  const fileInputRef = useRef(null);
-
-  const [fileName, setFileName] = useState("No file chosen");
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-    }
-  };
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
-  let guest = userProfile.rol === 0 ? true : false;
-  let employee = userProfile.rol === 2 ? true : false;
-  let admin = userProfile.rol === 3 ? true : false;
-
-  useEffect(() => {
-    const nav = document.getElementById("navbar");
-
-    if (nav) {
-      const rect = nav.getBoundingClientRect();
-
-      if (rect.left === 0 && rect.top === 0) {
-        nav.style.height = "100px";
-      }
-    }
-  }, []);
-
-  useEffect(() => {}, [categoriesClicks]);
+  let guest = userProfile.rol === 0;
+  let employee = userProfile.rol === 2;
+  let admin = userProfile.rol === 3;
 
   return (
     <>
@@ -121,10 +123,8 @@ export default function NavigationDesktop() {
         >
           {employee || (admin && editMode) ? (
             <Form className="d-flex align-items-center text-white">
-              <div className="d-flex align-items-center"></div>
-
               <Form.Group className="d-flex align-items-center text-white">
-              <Form.Control
+                <Form.Control
                   required
                   type="text"
                   placeholder="D&P Petshop"
@@ -146,7 +146,7 @@ export default function NavigationDesktop() {
             <Navbar.Brand as={Link} to="/" className="text-white me-0">
               <img
                 alt="Logo"
-                src={fileName}
+                src="/logo512.png"
                 width="50"
                 height="50"
                 className="d-inline-block align-center"
@@ -165,7 +165,7 @@ export default function NavigationDesktop() {
             )}
           </Button>
           <div className="d-flex justify-content-center align-items-center w-100 m-auto">
-            <Search/>
+            <Search />
           </div>
 
           {!editMode && !guest ? (
@@ -205,7 +205,7 @@ export default function NavigationDesktop() {
                 className="bg-secondary text-white me-2 rounded-pill d-flex justify-content-center align-items-center"
                 style={{ whiteSpace: "nowrap" }}
               >
-                <IoLogIn className="me-1" /> Log In {console.log(userProfile)}
+                <IoLogIn className="me-1" /> Log In
               </Button>
             </>
           ) : (
@@ -216,35 +216,35 @@ export default function NavigationDesktop() {
                 </Dropdown.Toggle>
                 <Dropdown.Menu style={{ minWidth: "auto" }}>
                   <div className="container">
-                    {userProfile.rol === 3 ? (
+                    {userProfile.rol === 3 && (
                       <>
-                      <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
-                        <Button
-                          as={Link}
-                          to="/UserList"
-                          variant="link"
-                          className="m-0 p-0 text-success"
-                        >
-                          <CgUserList /> Users List
-                        </Button>
-                      </Dropdown.Item>
-                      <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
-                      <Button
-                        as={Link}
-                        to="/orders"
-                        variant="link"
-                        className="m-0 p-0 text-success"
-                      >
-                        <FaBoxOpen /> Orders
-                      </Button>
-                    </Dropdown.Item>
-                    </>
-                    ) : null}
+                        <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
+                          <Button
+                            as={Link}
+                            to="/UserList"
+                            variant="link"
+                            className="m-0 p-0 text-success"
+                          >
+                            <CgUserList /> Users List
+                          </Button>
+                        </Dropdown.Item>
+                        <Dropdown.Item className="d-flex align-items-center border-bottom mb-2 text-success">
+                          <Button
+                            as={Link}
+                            to="/orders"
+                            variant="link"
+                            className="m-0 p-0 text-success"
+                          >
+                            <FaBoxOpen /> Orders
+                          </Button>
+                        </Dropdown.Item>
+                      </>
+                    )}
                     {admin || employee ? (
                       <Dropdown.Item className="d-flex align-items-center mb-2 text-success border-bottom">
                         <Button
                           variant="link"
-                          className=" m-0 p-0 text-success"
+                          className="m-0 p-0 text-success"
                           as={Link}
                           to="/categories/edit"
                         >
@@ -262,7 +262,6 @@ export default function NavigationDesktop() {
                       </Button>
                     </Dropdown.Item>
                     <Dropdown.Item className="d-flex align-items-center mb-2 text-success">
-                      {console.log(userProfile)}
                       <Button
                         onClick={handleLogOut}
                         variant="link"
@@ -274,14 +273,6 @@ export default function NavigationDesktop() {
                   </div>
                 </Dropdown.Menu>
               </Dropdown>
-
-              <img
-                alt="Logo"
-                src="/logo512.png"
-                width="50"
-                height="50"
-                className="d-inline-block align-center"
-              />
             </>
           )}
         </Navbar>
@@ -298,12 +289,9 @@ export default function NavigationDesktop() {
                 height: "40px",
               }}
             >
-              <div className="d-flex flew-row w-100">
-                <Button variant="link" className="ms-2 me-2s text-black">
-                  <MdMenu
-                    size={"2rem"}
-                    onClick={() => setShowOffCanvas(true)}
-                  />
+              <div className="d-flex flex-row w-100">
+                <Button variant="link" className="ms-2 me-2 text-black">
+                  <MdMenu size={"2rem"} onClick={() => setShowOffCanvas(true)} />
                 </Button>
                 {categories.map((element, index) =>
                   parseInt(element.isfeatured) ? (
@@ -321,36 +309,10 @@ export default function NavigationDesktop() {
                           />
                           <Dropdown.Menu>
                             <div className="container">
-                              {categories
-                                .filter(
-                                  (category) => category.name !== element.name
-                                )
-                                .map((filteredCategory, index2) => (
-                                  <div
-                                    key={index2}
-                                    className={`d-flex justify-content-center align-items-center ${
-                                      index2 === categories.length - 1
-                                        ? ""
-                                        : "border-bottom"
-                                    } mb-2`}
-                                  >
-                                    <Link
-                                      key={filteredCategory.name}
-                                      to={`/categories/${element.name}/${filteredCategory.name}`}
-                                      className="text-black"
-                                      style={{ textDecoration: "none" }}
-                                    >
-                                      {filteredCategory.name}
-                                    </Link>
-                                    <Link
-                                      to={`/categories/${element.name}/${filteredCategory.name}`}
-                                    ></Link>
-                                  </div>
-                                ))}
+                              {getSubcategories(element.id_category, element.name)}
                             </div>
                           </Dropdown.Menu>
                         </Dropdown>
-
                         <Link
                           key={element.name}
                           to={`/categories/${element.name}`}
