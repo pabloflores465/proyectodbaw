@@ -5,10 +5,11 @@ import { useLocation, useNavigate } from "react-router";
 import { UserProfileContext } from "../context/UserProfileContext";
 import postSearchProducts from "../conections/postSearchProducts";
 import { SearchProductsContext } from "../context/SearchProductsContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Search() {
   const {userProfile} = useContext(UserProfileContext)
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useLocalStorage("searchTerm", "");
   const navigate = useNavigate();
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState("/");
@@ -28,7 +29,7 @@ export default function Search() {
   ));
 
   const {setSearchProducts} = useContext(SearchProductsContext)
-  const [checkedFields, setCheckedFields] = useState([false, false, false, false, false]);
+  const [checkedFields, setCheckedFields] = useLocalStorage("checkedFields", [false, false, false, false, false]);
 
   let handleSearch = () => {
     if (searchTerm !== "") {

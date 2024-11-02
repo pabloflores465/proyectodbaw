@@ -136,7 +136,8 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
           </div>
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <>{footer.line31}</>
+              <>
+              <Button className="text-white" as={Link} to="/contacts">{footer.line31}</Button></>
             ) : (
               <Form.Control
                 type="text"
@@ -187,7 +188,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
           </div>
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <>{footer.line32}</>
+              <><Button className="text-white" as={Link} to="/contacts">{footer.line32}</Button></>
             ) : (
               <Form.Control
                 type="text"
@@ -240,7 +241,7 @@ DesktopUI = ({ footer, editMode, handleInput }) => {
           </div>
           <div className="d-flex justify-content-center">
             {!editMode ? (
-              <>{footer.line33}</>
+              <><Button className="text-white" as={Link} to="/contacts">{footer.line33}</Button></>
             ) : (
               <Form.Control
                 type="text"
@@ -379,6 +380,7 @@ MobileUI = ({ footer, editMode, handleInput }) => {
       {!editMode ? (
         <div style={{ fontSize: "25px" }}>
           <strong>{footer.title3}</strong>
+          hola
         </div>
       ) : (
         <Form.Control
@@ -390,7 +392,7 @@ MobileUI = ({ footer, editMode, handleInput }) => {
         />
       )}
       {!editMode ? (
-        <div>{footer.line31}</div>
+        <div><Button className="text-white" as={Link} to="/contacts">{footer.line31}</Button></div>
       ) : (
         <Form.Control
           type="text"
@@ -401,7 +403,7 @@ MobileUI = ({ footer, editMode, handleInput }) => {
         />
       )}
       {!editMode ? (
-        <div>{footer.line32}</div>
+        <div><Button className="text-white" as={Link} to="/contacts">{footer.line32}</Button></div>
       ) : (
         <Form.Control
           type="text"
@@ -412,7 +414,7 @@ MobileUI = ({ footer, editMode, handleInput }) => {
         />
       )}
       {!editMode ? (
-        <div>{footer.line33}</div>
+        <div><Button className="text-white" as={Link} to="/contacts">{footer.line33}</Button></div>
       ) : (
         <Form.Control
           type="text"

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Button, Card, Dropdown, Form, FormControl } from "react-bootstrap";
 import { FaListAlt, FaSave, FaShoppingCart } from "react-icons/fa";
 import { IoMdInformationCircle } from "react-icons/io";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { WindowWidthContext } from "../context/WindowWidthContext";
 import { EditModeContext } from "../context/EditModeContext";
 import axios from "axios";
@@ -23,6 +23,8 @@ export default function Product({ product, index, handleData }) {
 
   const [featuredItem, setFeaturedItem] = useState(false);
   const [enableItem, setEnableItem] = useState(false);
+
+  const location = useLocation()
 
   const localIp = process.env.REACT_APP_LOCAL_IP;
 
@@ -184,7 +186,7 @@ export default function Product({ product, index, handleData }) {
 
   return (
     <>
-      {editMode === false ? (
+      {editMode === false || location.pathname.startsWith('/search') ? (
         <Card
           className="shadow translate-up"
           as={Link}

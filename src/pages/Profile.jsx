@@ -87,10 +87,6 @@ function Profile({ show, setShow }) {
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated} onSubmit={handleSubmit} className="ps-1 pe-1 overflow-auto">
-          <Form.Group className="mb-3" controlId="validateUserName">
-            <Form.Label className="text-success">Profile Picture</Form.Label>
-            <Form.Control type="file" />
-          </Form.Group>
           <Form.Group className="mb-3" controlId="validateName">
             <Form.Label className="text-success">First Name</Form.Label>
             <Form.Control

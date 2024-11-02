@@ -16,6 +16,7 @@ import Forgotten from "../pages/Forgotten";
 import SearchProducts from "../pages/SearchProducts";
 import Error from "../pages/Error";
 import Contacts from "../pages/Contacts";
+import Thanks from "../pages/Thanks";
 
 function Router() {
   const router = createBrowserRouter([
@@ -81,6 +82,10 @@ function Router() {
           path: "/contacts",
           element: <Contacts />,
         },
+        {
+          path: "/thanks",
+          element: <Thanks/>
+        }
       ],
     },
     {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { UserProfileContext } from "../context/UserProfileContext";
 import { useContext, useState, useEffect } from "react";
 import getCartItems from "../conections/getCartItems";
@@ -35,6 +35,8 @@ export default function OrderList() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const navigate = useNavigate()
+
   const handlePayment = async () => {
     if (cardInput !== userProfile.cardNumber) {
       setError("The card number does not match. Please try again.");
@@ -49,6 +51,7 @@ export default function OrderList() {
         }
       );
       console.log("Pago procesado:", result.data);
+      navigate('/thanks')
       setShowModal(false); // Cierra el modal tras el pago exitoso
     } catch (error) {
       console.error("Error al procesar el pago:", error);
