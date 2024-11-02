@@ -120,11 +120,12 @@ function getProduct($connection) {
 
     foreach ($fproducts as $product) {
         // Verificar si el producto tiene todos los campos necesarios y más de una categoría
-        if (isset($product['id_products'], $product['product_name'], $product['description'], $product['price'], $product['stock']) && count($product['categories']) > 1) {
+        if (isset($product['id_products'], $product['product_name'], $product['description'], $product['image'], $product['price'], $product['stock']) && count($product['categories']) > 1) {
             $filteredProducts[] = [
                 'id_products' => $product['id_products'],
                 'product_name' => $product['product_name'],
                 'description' => $product['description'],
+                'image'=> $product['image'],
                 'price' => $product['price'],
                 'stock' => $product['stock'],
                 'categories' => $product['categories'] // Mantener las categorías

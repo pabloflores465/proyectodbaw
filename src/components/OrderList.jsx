@@ -42,7 +42,7 @@ export default function OrderList() {
       setError("The card number does not match. Please try again.");
       return; // No procede si los números no coinciden
     }
-
+    handleEmailSend();
     try {
       const result = await axios.post(
         `http://${localIp}/proyectodbaw/phpsql/Checkout.php`,
@@ -152,6 +152,29 @@ export default function OrderList() {
     }
   };
 
+  const handleEmailSend = async () => {
+    try {
+      const cartItemsWithoutImage = cartItems.map(({ image, ...rest }) => rest);
+
+    // Preparar los datos para enviar al backend
+    const data = {
+      cartItems: cartItemsWithoutImage, // Usar el array sin imágenes
+      email: userProfile.email // Dirección de correo
+    };
+      // Convierte cartItems a JSON y envíalos al backend
+      const result = await axios.post(
+        `http://${localIp}/proyectodbaw/phpsql/sendemail.php`,
+        JSON.stringify(data),
+      );
+  
+      console.log("Correo enviado:", result.data);
+    } catch (error) {
+      console.error("Error al enviar el correo:", error);
+    }
+  };
+
+  
+
   return (
     <div className="container mt-5">
       {userProfile.userId === parseInt(params.userId) ? (
@@ -166,7 +189,7 @@ export default function OrderList() {
                   <Table striped bordered hover responsive>
                     <thead>
                       <tr>
-                        <th>Item</th>
+                        <th>Item {console.log(JSON.stringify(cartItems))}</th>
                         <th>Quantity</th>
                         <th>Total</th>
                         <th>Action</th>
