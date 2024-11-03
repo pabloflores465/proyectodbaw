@@ -29,7 +29,7 @@ export default function Search() {
   ));
 
   const {setSearchProducts} = useContext(SearchProductsContext)
-  const [checkedFields, setCheckedFields] = useLocalStorage("checkedF", [false, false, false, false]);
+  const [checkedFields, setCheckedFields] = useLocalStorage("checkedF", [false, false, false, true]);
 
   let handleSearch = () => {
     if (searchTerm !== "") {
@@ -96,10 +96,10 @@ export default function Search() {
                     <Form.Check
                       className="me-2"
                       label="Disabled"
-                      defaultChecked={checkedFields[3]}
+                      defaultChecked={!checkedFields[3]}
                       onChange={(e) => {
                         let temp = [...checkedFields];
-                        temp[3] = e.target.checked;
+                        temp[3] = !e.target.checked;
                         setCheckedFields(temp);
                         }}
                     />):null

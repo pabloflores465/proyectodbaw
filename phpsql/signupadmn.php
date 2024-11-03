@@ -60,7 +60,7 @@ try{
     }
 
 
-$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, rol, active, last_connection, token) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate',$rol, 0, '2024-09-28', '$token')";
+$sql = "INSERT INTO users (first_name, last_name, email, password, birth_date, rol, active, last_connection, token, notified) VALUES ('$firstname', '$lastname', '$email', '$password', '$birthdate',$rol, 0, '2024-09-28', '$token', 0)";
 if (mysqli_query($connection, $sql)) {
     echo json_encode(["message" => "succesful", "status"=>"success"]);
 } else {
